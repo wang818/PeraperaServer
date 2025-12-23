@@ -1,0 +1,39 @@
+from pydantic_settings import BaseSettings, SettingsConfigDict
+from typing import Union
+
+
+class Settings(BaseSettings):
+    """Application settings."""
+    
+    model_config = SettingsConfigDict(
+        env_file=".env",
+        case_sensitive=True,
+        extra="ignore"
+    )
+    
+    # Application
+    APP_NAME: str = "PeraperaServer"
+    APP_VERSION: str = "1.0.0"
+    DEBUG: bool = True
+    
+    # Server
+    HOST: str = "0.0.0.0"
+    PORT: int = 8000
+    
+    # Database
+    DATABASE_URL: str = "postgresql+asyncpg://postgres:postgres@localhost:5432/perapera_db"
+    
+    # Security
+    SECRET_KEY: str = "your-secret-key-here-change-in-production"
+    ALGORITHM: str = "HS256"
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
+    
+    # CORS - use string type to avoid JSON parsing issues
+    ALLOWED_ORIGINS: str = "http://localhost:3000,http://localhost:8000"
+    
+    def get_allowed_origins(self) -> list[str]:
+        """Get CORS origins as a list."""
+        return [origin.strip() for origin in self.ALLOWED_ORIGINS.split(',')]
+
+
+settings = Settings()
