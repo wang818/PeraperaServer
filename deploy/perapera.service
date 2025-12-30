@@ -1,0 +1,16 @@
+[Unit]
+Description=Perapera FastAPI Application
+After=network.target postgresql.service
+
+[Service]
+Type=notify
+User=www-data
+Group=www-data
+WorkingDirectory=/var/www/PeraperaServer
+Environment="PATH=/var/www/PeraperaServer/venv/bin"
+ExecStart=/var/www/PeraperaServer/venv/bin/uvicorn app.main:app --host 0.0.0.0 --port 8000 --workers 4
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target
