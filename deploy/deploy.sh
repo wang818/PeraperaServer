@@ -11,7 +11,7 @@ echo "=== Perapera Server 部署脚本 ==="
 PROJECT_NAME="PeraperaServer"
 DEPLOY_USER="www-data"
 DEPLOY_PATH="/var/www/$PROJECT_NAME"
-REPO_URL="your-git-repo-url"  # 修改为你的 Git 仓库地址
+REPO_URL="git@github.com:wang818/PeraperaServer.git"  # 修改为你的 Git 仓库地址
 
 # 颜色输出
 GREEN='\033[0;32m'
