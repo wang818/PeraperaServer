@@ -3,7 +3,7 @@ Description=Perapera FastAPI Application
 After=network.target postgresql.service
 
 [Service]
-Type=notify
+Type=simple
 User=www-data
 Group=www-data
 WorkingDirectory=/var/www/PeraperaServer
