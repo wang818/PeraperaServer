@@ -31,6 +31,14 @@ class Settings(BaseSettings):
     # CORS - use string type to avoid JSON parsing issues
     ALLOWED_ORIGINS: str = "http://localhost:3000,http://localhost:8000"
     
+    # Email
+    SMTP_HOST: str = "smtp.gmail.com"
+    SMTP_PORT: int = 587
+    SMTP_USER: str = ""
+    SMTP_PASSWORD: str = ""
+    SMTP_FROM_EMAIL: str = ""
+    SMTP_FROM_NAME: str = "PeraperaServer"
+    
     def get_allowed_origins(self) -> list[str]:
         """Get CORS origins as a list."""
         return [origin.strip() for origin in self.ALLOWED_ORIGINS.split(',')]
