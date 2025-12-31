@@ -4,6 +4,9 @@ from email.mime.multipart import MIMEMultipart
 from app.core.config import settings
 import random
 import string
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 def generate_captcha(length: int = 6) -> str:
@@ -14,8 +17,11 @@ def generate_captcha(length: int = 6) -> str:
 async def send_email(to_email: str, subject: str, body: str) -> bool:
     """异步发送邮件"""
     if not settings.SMTP_USER or not settings.SMTP_PASSWORD or not settings.SMTP_FROM_EMAIL:
-        print("邮件配置未设置，跳过发送")
+        logger.warning("邮件配置未设置，跳过发送")
         return False
+    
+    logger.info(f"准备发送邮件到: {to_email}, 主题: {subject}")
+    logger.debug(f"SMTP配置 - Host: {settings.SMTP_HOST}, Port: {settings.SMTP_PORT}, User: {settings.SMTP_USER}")
     
     try:
         msg = MIMEMultipart()
@@ -24,9 +30,11 @@ async def send_email(to_email: str, subject: str, body: str) -> bool:
         msg['Subject'] = subject
         
         msg.attach(MIMEText(body, 'html'))
+        logger.debug("邮件内容已构建完成")
         
         # 尝试使用 STARTTLS (端口 587)
         try:
+            logger.info(f"尝试通过 STARTTLS 连接 {settings.SMTP_HOST}:{settings.SMTP_PORT}")
             await aiosmtplib.send(
                 msg,
                 hostname=settings.SMTP_HOST,
@@ -36,12 +44,14 @@ async def send_email(to_email: str, subject: str, body: str) -> bool:
                 start_tls=True,
                 timeout=15
             )
+            logger.info(f"邮件发送成功 (STARTTLS 587) -> {to_email}")
             return True
         except Exception as e1:
-            print(f"STARTTLS (587) 发送失败: {e1}")
+            logger.warning(f"STARTTLS (587) 发送失败: {type(e1).__name__}: {e1}")
             
             # 如果 587 失败，尝试使用 SSL (端口 465)
             try:
+                logger.info(f"尝试通过 SSL 连接 {settings.SMTP_HOST}:465")
                 await aiosmtplib.send(
                     msg,
                     hostname=settings.SMTP_HOST,
@@ -51,14 +61,14 @@ async def send_email(to_email: str, subject: str, body: str) -> bool:
                     use_tls=True,
                     timeout=15
                 )
-                print("使用 SSL (465) 发送成功")
+                logger.info(f"邮件发送成功 (SSL 465) -> {to_email}")
                 return True
             except Exception as e2:
-                print(f"SSL (465) 发送也失败: {e2}")
+                logger.error(f"SSL (465) 发送也失败: {type(e2).__name__}: {e2}")
                 return False
         
     except Exception as e:
-        print(f"发送邮件失败: {e}")
+        logger.error(f"发送邮件失败: {type(e).__name__}: {e}", exc_info=True)
         return False
 
 

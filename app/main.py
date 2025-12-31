@@ -4,18 +4,31 @@ from contextlib import asynccontextmanager
 from app.core.config import settings
 from app.core.database import init_db
 from app.api.v1.router import api_router
+import logging
+import sys
+
+# 配置日志
+logging.basicConfig(
+    level=logging.INFO if not settings.DEBUG else logging.DEBUG,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+    handlers=[
+        logging.StreamHandler(sys.stdout)
+    ]
+)
+
+logger = logging.getLogger(__name__)
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """Lifespan events for the application."""
     # Startup
-    print("Starting up...")
+    logger.info("Starting up...")
     await init_db()
-    print("Database initialized")
+    logger.info("Database initialized")
     yield
     # Shutdown
-    print("Shutting down...")
+    logger.info("Shutting down...")
 
 
 # Create FastAPI application
