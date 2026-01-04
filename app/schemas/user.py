@@ -1,6 +1,7 @@
 from pydantic import BaseModel, EmailStr, Field
 from typing import Optional
 from datetime import datetime
+from uuid import UUID
 
 
 class UserBase(BaseModel):
@@ -25,6 +26,7 @@ class UserUpdate(BaseModel):
 class UserInDB(UserBase):
     """Schema for user in database."""
     id: int
+    uuid: UUID
     is_active: bool
     is_superuser: bool
     created_at: datetime
@@ -37,6 +39,7 @@ class UserInDB(UserBase):
 class UserResponse(UserBase):
     """Schema for user response."""
     id: int
+    uuid: UUID
     is_active: bool
     created_at: datetime
     
