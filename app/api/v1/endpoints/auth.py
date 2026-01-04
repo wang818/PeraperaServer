@@ -9,6 +9,8 @@ from app.core.email import generate_captcha, send_captcha_email
 from app.models.user import User
 from app.models.captcha import CaptchaRecord
 from app.schemas.user import Token, CaptchaLogin
+from app.core.dependencies import get_language
+from app.core.i18n import get_translation
 import logging
 
 logger = logging.getLogger(__name__)
@@ -20,10 +22,11 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/v1/auth/login")
 @router.post("/login", response_model=Token)
 async def login_with_captcha(
     login_data: CaptchaLogin,
-    db: AsyncSession = Depends(get_db)
+    db: AsyncSession = Depends(get_db),
+    lang: str = Depends(get_language)
 ):
     """使用邮箱和验证码登录，如果用户不存在则自动创建账户"""
-    logger.info(f"尝试使用验证码登录: {login_data.email}")
+    logger.info(f"尝试使用验证码登录: {login_data.email}, 语言: {lang}")
     
     # 验证验证码
     now = datetime.utcnow()
@@ -42,7 +45,7 @@ async def login_with_captcha(
         logger.warning(f"验证码无效或已过期: {login_data.email}")
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Invalid or expired captcha"
+            detail=get_translation("invalid_or_expired_captcha", lang)
         )
     
     # 查询用户是否存在
@@ -90,7 +93,7 @@ async def login_with_captcha(
         logger.warning(f"用户未激活: {login_data.email}")
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Inactive user"
+            detail=get_translation("inactive_user", lang)
         )
     
     # 创建访问令牌
@@ -103,10 +106,13 @@ async def login_with_captcha(
 @router.get("/sendCaptcha")
 async def send_captcha(
     email: str,
-    db: AsyncSession = Depends(get_db)
+    db: AsyncSession = Depends(get_db),
+    lang: str = Depends(get_language)
 ):
     """发送验证码到指定邮箱，带频率限制"""
     from email_validator import validate_email, EmailNotValidError
+    
+    logger.info(f"请求发送验证码: {email}, 语言: {lang}")
     
     # 验证邮箱格式
     try:
@@ -114,7 +120,7 @@ async def send_captcha(
     except EmailNotValidError:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Invalid email format"
+            detail=get_translation("invalid_email_format", lang)
         )
     
     now = datetime.utcnow()
@@ -148,7 +154,7 @@ async def send_captcha(
                 wait_seconds = int((timedelta(minutes=15) - time_since_last).total_seconds())
                 raise HTTPException(
                     status_code=status.HTTP_429_TOO_MANY_REQUESTS,
-                    detail=f"Please wait {wait_seconds} seconds before requesting another captcha"
+                    detail=get_translation("wait_before_requesting", lang, seconds=wait_seconds)
                 )
         else:
             # 5次以后，需要间隔1小时
@@ -156,19 +162,19 @@ async def send_captcha(
                 wait_seconds = int((timedelta(hours=1) - time_since_last).total_seconds())
                 raise HTTPException(
                     status_code=status.HTTP_429_TOO_MANY_REQUESTS,
-                    detail=f"Please wait {wait_seconds} seconds before requesting another captcha"
+                    detail=get_translation("wait_before_requesting", lang, seconds=wait_seconds)
                 )
     
     # 生成6位验证码
     captcha = generate_captcha(6)
     
     # 发送邮件
-    email_sent = await send_captcha_email(email, captcha)
+    email_sent = await send_captcha_email(email, captcha, lang)
     
     if not email_sent:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="Failed to send email"
+            detail=get_translation("failed_to_send_email", lang)
         )
     
     # 保存验证码记录
@@ -183,7 +189,7 @@ async def send_captcha(
     await db.commit()
     
     return {
-        "message": "Captcha sent successfully",
+        "message": get_translation("captcha_sent_successfully", lang),
         "email": email,
         "send_count": send_count + 1
     }
@@ -191,14 +197,15 @@ async def send_captcha(
 
 async def get_current_user(
     token: str = Depends(oauth2_scheme),
-    db: AsyncSession = Depends(get_db)
+    db: AsyncSession = Depends(get_db),
+    lang: str = Depends(get_language)
 ) -> User:
     """Get current authenticated user."""
     from app.core.security import decode_access_token
     
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
-        detail="Could not validate credentials",
+        detail=get_translation("could_not_validate_credentials", lang),
         headers={"WWW-Authenticate": "Bearer"},
     )
     

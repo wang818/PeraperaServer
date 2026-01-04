@@ -1,9 +1,11 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
 from app.core.config import settings
 from app.core.database import init_db
 from app.api.v1.router import api_router
+from app.core.dependencies import get_language
+from app.core.i18n import get_translation
 import logging
 import sys
 
@@ -56,10 +58,10 @@ app.include_router(api_router, prefix="/api/v1")
 
 
 @app.get("/")
-async def root():
+async def root(lang: str = Depends(get_language)):
     """Root endpoint."""
     return {
-        "message": f"Welcome to {settings.APP_NAME}",
+        "message": get_translation("welcome_message", lang, app_name=settings.APP_NAME),
         "version": settings.APP_VERSION,
         "docs": "/docs",
         "redoc": "/redoc"
@@ -67,6 +69,6 @@ async def root():
 
 
 @app.get("/health")
-async def health_check():
+async def health_check(lang: str = Depends(get_language)):
     """Health check endpoint."""
-    return {"status": "healthy"}
+    return {"status": get_translation("healthy", lang)}

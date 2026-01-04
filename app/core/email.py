@@ -72,17 +72,20 @@ async def send_email(to_email: str, subject: str, body: str) -> bool:
         return False
 
 
-async def send_captcha_email(to_email: str, captcha: str) -> bool:
+async def send_captcha_email(to_email: str, captcha: str, lang: str = "en") -> bool:
     """发送验证码邮件"""
-    subject = "您的验证码"
+    from app.core.i18n import get_translation
+    
+    subject = get_translation("email_subject_captcha", lang)
+    
     body = f"""
     <html>
         <body>
-            <h2>验证码</h2>
-            <p>您的验证码是: <strong style="font-size: 24px; color: #007bff;">{captcha}</strong></p>
-            <p>验证码有效期为10分钟，请勿泄露给他人。</p>
+            <h2>{get_translation("email_captcha_title", lang)}</h2>
+            <p>{get_translation("email_captcha_body", lang, captcha=captcha)}</p>
+            <p>{get_translation("email_captcha_validity", lang)}</p>
             <br>
-            <p>如果这不是您的操作，请忽略此邮件。</p>
+            <p>{get_translation("email_captcha_ignore", lang)}</p>
         </body>
     </html>
     """
