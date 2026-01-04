@@ -53,3 +53,9 @@ class Token(BaseModel):
 class TokenData(BaseModel):
     """Token data schema."""
     user_id: Optional[int] = None
+
+
+class CaptchaLogin(BaseModel):
+    """Schema for captcha login."""
+    email: EmailStr
+    captcha: str = Field(..., min_length=6, max_length=6)

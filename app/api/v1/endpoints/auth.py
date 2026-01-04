@@ -8,40 +8,94 @@ from app.core.security import verify_password, create_access_token
 from app.core.email import generate_captcha, send_captcha_email
 from app.models.user import User
 from app.models.captcha import CaptchaRecord
-from app.schemas.user import Token
+from app.schemas.user import Token, CaptchaLogin
+import logging
+
+logger = logging.getLogger(__name__)
 
 router = APIRouter()
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/v1/auth/login")
 
 
 @router.post("/login", response_model=Token)
-async def login(
-    form_data: OAuth2PasswordRequestForm = Depends(),
+async def login_with_captcha(
+    login_data: CaptchaLogin,
     db: AsyncSession = Depends(get_db)
 ):
-    """Login endpoint to get access token."""
-    # Query user by username
+    """使用邮箱和验证码登录，如果用户不存在则自动创建账户"""
+    logger.info(f"尝试使用验证码登录: {login_data.email}")
+    
+    # 验证验证码
+    now = datetime.utcnow()
     result = await db.execute(
-        select(User).where(User.username == form_data.username)
+        select(CaptchaRecord).where(
+            and_(
+                CaptchaRecord.email == login_data.email,
+                CaptchaRecord.captcha == login_data.captcha,
+                CaptchaRecord.expires_at > now
+            )
+        ).order_by(CaptchaRecord.created_at.desc())
+    )
+    captcha_record = result.scalar_one_or_none()
+    
+    if not captcha_record:
+        logger.warning(f"验证码无效或已过期: {login_data.email}")
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid or expired captcha"
+        )
+    
+    # 查询用户是否存在
+    result = await db.execute(
+        select(User).where(User.email == login_data.email)
     )
     user = result.scalar_one_or_none()
     
-    # Verify user and password
-    if not user or not verify_password(form_data.password, user.hashed_password):
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Incorrect username or password",
-            headers={"WWW-Authenticate": "Bearer"},
+    # 如果用户不存在，自动创建账户
+    if not user:
+        logger.info(f"用户不存在，自动创建账户: {login_data.email}")
+        
+        # 生成用户名（使用邮箱前缀 + 随机数）
+        import random
+        email_prefix = login_data.email.split('@')[0]
+        username = f"{email_prefix}_{random.randint(1000, 9999)}"
+        
+        # 确保用户名唯一
+        while True:
+            check_result = await db.execute(
+                select(User).where(User.username == username)
+            )
+            if not check_result.scalar_one_or_none():
+                break
+            username = f"{email_prefix}_{random.randint(1000, 9999)}"
+        
+        # 创建新用户（使用随机密码，因为用户通过验证码登录）
+        from app.core.security import get_password_hash
+        random_password = ''.join(random.choices('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789', k=32))
+        
+        user = User(
+            email=login_data.email,
+            username=username,
+            hashed_password=get_password_hash(random_password),
+            is_active=True,
+            is_superuser=False
         )
+        db.add(user)
+        await db.commit()
+        await db.refresh(user)
+        logger.info(f"新用户创建成功: {user.email}, username: {user.username}")
     
+    # 检查用户是否激活
     if not user.is_active:
+        logger.warning(f"用户未激活: {login_data.email}")
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Inactive user"
         )
     
-    # Create access token
+    # 创建访问令牌
     access_token = create_access_token(data={"sub": str(user.id)})
+    logger.info(f"登录成功: {user.email}")
     
     return {"access_token": access_token, "token_type": "bearer"}
 
