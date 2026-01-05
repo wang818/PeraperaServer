@@ -46,12 +46,12 @@ router = APIRouter()
 #     return db_user
 
 
-# @router.get("/me", response_model=UserResponse)
-# async def read_current_user(
-#     current_user: User = Depends(get_current_user)
-# ):
-#     """Get current user information."""
-#     return current_user
+@router.get("/me", response_model=UserResponse)
+async def read_current_user(
+    current_user: User = Depends(get_current_user)
+):
+    """Get current user information."""
+    return current_user
 
 
 # @router.get("/{user_id}", response_model=UserResponse)

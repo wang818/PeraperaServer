@@ -38,7 +38,7 @@ class UserInDB(UserBase):
 
 class UserResponse(UserBase):
     """Schema for user response."""
-    id: int
+    # id: int
     uuid: UUID
     is_active: bool
     created_at: datetime
