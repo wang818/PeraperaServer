@@ -19,5 +19,5 @@ def get_support_lang():
         {"name": "Türkçe", "lang": "tr"},
         {"name": "Tiếng Việt", "lang": "vi"},
         {"name": "简体中文", "lang": "zh-CN"},
-        {"name": "繁體中文", "lang": "zh-TW"},
+        {"name": "繁體中文", "lang": "zh-Hant"},
     ]
