@@ -5,7 +5,9 @@ from typing import List
 from app.core.database import get_db
 from app.core.security import get_password_hash
 from app.models.user import User
+from app.models.user_setting import UserSetting
 from app.schemas.user import UserCreate, UserResponse, UserUpdate
+from app.schemas.user_setting import UserSettingResponse, UserSettingUpdate
 from app.api.v1.endpoints.auth import get_current_user
 
 router = APIRouter()
@@ -52,6 +54,55 @@ async def read_current_user(
 ):
     """Get current user information."""
     return current_user
+
+
+@router.get("/users_setting", response_model=UserSettingResponse)
+async def get_user_setting(
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db)
+):
+    """Get current user's settings."""
+    result = await db.execute(
+        select(UserSetting).where(UserSetting.user_uuid == current_user.uuid)
+    )
+    user_setting = result.scalar_one_or_none()
+    
+    if not user_setting:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="User settings not found"
+        )
+    
+    return user_setting
+
+
+@router.put("/users_setting", response_model=UserSettingResponse)
+async def update_user_setting(
+    setting_in: UserSettingUpdate,
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db)
+):
+    """Update current user's settings."""
+    result = await db.execute(
+        select(UserSetting).where(UserSetting.user_uuid == current_user.uuid)
+    )
+    user_setting = result.scalar_one_or_none()
+    
+    if not user_setting:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="User settings not found"
+        )
+    
+    # Update settings fields
+    update_data = setting_in.model_dump(exclude_unset=True)
+    for field, value in update_data.items():
+        setattr(user_setting, field, value)
+    
+    await db.commit()
+    await db.refresh(user_setting)
+    
+    return user_setting
 
 
 # @router.get("/{user_id}", response_model=UserResponse)
