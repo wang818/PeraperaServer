@@ -15,6 +15,7 @@ load_dotenv()
 from app.core.database import Base
 from app.models.user import User
 from app.models.captcha import CaptchaRecord
+from app.models.user_setting import UserSetting
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
