@@ -459,8 +459,8 @@ def get_language_from_header(accept_language: Optional[str] = None) -> str:
     if not accept_language:
         return Language.EN
     
-    # 解析语言代码（取第一个）
-    lang_code = accept_language.split(',')[0].split('-')[0].lower()
+    # 解析语言代码（取第一个，保留完整的语言-地区代码）
+    lang_code = accept_language.split(',')[0].strip().lower()
     
     # 映射到支持的语言
     lang_map = {
@@ -481,7 +481,19 @@ def get_language_from_header(accept_language: Optional[str] = None) -> str:
         'th': Language.TH,
         'tr': Language.TR,
         'vi': Language.VI,
-        'zh': Language.ZH_CN,
+        'zh-cn': Language.ZH_CN,
+        'zh-hans': Language.ZH_CN,  # 简体中文的另一种表示
+        'zh-hant': Language.ZH_HANT,
+        'zh-tw': Language.ZH_HANT,  # 繁体中文（台湾）
+        'zh-hk': Language.ZH_HANT,  # 繁体中文（香港）
+        'zh': Language.ZH_CN,  # 默认中文使用简体
     }
     
-    return lang_map.get(lang_code, Language.EN)
+    # 先尝试完整匹配，如果没有则尝试只匹配语言部分（不含地区）
+    result = lang_map.get(lang_code)
+    if result:
+        return result
+    
+    # 如果完整匹配失败，尝试只用语言代码部分（去掉地区）
+    base_lang = lang_code.split('-')[0]
+    return lang_map.get(base_lang, Language.EN)
