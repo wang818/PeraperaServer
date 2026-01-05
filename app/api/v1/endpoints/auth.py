@@ -8,6 +8,7 @@ from app.core.security import verify_password, create_access_token
 from app.core.email import generate_captcha, send_captcha_email
 from app.models.user import User
 from app.models.captcha import CaptchaRecord
+from app.models.user_setting import UserSetting
 from app.schemas.user import Token, CaptchaLogin
 from app.core.dependencies import get_language
 from app.core.i18n import get_translation
@@ -84,6 +85,14 @@ async def login_with_captcha(
             is_superuser=False
         )
         db.add(user)
+        await db.flush()
+        
+        # 为新用户创建默认设置
+        user_setting = UserSetting(
+            user_uuid=user.uuid
+        )
+        db.add(user_setting)
+        
         await db.commit()
         await db.refresh(user)
         logger.info(f"新用户创建成功: {user.email}, username: {user.username}")
