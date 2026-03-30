@@ -205,3 +205,6 @@ cython_debug/
 marimo/_static/
 marimo/_lsp/
 __marimo__/
+
+# YouTube cookies (contains sensitive authentication data)
+cookies.txt

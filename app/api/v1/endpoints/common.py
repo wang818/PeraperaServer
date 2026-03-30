@@ -33,6 +33,11 @@ async def download_youtube_audio(url: str = "https://www.youtube.com/watch?v=GUx
             }],
         }
         
+        # 如果存在 cookies 文件则使用
+        cookies_path = os.path.join(os.path.dirname(__file__), '../../../../cookies.txt')
+        if os.path.exists(cookies_path):
+            ydl_opts['cookiefile'] = cookies_path
+        
         # 下载音频
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
             info = ydl.extract_info(url, download=True)
