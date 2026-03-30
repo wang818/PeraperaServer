@@ -16,97 +16,94 @@ async def get_supported_languages():
 
 @router.get("/yt_audio")
 async def download_youtube_audio(url: str = "https://www.youtube.com/watch?v=GUxIotkN2zg"):
-    """Download audio from YouTube video with multiple fallback strategies."""
+    """Download audio from YouTube video using cobalt.tools API as fallback."""
+    import httpx
     
-    # 定义多个配置策略
-    strategies = [
-        {
-            'name': 'android',
-            'player_client': ['android'],
-            'use_cookies': False,
-        },
-        {
-            'name': 'ios',
-            'player_client': ['ios'],
-            'use_cookies': False,
-        },
-        {
-            'name': 'mweb_with_cookies',
-            'player_client': ['mweb'],
-            'use_cookies': True,
-        },
-        {
-            'name': 'ios_web_with_cookies',
-            'player_client': ['ios', 'web'],
-            'use_cookies': True,
-        },
-        {
-            'name': 'tv_with_cookies',
-            'player_client': ['tv'],
-            'use_cookies': True,
-        },
-    ]
+    # 先尝试 yt-dlp (快速尝试 android 客户端)
+    try:
+        temp_dir = tempfile.mkdtemp()
+        output_path = os.path.join(temp_dir, "test")
+        
+        ydl_opts = {
+            'format': 'bestaudio/best',
+            'outtmpl': output_path,
+            'extractor_args': {
+                'youtube': {
+                    'player_client': ['android'],
+                }
+            },
+            'postprocessors': [{
+                'key': 'FFmpegExtractAudio',
+                'preferredcodec': 'mp3',
+                'preferredquality': '192',
+            }],
+            'quiet': True,
+            'no_warnings': True,
+        }
+        
+        with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+            info = ydl.extract_info(url, download=True)
+            filename = ydl.prepare_filename(info)
+            audio_file = filename.rsplit('.', 1)[0] + '.mp3'
+        
+        if os.path.exists(audio_file):
+            return FileResponse(
+                audio_file,
+                media_type='audio/mpeg',
+                filename=f"{info.get('title', 'audio')}.mp3"
+            )
+    except Exception as e:
+        # yt-dlp 失败，使用 cobalt.tools API
+        pass
     
-    cookies_path = os.path.join(os.path.dirname(__file__), '../../../../cookies.txt')
-    cookies_exist = os.path.exists(cookies_path)
-    
-    last_error = None
-    
-    # 尝试每个策略
-    for strategy in strategies:
-        # 如果策略需要 cookies 但 cookies 不存在，跳过
-        if strategy['use_cookies'] and not cookies_exist:
-            continue
+    # 使用 cobalt.tools API
+    try:
+        async with httpx.AsyncClient(timeout=60.0) as client:
+            # 请求 cobalt API
+            response = await client.post(
+                "https://api.cobalt.tools/api/json",
+                json={
+                    "url": url,
+                    "vCodec": "h264",
+                    "vQuality": "720",
+                    "aFormat": "mp3",
+                    "isAudioOnly": True,
+                }
+            )
             
-        try:
-            # 创建临时目录
+            if response.status_code != 200:
+                raise HTTPException(status_code=500, detail="Cobalt API 请求失败")
+            
+            result = response.json()
+            
+            if result.get("status") == "error":
+                raise HTTPException(status_code=500, detail=f"Cobalt API 错误: {result.get('text')}")
+            
+            # 下载音频文件
+            audio_url = result.get("url")
+            if not audio_url:
+                raise HTTPException(status_code=500, detail="未获取到音频 URL")
+            
+            # 下载文件
+            audio_response = await client.get(audio_url)
+            if audio_response.status_code != 200:
+                raise HTTPException(status_code=500, detail="音频文件下载失败")
+            
+            # 保存到临时文件
             temp_dir = tempfile.mkdtemp()
-            output_path = os.path.join(temp_dir, "test")
+            audio_file = os.path.join(temp_dir, "audio.mp3")
+            with open(audio_file, 'wb') as f:
+                f.write(audio_response.content)
             
-            # 配置 yt-dlp 选项
-            ydl_opts = {
-                'format': 'bestaudio/best',
-                'outtmpl': output_path,
-                'extractor_args': {
-                    'youtube': {
-                        'player_client': strategy['player_client'],
-                    }
-                },
-                'postprocessors': [{
-                    'key': 'FFmpegExtractAudio',
-                    'preferredcodec': 'mp3',
-                    'preferredquality': '192',
-                }],
-                'quiet': True,
-                'no_warnings': True,
-            }
+            return FileResponse(
+                audio_file,
+                media_type='audio/mpeg',
+                filename="audio.mp3"
+            )
             
-            # 添加 cookies（如果策略需要）
-            if strategy['use_cookies'] and cookies_exist:
-                ydl_opts['cookiefile'] = cookies_path
-            
-            # 下载音频
-            with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-                info = ydl.extract_info(url, download=True)
-                filename = ydl.prepare_filename(info)
-                audio_file = filename.rsplit('.', 1)[0] + '.mp3'
-            
-            # 返回文件
-            if os.path.exists(audio_file):
-                return FileResponse(
-                    audio_file,
-                    media_type='audio/mpeg',
-                    filename=f"{info.get('title', 'audio')}.mp3"
-                )
-                
-        except Exception as e:
-            last_error = f"{strategy['name']}: {str(e)}"
-            continue
-    
-    # 所有策略都失败
-    raise HTTPException(
-        status_code=500, 
-        detail=f"所有下载策略都失败。最后错误: {last_error}"
-    )
+    except httpx.HTTPError as e:
+        raise HTTPException(status_code=500, detail=f"网络请求失败: {str(e)}")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"下载失败: {str(e)}")
 
 
