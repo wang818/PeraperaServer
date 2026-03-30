@@ -26,6 +26,11 @@ async def download_youtube_audio(url: str = "https://www.youtube.com/watch?v=GUx
         ydl_opts = {
             'format': 'bestaudio/best',
             'outtmpl': output_path,
+            'extractor_args': {
+                'youtube': {
+                    'player_client': ['mweb'],  # 使用 mweb 客户端（推荐配合 PO Token）
+                }
+            },
             'postprocessors': [{
                 'key': 'FFmpegExtractAudio',
                 'preferredcodec': 'mp3',
