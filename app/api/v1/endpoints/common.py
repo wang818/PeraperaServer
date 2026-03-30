@@ -22,13 +22,13 @@ async def download_youtube_audio(url: str = "https://www.youtube.com/watch?v=GUx
         temp_dir = tempfile.mkdtemp()
         output_path = os.path.join(temp_dir, "test")
         
-        # 配置 yt-dlp 选项 - 使用 mweb 客户端配合 cookies
+        # 配置 yt-dlp 选项
         ydl_opts = {
             'format': 'bestaudio/best',
             'outtmpl': output_path,
             'extractor_args': {
                 'youtube': {
-                    'player_client': ['mweb'],  # 移动网页客户端
+                    'player_client': ['ios', 'web'],  # 尝试 ios 和 web 客户端组合
                 }
             },
             'postprocessors': [{
