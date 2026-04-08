@@ -18,10 +18,10 @@ async def get_supported_languages():
 async def download_youtube_audio(url: str = "https://www.youtube.com/watch?v=GUxIotkN2zg"):
     """Download audio from YouTube video using RapidAPI."""
     import httpx
-    from urllib.parse import quote
+    from app.core.config import settings
     
-    # 从环境变量获取 RapidAPI Key
-    RAPIDAPI_KEY = os.getenv("RAPIDAPI_KEY")
+    # 从配置获取 RapidAPI Key
+    RAPIDAPI_KEY = settings.RAPIDAPI_KEY
     if not RAPIDAPI_KEY:
         raise HTTPException(status_code=500, detail="RAPIDAPI_KEY 未配置")
     

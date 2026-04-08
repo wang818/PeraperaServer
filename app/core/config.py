@@ -39,6 +39,9 @@ class Settings(BaseSettings):
     SMTP_FROM_EMAIL: str = ""
     SMTP_FROM_NAME: str = "PeraperaServer"
     
+    # RapidAPI
+    RAPIDAPI_KEY: str = ""
+    
     def get_allowed_origins(self) -> list[str]:
         """Get CORS origins as a list."""
         return [origin.strip() for origin in self.ALLOWED_ORIGINS.split(',')]
