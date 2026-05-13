@@ -1,8 +1,10 @@
 from fastapi import APIRouter, HTTPException
 from fastapi.responses import FileResponse, StreamingResponse
 from app.core.support_lang import get_support_lang
+from app.services.cos_service import cos_service
 import yt_dlp
 import os
+import shutil
 import tempfile
 import logging
 
@@ -19,18 +21,41 @@ async def get_supported_languages():
 
 @router.get("/yt_audio")
 async def download_youtube_audio(url: str = "https://www.youtube.com/watch?v=GUxIotkN2zg"):
-    """Download audio from YouTube video using RapidAPI."""
+    """Download audio from YouTube video using RapidAPI and upload to COS."""
     import httpx
     from app.core.config import settings
-    
+
     # 从配置获取 RapidAPI Key
     RAPIDAPI_KEY = settings.RAPIDAPI_KEY
     if not RAPIDAPI_KEY:
         raise HTTPException(status_code=500, detail="RAPIDAPI_KEY 未配置")
-    
+
     # 提取视频 ID
     video_id = url.split("v=")[-1].split("&")[0] if "v=" in url else url.split("/")[-1]
-    
+
+    async def _upload_to_cos(audio_content: bytes, title: str) -> dict:
+        """将音频内容上传到 COS，返回结果 dict。"""
+        temp_dir = tempfile.mkdtemp()
+        try:
+            safe_title = "".join(c for c in title if c.isalnum() or c in " _-").strip() or "audio"
+            file_name = f"{safe_title}.mp3"
+            audio_file = os.path.join(temp_dir, file_name)
+            with open(audio_file, 'wb') as f:
+                f.write(audio_content)
+
+            object_key = cos_service.generate_object_key(file_name)
+            cos_url = await cos_service.upload_file(audio_file, object_key)
+
+            return {
+                "status": "ok",
+                "title": title,
+                "url": cos_url,
+                "object_key": object_key,
+                "content_type": "audio/mpeg",
+            }
+        finally:
+            shutil.rmtree(temp_dir, ignore_errors=True)
+
     try:
         async with httpx.AsyncClient(timeout=120.0) as client:
             # 方案 1: YouTube MP3 API (ytjar)
@@ -42,30 +67,21 @@ async def download_youtube_audio(url: str = "https://www.youtube.com/watch?v=GUx
                         "X-RapidAPI-Host": "youtube-mp36.p.rapidapi.com"
                     }
                 )
-                
+
                 if response.status_code == 200:
                     result = response.json()
                     if result.get("status") == "ok" and result.get("link"):
-                        # 下载 MP3 文件
                         audio_url = result["link"]
                         audio_response = await client.get(audio_url)
-                        
+
                         if audio_response.status_code == 200:
-                            # 保存到临时文件
-                            temp_dir = tempfile.mkdtemp()
-                            audio_file = os.path.join(temp_dir, f"{result.get('title', 'audio')}.mp3")
-                            with open(audio_file, 'wb') as f:
-                                f.write(audio_response.content)
-                            
-                            return FileResponse(
-                                audio_file,
-                                media_type='audio/mpeg',
-                                filename=f"{result.get('title', 'audio')}.mp3"
+                            return await _upload_to_cos(
+                                audio_response.content,
+                                result.get('title', 'audio'),
                             )
             except Exception as e:
-                # 方案 1 失败，尝试方案 2
                 pass
-            
+
             # 方案 2: YouTube to MP3 API (备用)
             try:
                 response = await client.get(
@@ -79,35 +95,27 @@ async def download_youtube_audio(url: str = "https://www.youtube.com/watch?v=GUx
                         "X-RapidAPI-Host": "youtube-mp3-downloader2.p.rapidapi.com"
                     }
                 )
-                
+
                 if response.status_code == 200:
                     result = response.json()
                     if result.get("dlink"):
-                        # 下载 MP3 文件
                         audio_url = result["dlink"]
                         audio_response = await client.get(audio_url)
-                        
+
                         if audio_response.status_code == 200:
-                            # 保存到临时文件
-                            temp_dir = tempfile.mkdtemp()
-                            audio_file = os.path.join(temp_dir, f"{result.get('title', 'audio')}.mp3")
-                            with open(audio_file, 'wb') as f:
-                                f.write(audio_response.content)
-                            
-                            return FileResponse(
-                                audio_file,
-                                media_type='audio/mpeg',
-                                filename=f"{result.get('title', 'audio')}.mp3"
+                            return await _upload_to_cos(
+                                audio_response.content,
+                                result.get('title', 'audio'),
                             )
             except Exception as e:
                 pass
-            
+
             # 所有方案都失败
             raise HTTPException(
-                status_code=500, 
+                status_code=500,
                 detail="所有下载方案都失败，请检查 RapidAPI 配置或视频 URL"
             )
-            
+
     except httpx.HTTPError as e:
         raise HTTPException(status_code=500, detail=f"网络请求失败: {str(e)}")
     except HTTPException:

@@ -41,6 +41,13 @@ class Settings(BaseSettings):
     
     # RapidAPI
     RAPIDAPI_KEY: str = ""
+
+    # Tencent Cloud COS
+    COS_SECRET_ID: str = ""
+    COS_SECRET_KEY: str = ""
+    COS_BUCKET: str = ""
+    COS_REGION: str = "ap-tokyo"
+    COS_UPLOAD_PREFIX: str = "audios/"
     
     def get_allowed_origins(self) -> list[str]:
         """Get CORS origins as a list."""

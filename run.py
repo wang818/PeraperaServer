@@ -1,6 +1,6 @@
 """
 启动脚本
-运行命令: python run.py
+运行命令: python3 run.py
 """
 import uvicorn
 from app.core.config import settings
