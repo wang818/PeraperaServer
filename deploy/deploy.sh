@@ -92,12 +92,7 @@ cp $DEPLOY_PATH/deploy/perapera.service /etc/systemd/system/
 systemctl daemon-reload
 systemctl enable perapera.service
 
-# 10. 配置 Nginx
-echo_info "配置 Nginx..."
-cp $DEPLOY_PATH/deploy/nginx.conf /etc/nginx/conf.d/perapera.conf
-nginx -t
-
-# 11. 部署 SSL 证书
+# 10. 部署 SSL 证书
 echo_info "部署 SSL 证书..."
 SSL_DIR="/etc/nginx/ssl/perapera.cc"
 mkdir -p $SSL_DIR
@@ -105,6 +100,11 @@ cp $DEPLOY_PATH/deploy/ssl/perapera.cc_bundle.pem $SSL_DIR/
 cp $DEPLOY_PATH/deploy/ssl/perapera.cc.key $SSL_DIR/
 chmod 644 $SSL_DIR/perapera.cc_bundle.pem
 chmod 600 $SSL_DIR/perapera.cc.key
+
+# 11. 配置 Nginx
+echo_info "配置 Nginx..."
+cp $DEPLOY_PATH/deploy/nginx.conf /etc/nginx/conf.d/perapera.conf
+nginx -t
 
 # 12. 启动服务
 echo_info "启动服务..."
