@@ -97,22 +97,30 @@ echo_info "配置 Nginx..."
 cp $DEPLOY_PATH/deploy/nginx.conf /etc/nginx/conf.d/perapera.conf
 nginx -t
 
-# 11. 启动服务
+# 11. 部署 SSL 证书
+echo_info "部署 SSL 证书..."
+SSL_DIR="/etc/nginx/ssl/perapera.cc"
+mkdir -p $SSL_DIR
+cp $DEPLOY_PATH/deploy/ssl/perapera.cc_bundle.pem $SSL_DIR/
+cp $DEPLOY_PATH/deploy/ssl/perapera.cc.key $SSL_DIR/
+chmod 644 $SSL_DIR/perapera.cc_bundle.pem
+chmod 600 $SSL_DIR/perapera.cc.key
+
+# 12. 启动服务
 echo_info "启动服务..."
 systemctl restart perapera.service
 systemctl restart nginx
 
-# 12. 检查服务状态
+# 13. 检查服务状态
 echo_info "检查服务状态..."
 systemctl status perapera.service --no-pager
 systemctl status nginx --no-pager
 
 echo_info "=== 部署完成 ==="
-echo_info "应用地址: http://your-server-ip"
-echo_info "API 文档: http://your-server-ip/docs"
+echo_info "应用地址: https://perapera.cc"
+echo_info "API 文档: https://perapera.cc/docs"
 echo_info ""
 echo_warn "请确保："
 echo_warn "1. 修改 .env 文件中的配置"
-echo_warn "2. 修改 nginx.conf 中的域名"
+echo_warn "2. 域名 DNS 已正确解析到服务器 IP"
 echo_warn "3. 配置防火墙开放 80/443 端口"
-echo_warn "4. 配置 SSL 证书（生产环境）"
