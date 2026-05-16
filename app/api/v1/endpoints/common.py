@@ -1,7 +1,7 @@
 from fastapi import APIRouter, HTTPException
 from fastapi.responses import FileResponse, StreamingResponse
 from app.core.support_lang import get_support_lang
-from app.services.cos_service import cos_service
+from app.services.cos_service import cos_service, hash_filename
 import yt_dlp
 import os
 import shutil
@@ -37,7 +37,7 @@ async def download_youtube_audio(url: str = "https://www.youtube.com/watch?v=GUx
         """将音频内容上传到 COS，返回结果 dict。"""
         temp_dir = tempfile.mkdtemp()
         try:
-            safe_title = "".join(c for c in title if c.isalnum() or c in " _-").strip() or "audio"
+            safe_title = hash_filename(title, fallback="audio")
             file_name = f"{safe_title}.mp3"
             audio_file = os.path.join(temp_dir, file_name)
             with open(audio_file, 'wb') as f:

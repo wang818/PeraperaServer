@@ -1,12 +1,25 @@
 import os
 import asyncio
+import hashlib
 import logging
+import re
 import time
 import uuid
 
 from app.core.config import settings
 
 logger = logging.getLogger(__name__)
+
+
+def hash_filename(name: str, fallback: str = "file") -> str:
+    """Return an ASCII-safe filename derived from ``name`` via MD5.
+
+    Useful for sanitizing names that may contain non-ASCII characters
+    (e.g. Chinese) before using them as part of a COS object key.
+    """
+    if not name:
+        return fallback
+    return hashlib.md5(name.encode("utf-8")).hexdigest()
 
 
 class COSService:
@@ -33,13 +46,20 @@ class COSService:
     def generate_object_key(file_name: str, prefix: str = "audios/") -> str:
         """Generate a unique object key for COS upload.
 
-        Format: audios/baseName_timestamp_uuid.ext
+        The base name is hashed (MD5) so non-ASCII characters (e.g. Chinese)
+        are normalized into a URL-safe object key.
+
+        Format: audios/<md5>_timestamp_uuid.ext
         """
         file_ext = os.path.splitext(file_name)[1]
         base_name = os.path.splitext(file_name)[0]
+        hashed_base = hash_filename(base_name, fallback="file")
+        # Keep the extension only if it is ASCII; otherwise drop it.
+        if file_ext and not re.fullmatch(r"\.[A-Za-z0-9]+", file_ext):
+            file_ext = ""
         timestamp = int(time.time())
         short_uuid = uuid.uuid4().hex[:8]
-        return f"{prefix}{base_name}_{timestamp}_{short_uuid}{file_ext}"
+        return f"{prefix}{hashed_base}_{timestamp}_{short_uuid}{file_ext}"
 
     async def upload_file(
         self,
