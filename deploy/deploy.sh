@@ -103,7 +103,7 @@ chmod 600 $SSL_DIR/perapera.cc.key
 
 # 11. 配置 Nginx
 echo_info "配置 Nginx..."
-cp $DEPLOY_PATH/deploy/nginx.conf /etc/nginx/conf.d/perapera.conf
+cp $DEPLOY_PATH/deploy/perapera.conf /etc/nginx/conf.d/perapera.conf
 nginx -t
 
 # 12. 启动服务
