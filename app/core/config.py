@@ -48,6 +48,14 @@ class Settings(BaseSettings):
     COS_BUCKET: str = ""
     COS_REGION: str = "ap-tokyo"
     COS_UPLOAD_PREFIX: str = "audios/"
+
+    # Apple In-App Purchase (IAP)
+    APPLE_IAP_ENVIRONMENT: str = "sandbox"  # "sandbox" or "production"
+    APPLE_IAP_BUNDLE_ID: str = ""           # e.g. "com.perapera.app"
+    APPLE_IAP_ISSUER_ID: str = ""           # App Store Connect → Keys → Issuer ID
+    APPLE_IAP_KEY_ID: str = ""              # App Store Connect → Keys → Key ID
+    APPLE_IAP_PRIVATE_KEY: str = ""         # .p8 private key content (PEM format, can be inline or path)
+    APPLE_IAP_APP_SHARED_SECRET: str = ""   # App Store Connect shared secret for receipt verification
     
     def get_allowed_origins(self) -> list[str]:
         """Get CORS origins as a list."""
