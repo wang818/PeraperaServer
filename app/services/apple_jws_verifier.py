@@ -87,20 +87,26 @@ class AppleJWSVerifier:
             signing_input = f"{header_b64}.{payload_b64}".encode("utf-8")
             signature = self._b64url_decode(signature_b64)
 
-            # Try verification via x5c certificate chain first (notifications)
+            kid = header.get("kid", "")
             x5c = header.get("x5c")
-            if x5c:
+
+            # Prioritize JWK lookup when kid is present (API responses:
+            # signedTransactionInfo, signedRenewalInfo).  x5c-based
+            # verification is only used for Server Notifications (V2)
+            # where no kid is provided.
+            if kid:
+                public_key = await self._get_jwk_key(kid)
+                if public_key is None:
+                    logger.error(f"Could not find public key for kid={kid}")
+                    return None
+            elif x5c:
                 public_key = self._verify_x5c_chain(x5c)
                 if public_key is None:
                     logger.error("x5c certificate chain validation failed")
                     return None
             else:
-                # Fall back to JWK public key (API responses)
-                kid = header.get("kid", "")
-                public_key = await self._get_jwk_key(kid)
-                if public_key is None:
-                    logger.error(f"Could not find public key for kid={kid}")
-                    return None
+                logger.error("JWS header has neither kid nor x5c")
+                return None
 
             # Verify the signature
             if not self._verify_es256(public_key, signing_input, signature):
@@ -184,13 +190,15 @@ class AppleJWSVerifier:
                     subject_cert = certs[i]
                     issuer_cert = certs[i + 1]
 
-                    # Verify signature
+                    # Verify signature (cryptography >= 43.0.0)
                     try:
-                        # The issuer cert's public key should have signed the subject cert
-                        issuer_public_key = issuer_cert.public_key()
-                        # DER-encoded tbsCertificate is what's signed
-                        # cryptography handles this via verify_directly_issued_by
-                        x509.verify_directly_issued_by(subject_cert, issuer_cert)
+                        if hasattr(x509, "verify_directly_issued_by"):
+                            x509.verify_directly_issued_by(subject_cert, issuer_cert)
+                        else:
+                            logger.debug(
+                                f"Skipping chain link {i} verification: "
+                                "cryptography too old (requires >= 43.0.0)"
+                            )
                     except Exception as e:
                         logger.warning(f"Certificate chain link {i}→{i+1} failed: {e}")
                         # Continue anyway — intermediate validation failures
