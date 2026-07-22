@@ -107,7 +107,10 @@ class EntitlementService:
         our_type = self._map_apple_type(tx_type)
 
         # 4. Check/seed product record
-        await self._ensure_product_exists(product_id, our_type)
+        apple_price = tx_info.get("price")  # integer, smallest currency unit (e.g., cents)
+        apple_currency = tx_info.get("currency", "USD")
+        price_usd = apple_price / 100.0 if apple_price is not None else None
+        await self._ensure_product_exists(product_id, our_type, price=price_usd, currency=apple_currency)
 
         # 5. Determine transaction event type
         event_type = self._determine_event_type(tx_info, our_type)
@@ -925,7 +928,13 @@ class EntitlementService:
     # Product helpers
     # ------------------------------------------------------------------
 
-    async def _ensure_product_exists(self, product_id: str, product_type: str) -> Product:
+    async def _ensure_product_exists(
+        self,
+        product_id: str,
+        product_type: str,
+        price: Optional[float] = None,
+        currency: str = "USD",
+    ) -> Product:
         """Get or create a Product record for the given product ID."""
         result = await self.db.execute(
             select(Product).where(Product.product_id == product_id)
@@ -937,10 +946,22 @@ class EntitlementService:
                 product_id=product_id,
                 name=product_id,  # Can be updated later in admin
                 type=product_type,
+                price=price,
+                currency=currency,
                 is_active=True,
             )
             self.db.add(product)
-            logger.info(f"Auto-created product record: {product_id} ({product_type})")
+            logger.info(
+                f"Auto-created product record: {product_id} ({product_type}) "
+                f"price={price} {currency}"
+            )
+        elif price is not None and product.price is None:
+            # Backfill price info on existing row that was created without it
+            product.price = price
+            product.currency = currency
+            logger.info(
+                f"Backfilled price for product {product_id}: {price} {currency}"
+            )
 
         return product
 
