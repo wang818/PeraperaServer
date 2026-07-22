@@ -27,6 +27,7 @@ from cryptography import x509
 from cryptography.hazmat.primitives import hashes, serialization
 from cryptography.hazmat.primitives.asymmetric import ec
 from cryptography.hazmat.primitives.asymmetric.ec import EllipticCurvePublicKey
+from cryptography.hazmat.primitives.asymmetric.utils import encode_dss_signature
 from cryptography.x509.oid import NameOID
 
 from app.core.config import settings
@@ -89,6 +90,12 @@ class AppleJWSVerifier:
 
             kid = header.get("kid", "")
             x5c = header.get("x5c")
+
+            logger.info(
+                f"JWS header: alg={alg}, kid={kid!r}, "
+                f"has_x5c={bool(x5c)}, sig_len={len(signature)}, "
+                f"header_keys={list(header.keys())}"
+            )
 
             # Prioritize JWK lookup when kid is present (API responses:
             # signedTransactionInfo, signedRenewalInfo).  x5c-based
@@ -310,13 +317,39 @@ class AppleJWSVerifier:
         data: bytes,
         signature: bytes,
     ) -> bool:
-        """Verify an ES256 (ECDSA with SHA-256) signature."""
+        """Verify an ES256 (ECDSA with SHA-256) signature.
+
+        JWS (RFC 7515) uses raw r||s format, but some versions of
+        cryptography expect DER-encoded signatures.  Try DER first,
+        then attempt raw→DER conversion when the signature is 64 bytes
+        (the P-256 raw size).
+        """
         try:
             public_key.verify(signature, data, ec.ECDSA(hashes.SHA256()))
             return True
-        except Exception as e:
-            logger.error(f"ES256 verification failed: {e}")
-            return False
+        except Exception:
+            pass
+
+        # If direct verification fails and sig looks like raw r||s (64 bytes
+        # for P-256), convert to DER and retry.
+        if len(signature) == 64:
+            try:
+                r = int.from_bytes(signature[:32], "big")
+                s = int.from_bytes(signature[32:], "big")
+                der_sig = encode_dss_signature(r, s)
+                public_key.verify(der_sig, data, ec.ECDSA(hashes.SHA256()))
+                return True
+            except Exception as e:
+                logger.error(
+                    f"ES256 (raw→DER) verification failed: {type(e).__name__}: {e}"
+                )
+        else:
+            logger.error(
+                f"ES256 verification failed (sig_len={len(signature)}, "
+                f"key_size={public_key.key_size})"
+            )
+
+        return False
 
     # ------------------------------------------------------------------
     # Base64 / JSON helpers
