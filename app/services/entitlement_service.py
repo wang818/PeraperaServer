@@ -107,9 +107,9 @@ class EntitlementService:
         our_type = self._map_apple_type(tx_type)
 
         # 4. Check/seed product record
-        apple_price = tx_info.get("price")  # integer, smallest currency unit (e.g., cents)
+        apple_price = tx_info.get("price")  # integer, in milliunits (e.g., 5990 = 5.99 USD)
         apple_currency = tx_info.get("currency", "USD")
-        price_usd = apple_price / 100.0 if apple_price is not None else None
+        price_usd = apple_price / 1000.0 if apple_price is not None else None
         await self._ensure_product_exists(product_id, our_type, price=price_usd, currency=apple_currency)
 
         # 5. Determine transaction event type
