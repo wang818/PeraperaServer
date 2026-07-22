@@ -1,5 +1,5 @@
-from fastapi import APIRouter, Depends, HTTPException, status
-from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
+from fastapi import APIRouter, Depends, HTTPException, Request, status
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials, OAuth2PasswordRequestForm
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, and_
 from datetime import datetime, timedelta
@@ -17,7 +17,35 @@ import logging
 logger = logging.getLogger(__name__)
 
 router = APIRouter()
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/v1/auth/login")
+
+
+class OptionalHTTPBearer(HTTPBearer):
+    """
+    HTTPBearer that works with or without the 'Bearer ' prefix.
+
+    Swagger UI → paste just the raw token into the authorize dialog.
+    curl       → both ``Authorization: Bearer <token>`` and
+                 ``Authorization: <token>`` are accepted.
+    """
+
+    async def __call__(self, request: Request) -> HTTPAuthorizationCredentials:
+        authorization = request.headers.get("Authorization")
+        if not authorization:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Not authenticated",
+                headers={"WWW-Authenticate": "Bearer"},
+            )
+
+        scheme, _, credentials = authorization.partition(" ")
+        if scheme.lower() == "bearer":
+            return HTTPAuthorizationCredentials(scheme="Bearer", credentials=credentials)
+
+        # No "Bearer " prefix — treat the whole header value as the token
+        return HTTPAuthorizationCredentials(scheme="Bearer", credentials=authorization)
+
+
+oauth2_scheme = OptionalHTTPBearer()
 
 
 @router.post("/login", response_model=Token)
@@ -205,20 +233,20 @@ async def send_captcha(
 
 
 async def get_current_user(
-    token: str = Depends(oauth2_scheme),
+    credentials: HTTPAuthorizationCredentials = Depends(oauth2_scheme),
     db: AsyncSession = Depends(get_db),
     lang: str = Depends(get_language)
 ) -> User:
     """Get current authenticated user."""
     from app.core.security import decode_access_token
-    
+
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail=get_translation("could_not_validate_credentials", lang),
         headers={"WWW-Authenticate": "Bearer"},
     )
-    
-    payload = decode_access_token(token)
+
+    payload = decode_access_token(credentials.credentials)
     if payload is None:
         raise credentials_exception
     
