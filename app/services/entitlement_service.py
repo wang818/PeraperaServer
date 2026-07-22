@@ -112,6 +112,27 @@ class EntitlementService:
         # 5. Determine transaction event type
         event_type = self._determine_event_type(tx_info, our_type)
 
+        # Check for existing transaction (idempotency — iOS may retry)
+        existing = await self._get_existing_transaction(apple_tx_id)
+        if existing:
+            logger.info(
+                f"Transaction {apple_tx_id} already recorded (user={existing.user_id}), "
+                "returning existing record"
+            )
+            # Still update entitlement in case it wasn't done on the first pass
+            await self._upsert_entitlement(
+                user_id=user_id,
+                product_id=product_id,
+                original_transaction_id=original_tx_id,
+                transaction_id=apple_tx_id,
+                product_type=our_type,
+                purchase_date=purchase_date,
+                expires_date=expires_date,
+                environment=environment,
+                tx_info=tx_info,
+            )
+            return existing
+
         # 6. Create transaction record (audit log)
         txn_record = TransactionRecord(
             user_id=user_id,
@@ -926,6 +947,17 @@ class EntitlementService:
     # ------------------------------------------------------------------
     # User lookup (for notifications)
     # ------------------------------------------------------------------
+
+    async def _get_existing_transaction(
+        self, transaction_id: str
+    ) -> Optional[TransactionRecord]:
+        """Return an existing TransactionRecord for the given transaction_id, or None."""
+        result = await self.db.execute(
+            select(TransactionRecord).where(
+                TransactionRecord.transaction_id == transaction_id
+            )
+        )
+        return result.scalar_one_or_none()
 
     async def _find_user_by_original_tx(
         self, original_transaction_id: str
