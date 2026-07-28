@@ -1,14 +1,20 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select
+from sqlalchemy import select, update
 from typing import List
 from app.core.database import get_db
 from app.core.security import get_password_hash
 from app.models.user import User
 from app.models.user_setting import UserSetting
+from app.models.iap import UserEntitlement, TransactionRecord
 from app.schemas.user import UserCreate, UserResponse, UserUpdate
 from app.schemas.user_setting import UserSettingResponse, UserSettingUpdate
 from app.api.v1.endpoints.auth import get_current_user
+from app.core.dependencies import get_language
+from app.core.i18n import get_translation
+import logging
+
+logger = logging.getLogger(__name__)
 
 router = APIRouter()
 
@@ -98,11 +104,66 @@ async def update_user_setting(
     update_data = setting_in.model_dump(exclude_unset=True)
     for field, value in update_data.items():
         setattr(user_setting, field, value)
-    
+
     await db.commit()
     await db.refresh(user_setting)
-    
+
     return user_setting
+
+
+@router.delete("/me", status_code=status.HTTP_200_OK)
+async def delete_current_user(
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+    lang: str = Depends(get_language),
+):
+    """注销当前登录用户的账号。
+
+    硬删除流程（按依赖顺序执行）：
+    1. 删除 UserSetting（按 user_uuid）
+    2. 删除 UserEntitlement（按 user_id，FK 约束会级联失败）
+    3. 将 TransactionRecord.user_id 置 NULL（保留不可变审计日志，但匿名化）
+    4. 删除 User 行
+    """
+    user_id = current_user.id
+    user_uuid = current_user.uuid
+    logger.info(f"注销账号请求: id={user_id}, uuid={user_uuid}, email={current_user.email}")
+
+    try:
+        # 1. 删除用户设置
+        await db.execute(
+            UserSetting.__table__.delete().where(UserSetting.user_uuid == user_uuid)
+        )
+
+        # 2. 删除用户当前权益
+        await db.execute(
+            UserEntitlement.__table__.delete().where(UserEntitlement.user_id == user_id)
+        )
+
+        # 3. 匿名化 IAP 交易历史（不可变审计日志，仅去掉 user 关联）
+        await db.execute(
+            update(TransactionRecord)
+            .where(TransactionRecord.user_id == user_id)
+            .values(user_id=None)
+        )
+
+        # 4. 删除用户本身
+        await db.execute(User.__table__.delete().where(User.id == user_id))
+
+        await db.commit()
+        logger.info(f"账号已注销: id={user_id}, uuid={user_uuid}")
+
+        return {
+            "message": get_translation("account_deleted", lang),
+            "deleted_user_id": user_id,
+        }
+    except Exception as e:
+        await db.rollback()
+        logger.exception(f"注销账号失败: id={user_id}, error={e}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=get_translation("account_delete_failed", lang),
+        )
 
 
 # @router.get("/{user_id}", response_model=UserResponse)
