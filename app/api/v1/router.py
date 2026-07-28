@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-from app.api.v1.endpoints import users, auth, common, iap
+from app.api.v1.endpoints import users, auth, common, iap, status
 
 api_router = APIRouter()
 
@@ -8,3 +8,4 @@ api_router.include_router(auth.router, prefix="/auth", tags=["Authentication"])
 api_router.include_router(users.router, prefix="/users", tags=["Users"])
 api_router.include_router(common.router, prefix="/common", tags=["Common"])
 api_router.include_router(iap.router, prefix="/iap", tags=["In-App Purchase"])
+api_router.include_router(status.router, prefix="/status", tags=["Status"])
