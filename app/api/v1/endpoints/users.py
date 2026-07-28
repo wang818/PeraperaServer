@@ -7,7 +7,7 @@ from app.core.security import get_password_hash
 from app.models.user import User
 from app.models.user_setting import UserSetting
 from app.models.iap import UserEntitlement, TransactionRecord
-from app.schemas.user import UserCreate, UserResponse, UserUpdate, AccountDeleteResponse
+from app.schemas.user import UserCreate, UserResponse, UserUpdate, AccountDeleteResponse, ErrorResponse
 from app.schemas.user_setting import UserSettingResponse, UserSettingUpdate
 from app.api.v1.endpoints.auth import get_current_user
 from app.core.dependencies import get_language
@@ -157,7 +157,8 @@ async def update_user_setting(
             "description": "未提供有效 token 或 token 已过期",
             "content": {
                 "application/json": {
-                    "example": {"detail": "Could not validate credentials"}
+                    "schema": {"$ref": "#/components/schemas/ErrorResponse"},
+                    "example": {"detail": "Could not validate credentials"},
                 }
             },
         },
@@ -165,7 +166,8 @@ async def update_user_setting(
             "description": "服务器内部错误（如 DB 事务失败、连接断开等）",
             "content": {
                 "application/json": {
-                    "example": {"detail": "账号注销失败，请稍后重试"}
+                    "schema": {"$ref": "#/components/schemas/ErrorResponse"},
+                    "example": {"detail": "账号注销失败，请稍后重试"},
                 }
             },
         },

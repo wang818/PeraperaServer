@@ -68,3 +68,8 @@ class AccountDeleteResponse(BaseModel):
     """Schema for account deletion response."""
     message: str = Field(..., description="本地化提示文案")
     deleted_user_id: int = Field(..., description="被删除的用户 ID")
+
+
+class ErrorResponse(BaseModel):
+    """Schema for standard error response (FastAPI HTTPException detail)."""
+    detail: str = Field(..., description="错误描述")
