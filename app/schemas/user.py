@@ -62,3 +62,9 @@ class CaptchaLogin(BaseModel):
     """Schema for captcha login."""
     email: EmailStr
     captcha: str = Field(..., min_length=6, max_length=6)
+
+
+class AccountDeleteResponse(BaseModel):
+    """Schema for account deletion response."""
+    message: str = Field(..., description="本地化提示文案")
+    deleted_user_id: int = Field(..., description="被删除的用户 ID")

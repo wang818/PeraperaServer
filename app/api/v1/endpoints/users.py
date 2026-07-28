@@ -7,7 +7,7 @@ from app.core.security import get_password_hash
 from app.models.user import User
 from app.models.user_setting import UserSetting
 from app.models.iap import UserEntitlement, TransactionRecord
-from app.schemas.user import UserCreate, UserResponse, UserUpdate
+from app.schemas.user import UserCreate, UserResponse, UserUpdate, AccountDeleteResponse
 from app.schemas.user_setting import UserSettingResponse, UserSettingUpdate
 from app.api.v1.endpoints.auth import get_current_user
 from app.core.dependencies import get_language
@@ -113,6 +113,7 @@ async def update_user_setting(
 
 @router.delete(
     "/delete_account",
+    response_model=AccountDeleteResponse,
     status_code=status.HTTP_200_OK,
     summary="注销当前账号（硬删除）",
     description="""
