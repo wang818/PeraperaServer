@@ -112,7 +112,7 @@ async def update_user_setting(
 
 
 @router.delete(
-    "/me",
+    "/delete_account",
     status_code=status.HTTP_200_OK,
     summary="注销当前账号（硬删除）",
     description="""
