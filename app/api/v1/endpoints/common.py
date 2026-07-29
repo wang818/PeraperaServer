@@ -1,7 +1,16 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Depends, status
 from fastapi.responses import FileResponse, StreamingResponse
+from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy import select
+
 from app.core.support_lang import get_support_lang
 from app.services.cos_service import cos_service, hash_filename
+from app.core.database import get_db
+from app.api.v1.endpoints.auth import get_current_user
+from app.core.dependencies import get_language
+from app.core.i18n import get_translation
+from app.models.user import User
+from app.services import quota_service
 import yt_dlp
 import os
 import shutil
@@ -20,110 +29,123 @@ async def get_supported_languages():
 
 
 @router.get("/yt_audio")
-async def download_youtube_audio(url: str = "https://www.youtube.com/watch?v=GUxIotkN2zg"):
-    """Download audio from YouTube video using RapidAPI and upload to COS."""
+async def download_youtube_audio(
+    url: str = "https://www.youtube.com/watch?v=GUxIotkN2zg",
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+    lang: str = Depends(get_language),
+):
+    """下载 YouTube 音频并上传到 COS。
+
+    需要登录鉴权。下载前先查询视频时长，校验用户剩余字幕识别时长；
+    时长不足直接返回 403。下载成功后才扣除对应时长（优先月卡，其次点卡）。
+    """
     import httpx
     from app.core.config import settings
 
-    # 从配置获取 RapidAPI Key
+    # 1. 查询视频时长（用于计费）
+    duration_seconds = await quota_service.get_video_duration_seconds(url)
+    if duration_seconds is None:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=get_translation("video_duration_unavailable", lang),
+        )
+
+    # 2. 下载前校验时长配额（不足则抛 403，不浪费下载带宽）
+    await quota_service.check_quota_available(db, current_user, duration_seconds, lang)
+
+    # 3. 下载音频（多服务商降级）
+    audio_content, title = await _fetch_audio(url)
+
+    # 4. 下载成功后才扣除时长
+    await quota_service.consume_quota(db, current_user, duration_seconds)
+
+    # 5. 上传 COS 并提交事务
+    result = await _upload_to_cos(audio_content, title)
+    await db.commit()
+    return result
+
+
+async def _fetch_audio(url: str):
+    """通过 RapidAPI 下载 YouTube 音频，返回 (音频字节, 标题)。
+
+    依次尝试多个 API 服务，直到成功为止。所有方案都失败则抛 500。
+    """
+    import httpx
+    from app.core.config import settings
+
     RAPIDAPI_KEY = settings.RAPIDAPI_KEY
     if not RAPIDAPI_KEY:
         raise HTTPException(status_code=500, detail="RAPIDAPI_KEY 未配置")
 
-    # 提取视频 ID
     video_id = url.split("v=")[-1].split("&")[0] if "v=" in url else url.split("/")[-1]
 
-    async def _upload_to_cos(audio_content: bytes, title: str) -> dict:
-        """将音频内容上传到 COS，返回结果 dict。"""
-        temp_dir = tempfile.mkdtemp()
+    async with httpx.AsyncClient(timeout=120.0) as client:
+        # 方案 1: YouTube MP3 API (ytjar)
         try:
-            safe_title = hash_filename(title, fallback="audio")
-            file_name = f"{safe_title}.mp3"
-            audio_file = os.path.join(temp_dir, file_name)
-            with open(audio_file, 'wb') as f:
-                f.write(audio_content)
-
-            object_key = cos_service.generate_object_key(file_name)
-            cos_url = await cos_service.upload_file(audio_file, object_key)
-
-            return {
-                "status": "ok",
-                "title": title,
-                "url": cos_url,
-                "object_key": object_key,
-                "content_type": "audio/mpeg",
-            }
-        finally:
-            shutil.rmtree(temp_dir, ignore_errors=True)
-
-    try:
-        async with httpx.AsyncClient(timeout=120.0) as client:
-            # 方案 1: YouTube MP3 API (ytjar)
-            try:
-                response = await client.get(
-                    f"https://youtube-mp36.p.rapidapi.com/dl?id={video_id}",
-                    headers={
-                        "X-RapidAPI-Key": RAPIDAPI_KEY,
-                        "X-RapidAPI-Host": "youtube-mp36.p.rapidapi.com"
-                    }
-                )
-
-                if response.status_code == 200:
-                    result = response.json()
-                    if result.get("status") == "ok" and result.get("link"):
-                        audio_url = result["link"]
-                        audio_response = await client.get(audio_url)
-
-                        if audio_response.status_code == 200:
-                            return await _upload_to_cos(
-                                audio_response.content,
-                                result.get('title', 'audio'),
-                            )
-            except Exception as e:
-                pass
-
-            # 方案 2: YouTube to MP3 API (备用)
-            try:
-                response = await client.get(
-                    "https://youtube-mp3-downloader2.p.rapidapi.com/ytmp3/ytmp3/custom",
-                    params={
-                        "url": url,
-                        "quality": "192"
-                    },
-                    headers={
-                        "X-RapidAPI-Key": RAPIDAPI_KEY,
-                        "X-RapidAPI-Host": "youtube-mp3-downloader2.p.rapidapi.com"
-                    }
-                )
-
-                if response.status_code == 200:
-                    result = response.json()
-                    if result.get("dlink"):
-                        audio_url = result["dlink"]
-                        audio_response = await client.get(audio_url)
-
-                        if audio_response.status_code == 200:
-                            return await _upload_to_cos(
-                                audio_response.content,
-                                result.get('title', 'audio'),
-                            )
-            except Exception as e:
-                pass
-
-            # 所有方案都失败
-            raise HTTPException(
-                status_code=500,
-                detail="所有下载方案都失败，请检查 RapidAPI 配置或视频 URL"
+            response = await client.get(
+                f"https://youtube-mp36.p.rapidapi.com/dl?id={video_id}",
+                headers={
+                    "X-RapidAPI-Key": RAPIDAPI_KEY,
+                    "X-RapidAPI-Host": "youtube-mp36.p.rapidapi.com",
+                },
             )
+            if response.status_code == 200:
+                result = response.json()
+                if result.get("status") == "ok" and result.get("link"):
+                    audio_response = await client.get(result["link"])
+                    if audio_response.status_code == 200:
+                        return audio_response.content, result.get("title", "audio")
+        except Exception:
+            pass
 
-    except httpx.HTTPError as e:
-        raise HTTPException(status_code=500, detail=f"网络请求失败: {str(e)}")
-    except HTTPException:
-        raise
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"下载失败: {str(e)}")
+        # 方案 2: YouTube to MP3 API (备用)
+        try:
+            response = await client.get(
+                "https://youtube-mp3-downloader2.p.rapidapi.com/ytmp3/ytmp3/custom",
+                params={"url": url, "quality": "192"},
+                headers={
+                    "X-RapidAPI-Key": RAPIDAPI_KEY,
+                    "X-RapidAPI-Host": "youtube-mp3-downloader2.p.rapidapi.com",
+                },
+            )
+            if response.status_code == 200:
+                result = response.json()
+                if result.get("dlink"):
+                    audio_response = await client.get(result["dlink"])
+                    if audio_response.status_code == 200:
+                        return audio_response.content, result.get("title", "audio")
+        except Exception:
+            pass
+
+        raise HTTPException(
+            status_code=500,
+            detail="所有下载方案都失败，请检查 RapidAPI 配置或视频 URL",
+        )
 
 
+async def _upload_to_cos(audio_content: bytes, title: str) -> dict:
+    """将音频内容上传到 COS，返回结果 dict。"""
+    temp_dir = tempfile.mkdtemp()
+    try:
+        safe_title = hash_filename(title, fallback="audio")
+        file_name = f"{safe_title}.mp3"
+        audio_file = os.path.join(temp_dir, file_name)
+        with open(audio_file, "wb") as f:
+            f.write(audio_content)
+
+        object_key = cos_service.generate_object_key(file_name)
+        cos_url = await cos_service.upload_file(audio_file, object_key)
+
+        return {
+            "status": "ok",
+            "title": title,
+            "url": cos_url,
+            "object_key": object_key,
+            "content_type": "audio/mpeg",
+        }
+    finally:
+        shutil.rmtree(temp_dir, ignore_errors=True)
 
 
 def _extract_video_id(url: str) -> str:
@@ -141,7 +163,7 @@ def _extract_video_id(url: str) -> str:
 async def download_youtube_video(url: str = "https://www.youtube.com/watch?v=YGG2LlxlvJI"):
     """
     通过第三方 RapidAPI 下载 YouTube 视频（MP4 格式）。
-    
+
     依次尝试多个 API 服务，直到成功为止：
     1. YouTube Downloader (FAST) - POST /download
     2. YouTube Video & Playlist Downloader - GET /video
@@ -205,25 +227,21 @@ async def download_youtube_video(url: str = "https://www.youtube.com/watch?v=YGG
             )
             if response.status_code == 200:
                 result = response.json()
-                # 该 API 返回 formats 列表，选择包含视频+音频的 mp4
                 formats = result.get("formats", [])
                 download_url = None
                 title = result.get("title", "video")
 
-                # 优先选择有音频的 mp4 格式，分辨率尽量高
                 for fmt in sorted(formats, key=lambda x: x.get("height", 0) or 0, reverse=True):
                     if fmt.get("url") and fmt.get("ext") == "mp4" and fmt.get("acodec") != "none":
                         download_url = fmt["url"]
                         break
 
-                # 如果没有带音频的，退而求其次选任意 mp4
                 if not download_url:
                     for fmt in formats:
                         if fmt.get("url") and fmt.get("ext") == "mp4":
                             download_url = fmt["url"]
                             break
 
-                # 有些 API 直接返回 link / download_url
                 if not download_url:
                     download_url = result.get("link") or result.get("download_url")
 
@@ -258,7 +276,6 @@ async def download_youtube_video(url: str = "https://www.youtube.com/watch?v=YGG
             if response.status_code == 200:
                 result = response.json()
                 title = result.get("title", "video")
-                # 该 API 返回 formats / adaptiveFormats
                 formats = result.get("formats", []) + result.get("adaptiveFormats", [])
                 download_url = None
 
@@ -287,7 +304,6 @@ async def download_youtube_video(url: str = "https://www.youtube.com/watch?v=YGG
         except Exception as e:
             logger.warning(f"方案 3 失败: {e}")
 
-        # ── 所有方案都失败 ──
         raise HTTPException(
             status_code=500,
             detail="所有视频下载方案都失败了，请检查 RapidAPI 配置、API 订阅状态或视频 URL 是否正确",

@@ -163,6 +163,9 @@ class EntitlementService:
             tx_info=tx_info,
         )
 
+        # 8. 将订阅权益写入 users 表（仅新交易路径，避免幂等重试重复发放）
+        await self.apply_product_benefits(user_id, product_id)
+
         logger.info(
             f"Transaction verified: user={user_id}, product={product_id}, "
             f"tx_id={apple_tx_id}, type={event_type}"
@@ -221,6 +224,12 @@ class EntitlementService:
         # Determine product type from receipt
         our_type = "auto_renewable_subscription" if expires_date else "consumable"
 
+        # 幂等：同一交易已记录则直接返回，避免重复发放权益（防止点卡被重复累加）
+        existing = await self._get_existing_transaction(apple_tx_id)
+        if existing:
+            logger.info(f"Receipt transaction {apple_tx_id} 已记录，跳过重复发放")
+            return existing
+
         # Ensure product record exists
         await self._ensure_product_exists(product_id, our_type)
 
@@ -261,11 +270,63 @@ class EntitlementService:
             renewal_info=renewal_info,
         )
 
+        # 将订阅权益写入 users 表
+        await self.apply_product_benefits(user_id, product_id)
+
         logger.info(
             f"Receipt verified: user={user_id}, product={product_id}, "
             f"tx_id={apple_tx_id}"
         )
         return txn_record
+
+    # ------------------------------------------------------------------
+    # Product benefits → User subscription fields
+    # ------------------------------------------------------------------
+
+    async def apply_product_benefits(self, user_id: int, product_id: str) -> None:
+        """根据已验证的商品，将订阅权益写入 users 表。
+
+        调用前应已完成交易校验与 entitlement 写入。本方法仅更新 users 表上的
+        订阅 / 字幕识别时长字段，不修改 iap 相关表。
+
+        - cc.perapera.pro.monthly  ：月卡过期时间 = now+30d；月卡时长 = 1800 分钟（设为）
+        - cc.perapera.pro.yearly   ：年卡过期时间 = now+360d（设为）
+        - cc.perapera.base.monthly ：点卡时长 += 180 分钟（累加）
+        """
+        from datetime import timedelta
+
+        from app.models.user import User
+
+        result = await self.db.execute(
+            select(User).where(User.id == user_id)
+        )
+        user = result.scalar_one_or_none()
+        if user is None:
+            logger.warning(f"apply_product_benefits: user {user_id} 不存在，跳过")
+            return
+
+        now = datetime.now(timezone.utc)
+
+        if product_id == settings.PRODUCT_PRO_MONTHLY:
+            user.monthly_expire_at = now + timedelta(days=settings.MONTHLY_DURATION_DAYS)
+            user.monthly_card_minutes = settings.MONTHLY_CARD_MINUTES
+            logger.info(
+                f"已应用月卡权益 user={user_id}，"
+                f"月卡过期={user.monthly_expire_at}，月卡时长={user.monthly_card_minutes} 分钟"
+            )
+        elif product_id == settings.PRODUCT_PRO_YEARLY:
+            user.annual_expire_at = now + timedelta(days=settings.YEARLY_DURATION_DAYS)
+            logger.info(
+                f"已应用年卡权益 user={user_id}，年卡过期={user.annual_expire_at}"
+            )
+        elif product_id == settings.PRODUCT_BASE_MONTHLY:
+            user.point_card_minutes = (user.point_card_minutes or 0) + settings.POINT_CARD_MINUTES
+            logger.info(
+                f"已应用点卡权益 user={user_id}，"
+                f"点卡时长 +{settings.POINT_CARD_MINUTES} 分钟，当前={user.point_card_minutes} 分钟"
+            )
+        else:
+            logger.info(f"apply_product_benefits: 未知商品 {product_id}，未应用权益")
 
     # ------------------------------------------------------------------
     # Server Notification Processing
@@ -417,6 +478,9 @@ class EntitlementService:
                 tx_info=tx_info,
                 renewal_info=renewal_info,
             )
+            # 发放订阅权益
+            if user_id:
+                await self.apply_product_benefits(user_id, product_id)
 
         elif notification_type == "DID_RENEW":
             # Renewal succeeded — update expires date, ensure active
@@ -430,6 +494,9 @@ class EntitlementService:
                 is_in_billing_retry=False,
                 is_in_grace_period=False,
             )
+            # 续期成功：重新发放订阅权益（月卡刷新 30h / 年卡顺延）
+            if user_id:
+                await self.apply_product_benefits(user_id, product_id)
 
         elif notification_type == "DID_CHANGE_RENEWAL_PREF":
             # User changed product (upgrade/downgrade) — handled in the next renewal

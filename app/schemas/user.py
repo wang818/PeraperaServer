@@ -42,7 +42,12 @@ class UserResponse(UserBase):
     uuid: UUID
     is_active: bool
     created_at: datetime
-    
+    # 订阅 / 字幕识别时长配额
+    annual_expire_at: Optional[datetime] = None
+    monthly_expire_at: Optional[datetime] = None
+    point_card_minutes: int = 0
+    monthly_card_minutes: int = 0
+
     class Config:
         from_attributes = True
 

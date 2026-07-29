@@ -453,6 +453,22 @@ TRANSLATIONS: Dict[str, Dict[str, str]] = {
         "vi": "Nếu không phải bạn, vui lòng bỏ qua email này.",
         "zh-CN": "如果这不是您的操作，请忽略此邮件。",
         "zh-Hant": "如果這不是您的操作，請忽略此郵件。"
+    },
+
+    # 字幕识别时长 / 订阅配额相关
+    "quota_insufficient": {
+        "en": "Insufficient subtitle recognition time: need {needed} min, only {total} min available",
+        "ja": "字幕認識時間が不足しています：必要 {needed} 分、残り {total} 分",
+        "ko": "자막 인식 시간이 부족합니다: 필요 {needed}분, 보유 {total}분",
+        "zh-CN": "字幕识别时长不足：需要 {needed} 分钟，当前剩余 {total} 分钟",
+        "zh-Hant": "字幕辨識時長不足：需要 {needed} 分鐘，目前剩餘 {total} 分鐘"
+    },
+    "video_duration_unavailable": {
+        "en": "Could not retrieve the video duration, please try again later",
+        "ja": "動画の長さを取得できませんでした。後でもう一度お試しください",
+        "ko": "동영상 길이를 가져올 수 없습니다. 나중에 다시 시도해 주세요",
+        "zh-CN": "无法获取视频时长信息，请稍后重试",
+        "zh-Hant": "無法取得影片時長資訊，請稍後重試"
     }
 }
 

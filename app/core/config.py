@@ -56,6 +56,19 @@ class Settings(BaseSettings):
     APPLE_IAP_KEY_ID: str = ""              # App Store Connect → Keys → Key ID
     APPLE_IAP_PRIVATE_KEY: str = ""         # .p8 private key content (PEM format, can be inline or path)
     APPLE_IAP_APP_SHARED_SECRET: str = ""   # App Store Connect shared secret for receipt verification
+
+    # ── 订阅商品 / 字幕识别时长配额 ──
+    # Product IDs（与 App Store Connect 一致）
+    PRODUCT_PRO_MONTHLY: str = "cc.perapera.pro.monthly"   # 月卡
+    PRODUCT_PRO_YEARLY: str = "cc.perapera.pro.yearly"    # 年卡
+    PRODUCT_BASE_MONTHLY: str = "cc.perapera.base.monthly"  # 点卡
+
+    # 时长 / 周期参数
+    MONTHLY_DURATION_DAYS: int = 30     # 月卡有效期（天）
+    YEARLY_DURATION_DAYS: int = 360     # 年卡有效期（天）
+    MONTHLY_CARD_MINUTES: int = 1800    # 月卡时长：30 小时 = 1800 分钟
+    POINT_CARD_MINUTES: int = 180       # 点卡单次充值：3 小时 = 180 分钟
+    MONTHLY_REFILL_MINUTES: int = 1800  # 年卡有效且月卡过期时补充的月卡时长：30 小时 = 1800 分钟
     
     def get_allowed_origins(self) -> list[str]:
         """Get CORS origins as a list."""
