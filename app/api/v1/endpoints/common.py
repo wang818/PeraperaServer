@@ -47,21 +47,22 @@ async def download_youtube_audio(
 
     RAPIDAPI_KEY = settings.RAPIDAPI_KEY
 
-    # 1. 查询视频时长（用于计费）
-    duration_seconds = await quota_service.get_video_duration_seconds(url)
+    # 1. 获取视频元信息（RapidAPI，可靠来源，含 video_length 时长）
+    video_id = _extract_video_id(url)
+    video_info = await _fetch_video_info(video_id, RAPIDAPI_KEY)
+
+    # 2. 时长优先用 RapidAPI 的 video_length；拿不到再回退 yt-dlp
+    duration_seconds = _parse_duration(video_info)
+    if duration_seconds is None:
+        duration_seconds = await quota_service.get_video_duration_seconds(url)
     if duration_seconds is None:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail=get_translation("video_duration_unavailable", lang),
         )
 
-    # 2. 下载前校验时长配额（不足则抛 403，不浪费下载带宽）
+    # 3. 下载前校验时长配额（不足则抛 403，不浪费下载带宽）
     await quota_service.check_quota_available(db, current_user, duration_seconds, lang)
-
-    # 3. 获取视频元信息（最佳努力，失败不影响下载与计费）
-    video_id = _extract_video_id(url)
-    video_info, _ = await _fetch_video_info(video_id, RAPIDAPI_KEY)
-    info_title = (video_info or {}).get("title")
 
     # 4. 下载音频（多服务商降级）
     audio_content, audio_title = await _fetch_audio(url)
@@ -70,6 +71,7 @@ async def download_youtube_audio(
     await quota_service.consume_quota(db, current_user, duration_seconds)
 
     # 6. 上传 COS 并提交事务（优先使用视频元信息标题）
+    info_title = (video_info or {}).get("title")
     result = await _upload_to_cos(audio_content, info_title or audio_title, video_info)
     await db.commit()
     return result
@@ -235,6 +237,23 @@ def _extract_video_id(url: str) -> str:
     elif "/shorts/" in url:
         return url.split("/shorts/")[-1].split("?")[0]
     return url.split("/")[-1]
+
+
+def _parse_duration(video_info: Optional[dict]) -> Optional[int]:
+    """从 RapidAPI 视频元信息中提取时长（秒）。
+
+    youtube-v2 的 video_length 为秒数（字符串或数字）。解析失败返回 None，
+    由调用方回退到 yt-dlp 或报错。
+    """
+    if not video_info:
+        return None
+    raw = video_info.get("video_length")
+    if raw is None:
+        return None
+    try:
+        return int(float(raw))
+    except (TypeError, ValueError):
+        return None
 
 
 @router.get("/yt_video")
