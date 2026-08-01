@@ -2,7 +2,7 @@ from fastapi import APIRouter, HTTPException, Depends, status
 from fastapi.responses import FileResponse, StreamingResponse
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
-from typing import Optional
+from typing import Optional, Union
 
 from app.core.support_lang import get_support_lang
 from app.services.cos_service import cos_service, hash_filename
@@ -17,6 +17,7 @@ import os
 import shutil
 import tempfile
 import logging
+import httpx
 
 logger = logging.getLogger(__name__)
 
@@ -42,7 +43,6 @@ async def download_youtube_audio(
     时长不足直接返回 403。下载成功后才扣除对应时长（优先月卡，其次点卡）。
     同时返回通过 youtube-v2.p.rapidapi.com/video/details 获取到的视频元信息。
     """
-    import httpx
     from app.core.config import settings
 
     RAPIDAPI_KEY = settings.RAPIDAPI_KEY
@@ -60,7 +60,7 @@ async def download_youtube_audio(
 
     # 3. 获取视频元信息（最佳努力，失败不影响下载与计费）
     video_id = _extract_video_id(url)
-    video_info = await _fetch_video_info(video_id, RAPIDAPI_KEY)
+    video_info, _ = await _fetch_video_info(video_id, RAPIDAPI_KEY)
     info_title = (video_info or {}).get("title")
 
     # 4. 下载音频（多服务商降级）
@@ -96,11 +96,11 @@ async def get_youtube_info(
         )
 
     video_id = _extract_video_id(url)
-    info = await _fetch_video_info(video_id, api_key)
+    info, err = await _fetch_video_info(video_id, api_key, return_error=True)
     if info is None:
         raise HTTPException(
             status_code=status.HTTP_502_BAD_GATEWAY,
-            detail="获取视频元信息失败，请检查 RapidAPI 配置、订阅状态或视频 URL",
+            detail=err or "获取视频元信息失败，请检查 RapidAPI 配置、订阅状态或视频 URL",
         )
     return info
 
@@ -110,7 +110,6 @@ async def _fetch_audio(url: str):
 
     依次尝试多个 API 服务，直到成功为止。所有方案都失败则抛 500。
     """
-    import httpx
     from app.core.config import settings
 
     RAPIDAPI_KEY = settings.RAPIDAPI_KEY
@@ -190,15 +189,21 @@ async def _upload_to_cos(
         shutil.rmtree(temp_dir, ignore_errors=True)
 
 
-async def _fetch_video_info(video_id: str, api_key: Optional[str]) -> Optional[dict]:
+async def _fetch_video_info(
+    video_id: str, api_key: Optional[str], return_error: bool = False
+) -> Union[tuple, Optional[dict]]:
     """通过 youtube-v2.p.rapidapi.com/video/details 获取视频元信息。
 
     返回字段示例：title / author / number_of_views / video_length / description /
-    published_time / thumbnails 等。最佳努力：key 未配置或请求失败时返回 None，
-    不影响主下载与计费流程。
+    published_time / thumbnails 等。
+    - 默认（return_error=False）：最佳努力，key 未配置或请求失败时返回 None，
+      不影响主下载与计费流程。
+    - return_error=True：失败时返回 (None, 错误说明)，供独立元信息接口向调用方
+      暴露真实失败原因，便于排查。
     """
     if not api_key:
-        return None
+        err = "RAPIDAPI_KEY 未配置"
+        return (None, err) if return_error else None
     try:
         async with httpx.AsyncClient(timeout=30.0) as client:
             resp = await client.get(
@@ -210,11 +215,15 @@ async def _fetch_video_info(video_id: str, api_key: Optional[str]) -> Optional[d
                 },
             )
             if resp.status_code == 200:
-                return resp.json()
-            logger.warning(f"获取视频元信息失败: status={resp.status_code}")
+                data = resp.json()
+                return (data, None) if return_error else data
+            err = f"RapidAPI 返回状态码 {resp.status_code}，响应: {resp.text[:300]}"
+            logger.warning(f"获取视频元信息失败: {err}")
+            return (None, err) if return_error else None
     except Exception as e:
-        logger.warning(f"获取视频元信息异常: {e}")
-    return None
+        err = f"请求 RapidAPI 异常: {e}"
+        logger.warning(f"获取视频元信息异常: {err}")
+        return (None, err) if return_error else None
 
 
 def _extract_video_id(url: str) -> str:
