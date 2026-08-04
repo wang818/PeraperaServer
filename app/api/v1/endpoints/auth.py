@@ -60,23 +60,32 @@ async def login_with_captcha(
     
     # 验证验证码
     now = datetime.utcnow()
-    result = await db.execute(
-        select(CaptchaRecord).where(
-            and_(
-                CaptchaRecord.email == login_data.email,
-                CaptchaRecord.captcha == login_data.captcha,
-                CaptchaRecord.expires_at > now
-            )
-        ).order_by(CaptchaRecord.created_at.desc())
+
+    # ── Apple 审核专用账号：固定验证码直接通过（无需先调用 sendCaptcha） ──
+    is_review_account = (
+        bool(settings.APPLE_REVIEW_EMAIL)
+        and login_data.email == settings.APPLE_REVIEW_EMAIL
+        and login_data.captcha == settings.APPLE_REVIEW_CAPTCHA
     )
-    captcha_record = result.scalar_one_or_none()
-    
-    if not captcha_record:
-        logger.warning(f"验证码无效或已过期: {login_data.email}")
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail=get_translation("invalid_or_expired_captcha", lang)
+
+    if not is_review_account:
+        result = await db.execute(
+            select(CaptchaRecord).where(
+                and_(
+                    CaptchaRecord.email == login_data.email,
+                    CaptchaRecord.captcha == login_data.captcha,
+                    CaptchaRecord.expires_at > now
+                )
+            ).order_by(CaptchaRecord.created_at.desc())
         )
+        captcha_record = result.scalar_one_or_none()
+
+        if not captcha_record:
+            logger.warning(f"验证码无效或已过期: {login_data.email}")
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail=get_translation("invalid_or_expired_captcha", lang)
+            )
     
     # 查询用户是否存在
     result = await db.execute(
