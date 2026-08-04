@@ -57,6 +57,12 @@ class Settings(BaseSettings):
     APPLE_IAP_PRIVATE_KEY: str = ""         # .p8 private key content (PEM format, can be inline or path)
     APPLE_IAP_APP_SHARED_SECRET: str = ""   # App Store Connect shared secret for receipt verification
 
+    # Apple 审核专用账号（无需发邮件，验证码固定，便于审核登录）
+    APPLE_REVIEW_EMAIL: str = "yinsishun1987@gmail.com"
+    APPLE_REVIEW_CAPTCHA: str = "123456"
+    # 审核验证码有效期（天），默认 30 天，避免审核期间过期
+    APPLE_REVIEW_CAPTCHA_DAYS: int = 30
+
     # ── 订阅商品 / 字幕识别时长配额 ──
     # Product IDs（与 App Store Connect 一致）
     PRODUCT_PRO_MONTHLY: str = "cc.perapera.pro.monthly"   # 月卡

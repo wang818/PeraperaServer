@@ -6,6 +6,7 @@ from datetime import datetime, timedelta
 from app.core.database import get_db
 from app.core.security import verify_password, create_access_token
 from app.core.email import generate_captcha, send_captcha_email
+from app.core.config import settings
 from app.models.user import User
 from app.models.captcha import CaptchaRecord
 from app.models.user_setting import UserSetting
@@ -150,7 +151,27 @@ async def send_captcha(
     from email_validator import validate_email, EmailNotValidError
     
     logger.info(f"请求发送验证码: {email}, 语言: {lang}")
-    
+
+    # ── Apple 审核专用账号：固定验证码、不发邮件、跳过频率限制 ──
+    if settings.APPLE_REVIEW_EMAIL and email == settings.APPLE_REVIEW_EMAIL:
+        logger.info(f"检测到 Apple 审核账号，使用固定验证码（不发邮件）: {email}")
+        review_captcha = settings.APPLE_REVIEW_CAPTCHA
+        review_expiry = datetime.utcnow() + timedelta(days=settings.APPLE_REVIEW_CAPTCHA_DAYS)
+        captcha_record = CaptchaRecord(
+            email=email,
+            captcha=review_captcha,
+            send_count=1,
+            created_at=datetime.utcnow(),
+            expires_at=review_expiry,
+        )
+        db.add(captcha_record)
+        await db.commit()
+        return {
+            "message": "Apple 审核账号验证码已设置（固定值，未发送邮件）",
+            "email": email,
+            "send_count": 1,
+        }
+
     # 验证邮箱格式
     try:
         validate_email(email)
