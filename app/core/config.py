@@ -26,7 +26,7 @@ class Settings(BaseSettings):
     # Security
     SECRET_KEY: str = "your-secret-key-here-change-in-production"
     ALGORITHM: str = "HS256"
-    ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = 4320  # 3 days
     
     # CORS - use string type to avoid JSON parsing issues
     ALLOWED_ORIGINS: str = "http://localhost:3000,http://localhost:8000"

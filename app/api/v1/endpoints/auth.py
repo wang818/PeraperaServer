@@ -4,12 +4,13 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, and_
 from datetime import datetime, timedelta
 from app.core.database import get_db
-from app.core.security import verify_password, create_access_token
+from app.core.security import verify_password, create_access_token, decode_access_token
 from app.core.email import generate_captcha, send_captcha_email
 from app.models.user import User
 from app.models.captcha import CaptchaRecord
 from app.models.user_setting import UserSetting
 from app.schemas.user import Token, CaptchaLogin
+from app.core.config import settings
 from app.core.dependencies import get_language
 from app.core.i18n import get_translation
 import logging
@@ -133,11 +134,68 @@ async def login_with_captcha(
             detail=get_translation("inactive_user", lang)
         )
     
-    # 创建访问令牌
+    # 创建令牌（有效期 3 天）
     access_token = create_access_token(data={"sub": str(user.id)})
     logger.info(f"登录成功: {user.email}")
-    
+
     return {"access_token": access_token, "token_type": "bearer"}
+
+
+@router.post("/refresh", response_model=Token)
+async def refresh_access_token(
+    credentials: HTTPAuthorizationCredentials = Depends(oauth2_scheme),
+    db: AsyncSession = Depends(get_db),
+    lang: str = Depends(get_language)
+):
+    """用当前 token 刷新，延长 3 天有效期（滑动窗口）"""
+    token_str = credentials.credentials
+
+    # 解码 token（允许已过期的 token 来刷新）
+
+
+    user_id: str | None = None
+
+    # 先尝试正常解码
+    payload = decode_access_token(token_str)
+    if payload is not None:
+        user_id = payload.get("sub")
+
+    # 如果 token 已过期，手动解码拿 user_id
+    if user_id is None:
+        from jose import jwt as jose_jwt
+        try:
+            payload = jose_jwt.decode(
+                token_str, settings.SECRET_KEY, algorithms=[settings.ALGORITHM],
+                options={"verify_exp": False}
+            )
+            user_id = payload.get("sub")
+        except Exception:
+            user_id = None
+
+    if user_id is None:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail=get_translation("invalid_or_expired_refresh_token", lang),
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+
+    # 验证用户是否存在且激活
+    result = await db.execute(select(User).where(User.id == int(user_id)))
+    user = result.scalar_one_or_none()
+    if user is None or not user.is_active:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail=get_translation("invalid_or_expired_refresh_token", lang),
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+
+    # 生成新的令牌，有效期从此刻起 3 天（滑动窗口）
+
+
+    new_access_token = create_access_token(data={"sub": str(user.id)})
+    logger.info(f"令牌刷新成功: {user.email}")
+
+    return {"access_token": new_access_token, "token_type": "bearer"}
 
 
 @router.get("/sendCaptcha")

@@ -114,6 +114,27 @@ TRANSLATIONS: Dict[str, Dict[str, str]] = {
         "zh-CN": "验证码无效或已过期",
         "zh-Hant": "驗證碼無效或已過期"
     },
+    "invalid_or_expired_refresh_token": {
+        "en": "Invalid or expired refresh token",
+        "ar": "رمز التحديث غير صالح أو منتهي الصلاحية",
+        "de": "Ungültiger oder abgelaufener Refresh-Token",
+        "es": "Token de actualización no válido o caducado",
+        "fil": "Hindi wasto o nag-expire na ang refresh token",
+        "fr": "Jeton d'actualisation invalide ou expiré",
+        "id": "Token penyegaran tidak valid atau kedaluwarsa",
+        "ja": "リフレッシュトークンが無効または期限切れです",
+        "ko": "리프레시 토큰이 유효하지 않거나 만료되었습니다",
+        "ms": "Token segar semula tidak sah atau tamat tempoh",
+        "my": "ရီဖရက်ရှ် တိုကင် မမှန်ကန်ပါ သို့မဟုတ် သက်တမ်းကုန်ဆုံးပါပြီ",
+        "pl": "Nieprawidłowy lub wygasły token odświeżania",
+        "pt": "Token de atualização inválido ou expirado",
+        "ru": "Неверный или истекший токен обновления",
+        "th": "รีเฟรชโทเค็นไม่ถูกต้องหรือหมดอายุ",
+        "tr": "Geçersiz veya süresi dolmuş yenileme tokeni",
+        "vi": "Token làm mới không hợp lệ hoặc đã hết hạn",
+        "zh-CN": "刷新令牌无效或已过期",
+        "zh-Hant": "刷新令牌無效或已過期"
+    },
     "inactive_user": {
         "en": "Inactive user",
         "ar": "مستخدم غير نشط",
