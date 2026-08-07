@@ -212,3 +212,5 @@ cookies.txt
 .codegraph/
 
 *.p8
+
+.cursor
