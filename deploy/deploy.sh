@@ -124,3 +124,16 @@ echo_warn "请确保："
 echo_warn "1. 修改 .env 文件中的配置"
 echo_warn "2. 域名 DNS 已正确解析到服务器 IP"
 echo_warn "3. 配置防火墙开放 80/443 端口"
+
+# 14. 发送部署完成通知邮件（最佳努力，失败不影响部署结果）
+echo_info "发送部署完成通知邮件..."
+if [ -f "$DEPLOY_PATH/venv/bin/activate" ]; then
+    # shellcheck disable=SC1091
+    source "$DEPLOY_PATH/venv/bin/activate"
+    ( cd "$DEPLOY_PATH" && python "$DEPLOY_PATH/scripts/notify_deploy.py" \
+        --to "${DEPLOY_NOTIFY_EMAIL:-wangjianvip83@gmail.com}" ) \
+        || echo_warn "部署通知邮件发送失败（不影响部署结果）"
+    deactivate 2>/dev/null || true
+else
+    echo_warn "未找到虚拟环境，跳过部署通知邮件"
+fi

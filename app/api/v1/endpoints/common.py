@@ -2,6 +2,7 @@ from fastapi import APIRouter, HTTPException, Depends, status
 from fastapi.responses import FileResponse, StreamingResponse
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
+from typing import Optional, Union
 
 from app.core.support_lang import get_support_lang
 from app.services.cos_service import cos_service, hash_filename
@@ -16,6 +17,7 @@ import os
 import shutil
 import tempfile
 import logging
+import httpx
 
 logger = logging.getLogger(__name__)
 
@@ -39,31 +41,70 @@ async def download_youtube_audio(
 
     需要登录鉴权。下载前先查询视频时长，校验用户剩余字幕识别时长；
     时长不足直接返回 403。下载成功后才扣除对应时长（优先月卡，其次点卡）。
+    同时返回通过 youtube-v2.p.rapidapi.com/video/details 获取到的视频元信息。
     """
-    import httpx
     from app.core.config import settings
 
-    # 1. 查询视频时长（用于计费）
-    duration_seconds = await quota_service.get_video_duration_seconds(url)
+    RAPIDAPI_KEY = settings.RAPIDAPI_KEY
+
+    # 1. 获取视频元信息（RapidAPI，可靠来源，含 video_length 时长）
+    video_id = _extract_video_id(url)
+    video_info = await _fetch_video_info(video_id, RAPIDAPI_KEY)
+
+    # 2. 时长优先用 RapidAPI 的 video_length；拿不到再回退 yt-dlp
+    duration_seconds = _parse_duration(video_info)
+    if duration_seconds is None:
+        duration_seconds = await quota_service.get_video_duration_seconds(url)
     if duration_seconds is None:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail=get_translation("video_duration_unavailable", lang),
         )
 
-    # 2. 下载前校验时长配额（不足则抛 403，不浪费下载带宽）
+    # 3. 下载前校验时长配额（不足则抛 403，不浪费下载带宽）
     await quota_service.check_quota_available(db, current_user, duration_seconds, lang)
 
-    # 3. 下载音频（多服务商降级）
-    audio_content, title = await _fetch_audio(url)
+    # 4. 下载音频（多服务商降级）
+    audio_content, audio_title = await _fetch_audio(url)
 
-    # 4. 下载成功后才扣除时长
+    # 5. 下载成功后才扣除时长
     await quota_service.consume_quota(db, current_user, duration_seconds)
 
-    # 5. 上传 COS 并提交事务
-    result = await _upload_to_cos(audio_content, title)
+    # 6. 上传 COS 并提交事务（优先使用视频元信息标题）
+    info_title = (video_info or {}).get("title")
+    result = await _upload_to_cos(audio_content, info_title or audio_title, video_info)
     await db.commit()
     return result
+
+
+@router.get("/yt_info")
+async def get_youtube_info(
+    url: str = "https://www.youtube.com/watch?v=GUxIotkN2zg",
+    current_user: User = Depends(get_current_user),
+    lang: str = Depends(get_language),
+):
+    """获取 YouTube 视频元信息（不含下载，不消耗配额，需登录鉴权）。
+
+    通过 youtube-v2.p.rapidapi.com/video/details 拉取标题、作者、时长、
+    播放量、描述、缩略图等公开元信息，直接返回该 JSON。
+    """
+    from app.core.config import settings
+
+    api_key = settings.RAPIDAPI_KEY
+    if not api_key:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="RAPIDAPI_KEY 未配置，请参考 RAPIDAPI_SETUP.md 进行设置",
+        )
+
+    video_id = _extract_video_id(url)
+    info, err = await _fetch_video_info(video_id, api_key, return_error=True)
+    if info is None:
+        raise HTTPException(
+            status_code=status.HTTP_502_BAD_GATEWAY,
+            detail=err or "获取视频元信息失败，请检查 RapidAPI 配置、订阅状态或视频 URL",
+        )
+    return info
 
 
 async def _fetch_audio(url: str):
@@ -71,7 +112,6 @@ async def _fetch_audio(url: str):
 
     依次尝试多个 API 服务，直到成功为止。所有方案都失败则抛 500。
     """
-    import httpx
     from app.core.config import settings
 
     RAPIDAPI_KEY = settings.RAPIDAPI_KEY
@@ -124,8 +164,10 @@ async def _fetch_audio(url: str):
         )
 
 
-async def _upload_to_cos(audio_content: bytes, title: str) -> dict:
-    """将音频内容上传到 COS，返回结果 dict。"""
+async def _upload_to_cos(
+    audio_content: bytes, title: str, video_info: Optional[dict] = None
+) -> dict:
+    """将音频内容上传到 COS，返回结果 dict（含视频元信息）。"""
     temp_dir = tempfile.mkdtemp()
     try:
         safe_title = hash_filename(title, fallback="audio")
@@ -143,9 +185,47 @@ async def _upload_to_cos(audio_content: bytes, title: str) -> dict:
             "url": cos_url,
             "object_key": object_key,
             "content_type": "audio/mpeg",
+            "video_info": video_info,
         }
     finally:
         shutil.rmtree(temp_dir, ignore_errors=True)
+
+
+async def _fetch_video_info(
+    video_id: str, api_key: Optional[str], return_error: bool = False
+) -> Union[tuple, Optional[dict]]:
+    """通过 youtube-v2.p.rapidapi.com/video/details 获取视频元信息。
+
+    返回字段示例：title / author / number_of_views / video_length / description /
+    published_time / thumbnails 等。
+    - 默认（return_error=False）：最佳努力，key 未配置或请求失败时返回 None，
+      不影响主下载与计费流程。
+    - return_error=True：失败时返回 (None, 错误说明)，供独立元信息接口向调用方
+      暴露真实失败原因，便于排查。
+    """
+    if not api_key:
+        err = "RAPIDAPI_KEY 未配置"
+        return (None, err) if return_error else None
+    try:
+        async with httpx.AsyncClient(timeout=30.0) as client:
+            resp = await client.get(
+                "https://youtube-v2.p.rapidapi.com/video/details",
+                params={"video_id": video_id},
+                headers={
+                    "X-RapidAPI-Key": api_key,
+                    "X-RapidAPI-Host": "youtube-v2.p.rapidapi.com",
+                },
+            )
+            if resp.status_code == 200:
+                data = resp.json()
+                return (data, None) if return_error else data
+            err = f"RapidAPI 返回状态码 {resp.status_code}，响应: {resp.text[:300]}"
+            logger.warning(f"获取视频元信息失败: {err}")
+            return (None, err) if return_error else None
+    except Exception as e:
+        err = f"请求 RapidAPI 异常: {e}"
+        logger.warning(f"获取视频元信息异常: {err}")
+        return (None, err) if return_error else None
 
 
 def _extract_video_id(url: str) -> str:
@@ -157,6 +237,23 @@ def _extract_video_id(url: str) -> str:
     elif "/shorts/" in url:
         return url.split("/shorts/")[-1].split("?")[0]
     return url.split("/")[-1]
+
+
+def _parse_duration(video_info: Optional[dict]) -> Optional[int]:
+    """从 RapidAPI 视频元信息中提取时长（秒）。
+
+    youtube-v2 的 video_length 为秒数（字符串或数字）。解析失败返回 None，
+    由调用方回退到 yt-dlp 或报错。
+    """
+    if not video_info:
+        return None
+    raw = video_info.get("video_length")
+    if raw is None:
+        return None
+    try:
+        return int(float(raw))
+    except (TypeError, ValueError):
+        return None
 
 
 @router.get("/yt_video")

@@ -6,6 +6,7 @@ from datetime import datetime, timedelta
 from app.core.database import get_db
 from app.core.security import verify_password, create_access_token, decode_access_token
 from app.core.email import generate_captcha, send_captcha_email
+from app.core.config import settings
 from app.models.user import User
 from app.models.captcha import CaptchaRecord
 from app.models.user_setting import UserSetting
@@ -60,23 +61,32 @@ async def login_with_captcha(
     
     # 验证验证码
     now = datetime.utcnow()
-    result = await db.execute(
-        select(CaptchaRecord).where(
-            and_(
-                CaptchaRecord.email == login_data.email,
-                CaptchaRecord.captcha == login_data.captcha,
-                CaptchaRecord.expires_at > now
-            )
-        ).order_by(CaptchaRecord.created_at.desc())
+
+    # ── Apple 审核专用账号：固定验证码直接通过（无需先调用 sendCaptcha） ──
+    is_review_account = (
+        bool(settings.APPLE_REVIEW_EMAIL)
+        and login_data.email == settings.APPLE_REVIEW_EMAIL
+        and login_data.captcha == settings.APPLE_REVIEW_CAPTCHA
     )
-    captcha_record = result.scalar_one_or_none()
-    
-    if not captcha_record:
-        logger.warning(f"验证码无效或已过期: {login_data.email}")
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail=get_translation("invalid_or_expired_captcha", lang)
+
+    if not is_review_account:
+        result = await db.execute(
+            select(CaptchaRecord).where(
+                and_(
+                    CaptchaRecord.email == login_data.email,
+                    CaptchaRecord.captcha == login_data.captcha,
+                    CaptchaRecord.expires_at > now
+                )
+            ).order_by(CaptchaRecord.created_at.desc())
         )
+        captcha_record = result.scalar_one_or_none()
+
+        if not captcha_record:
+            logger.warning(f"验证码无效或已过期: {login_data.email}")
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail=get_translation("invalid_or_expired_captcha", lang)
+            )
     
     # 查询用户是否存在
     result = await db.execute(
@@ -208,7 +218,27 @@ async def send_captcha(
     from email_validator import validate_email, EmailNotValidError
     
     logger.info(f"请求发送验证码: {email}, 语言: {lang}")
-    
+
+    # ── Apple 审核专用账号：固定验证码、不发邮件、跳过频率限制 ──
+    if settings.APPLE_REVIEW_EMAIL and email == settings.APPLE_REVIEW_EMAIL:
+        logger.info(f"检测到 Apple 审核账号，使用固定验证码（不发邮件）: {email}")
+        review_captcha = settings.APPLE_REVIEW_CAPTCHA
+        review_expiry = datetime.utcnow() + timedelta(days=settings.APPLE_REVIEW_CAPTCHA_DAYS)
+        captcha_record = CaptchaRecord(
+            email=email,
+            captcha=review_captcha,
+            send_count=1,
+            created_at=datetime.utcnow(),
+            expires_at=review_expiry,
+        )
+        db.add(captcha_record)
+        await db.commit()
+        return {
+            "message": "Apple 审核账号验证码已设置（固定值，未发送邮件）",
+            "email": email,
+            "send_count": 1,
+        }
+
     # 验证邮箱格式
     try:
         validate_email(email)

@@ -33,3 +33,8 @@ jobs:
 
             echo "=== Deploy completed ==="
             sudo systemctl status perapera.service --no-pager
+
+            # Send deploy-completion notification email (best-effort)
+            source venv/bin/activate
+            python scripts/notify_deploy.py --to "wangjianvip83@gmail.com" \
+              || echo "部署通知邮件发送失败（不影响部署结果）"
