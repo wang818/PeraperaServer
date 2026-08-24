@@ -1,0 +1,171 @@
+Sample Call for Java
+https://intl.cloud.tencent.com/document/product/1084/44456
+
+<!DOCTYPE html>Sample Call for Java
+tencent cloud
+
+Promotions
+
+Products
+
+Solutions
+
+Pricing
+
+Partner Network
+
+Marketplace
+
+Explore
+
+PrevNext
+
+Simple Email Service
+
+News and Announcements
+Release Notes
+
+Announcement on a Newly Added Independent IP Value-Added Service
+
+Product Introduction
+Overview
+
+Features
+
+Strengths
+
+Use Cases
+
+Specifications
+
+Purchase Guide
+Pricing
+
+Getting Started
+Email Configuration
+
+Email Sending
+
+Reputation Level
+
+Console Guide
+
+Configuration
+
+Email Sending
+
+Statistics
+
+Delivery Response
+
+API Documentation
+History
+
+Introduction
+
+API Category
+
+Making API Requests
+
+Domain Verification APIs
+
+Mail APIs
+
+Template APIs
+
+Statistics APIs
+
+Sender Address APIs
+
+Blocklist APIs
+
+Sending Status Query APIs
+
+Batch Task APIs
+
+Custom Blocklist APIs
+
+Data Types
+
+Error Codes
+
+SMTP Documentation
+SMTP Email Sending Guide
+
+SMTP Service Address
+
+Sample Call for Java
+
+Sample Call for Go
+
+Sample Call for PHP
+
+Sample Call for Python
+
+Sample Call for C#
+
+Sending Email with Attachment
+
+Error Code
+
+Webhook Documentation
+Email Event Notification
+
+Email Sending Restrictions
+Attachment Types
+
+FAQs
+Getting Started
+
+Billing
+
+Sending Limits
+
+Sending Feature
+
+Domain
+
+Template
+
+Identity Verification and Configuration
+
+Independent IP Related Questions
+
+Delivery
+
+API Use
+
+Callback
+
+Spam Folder
+
+Delivery Status FAQ
+
+Security
+
+Domain Acceleration Configuration
+
+Important Notes
+
+Others
+
+Contact Us
+
+DocumentationSimple Email ServiceSMTP DocumentationSample Call for Java
+
+Sample Call for Java
+
+Download
+
+Focus Mode
+
+Font Size
+
+Last updated: 2025-08-19 10:27:00
+AI-Translated
+
+The following sample code is a demo on JDK 1.8:
+
+<div class="" data-slate-node="element"><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-string="true">package org.example</span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token punctuation"><span data-slate-string="true">;</span></span></span></span></div><div class="" data-slate-node="element"><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-zero-width="n" data-slate-length="0">﻿<br/></span></span></span></div><div class="" data-slate-node="element"><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token function"><span data-slate-string="true">import</span></span></span><span data-slate-leaf="true"><span data-slate-string="true"> javax.mail.*</span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token punctuation"><span data-slate-string="true">;</span></span></span></span></div><div class="" data-slate-node="element"><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token function"><span data-slate-string="true">import</span></span></span><span data-slate-leaf="true"><span data-slate-string="true"> javax.mail.internet.InternetAddress</span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token punctuation"><span data-slate-string="true">;</span></span></span></span></div><div class="" data-slate-node="element"><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token function"><span data-slate-string="true">import</span></span></span><span data-slate-leaf="true"><span data-slate-string="true"> javax.mail.internet.MimeMessage</span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token punctuation"><span data-slate-string="true">;</span></span></span></span></div><div class="" data-slate-node="element"><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token function"><span data-slate-string="true">import</span></span></span><span data-slate-leaf="true"><span data-slate-string="true"> java.io.UnsupportedEncodingException</span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token punctuation"><span data-slate-string="true">;</span></span></span></span></div><div class="" data-slate-node="element"><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token function"><span data-slate-string="true">import</span></span></span><span data-slate-leaf="true"><span data-slate-string="true"> java.nio.charset.StandardCharsets</span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token punctuation"><span data-slate-string="true">;</span></span></span></span></div><div class="" data-slate-node="element"><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token function"><span data-slate-string="true">import</span></span></span><span data-slate-leaf="true"><span data-slate-string="true"> java.util.Properties</span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token punctuation"><span data-slate-string="true">;</span></span></span></span></div><div class="" data-slate-node="element"><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-zero-width="n" data-slate-length="0">﻿<br/></span></span></span></div><div class="" data-slate-node="element"><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-string="true">public class SampleMail </span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token punctuation"><span data-slate-string="true">{</span></span></span></span></div><div class="" data-slate-node="element"><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-string="true"> private static final String SMTP_HOST </span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token operator"><span data-slate-string="true">=</span></span></span><span data-slate-leaf="true"><span data-slate-string="true"> </span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token string"><span data-slate-string="true">"sg-smtp.qcloudmail.com"</span></span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token punctuation"><span data-slate-string="true">;</span></span></span></span></div><div class="" data-slate-node="element"><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-string="true"> private static final String SMTP_PORT </span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token operator"><span data-slate-string="true">=</span></span></span><span data-slate-leaf="true"><span data-slate-string="true"> </span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token string"><span data-slate-string="true">"465"</span></span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token punctuation"><span data-slate-string="true">;</span></span></span></span></div><div class="" data-slate-node="element"><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-zero-width="n" data-slate-length="0">﻿<br/></span></span></span></div><div class="" data-slate-node="element"><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-string="true"> public static void main</span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token punctuation"><span data-slate-string="true">(</span></span></span><span data-slate-leaf="true"><span data-slate-string="true">String</span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token punctuation"><span data-slate-string="true">[</span></span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token punctuation"><span data-slate-string="true">]</span></span></span><span data-slate-leaf="true"><span data-slate-string="true"> args</span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token punctuation"><span data-slate-string="true">)</span></span></span><span data-slate-leaf="true"><span data-slate-string="true"> </span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token punctuation"><span data-slate-string="true">{</span></span></span></span></div><div class="" data-slate-node="element"><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-string="true"> // Configure the environment attributes </span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token keyword"><span data-slate-string="true">for</span></span></span><span data-slate-leaf="true"><span data-slate-string="true"> email sending</span></span></span></div><div class="" data-slate-node="element"><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-string="true"> final Properties props </span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token operator"><span data-slate-string="true">=</span></span></span><span data-slate-leaf="true"><span data-slate-string="true"> new Properties</span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token punctuation"><span data-slate-string="true">(</span></span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token punctuation"><span data-slate-string="true">)</span></span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token punctuation"><span data-slate-string="true">;</span></span></span></span></div><div class="" data-slate-node="element"><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-string="true"> // smtps indicates implicit TLS, corresponding to port </span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token number"><span data-slate-string="true">465</span></span></span><span data-slate-leaf="true"><span data-slate-string="true">. Otherwise, it is port </span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token number"><span data-slate-string="true">587</span></span></span><span data-slate-leaf="true"><span data-slate-string="true">, explicit TLS</span></span></span></div><div class="" data-slate-node="element"><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-string="true"> props.put</span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token punctuation"><span data-slate-string="true">(</span></span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token string"><span data-slate-string="true">"mail.transport.protocol"</span></span></span><span data-slate-leaf="true"><span data-slate-string="true">, </span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token string"><span data-slate-string="true">"smtps"</span></span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token punctuation"><span data-slate-string="true">)</span></span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token punctuation"><span data-slate-string="true">;</span></span></span><span data-slate-leaf="true"><span data-slate-string="true"> </span></span></span></div><div class="" data-slate-node="element"><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-string="true"> // Indicate that SMTP is used to send the email, </span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token function"><span data-slate-string="true">which</span></span></span><span data-slate-leaf="true"><span data-slate-string="true"> requires authentication</span></span></span></div><div class="" data-slate-node="element"><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-string="true"> props.put</span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token punctuation"><span data-slate-string="true">(</span></span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token string"><span data-slate-string="true">"mail.smtp.auth"</span></span></span><span data-slate-leaf="true"><span data-slate-string="true">, </span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token string"><span data-slate-string="true">"true"</span></span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token punctuation"><span data-slate-string="true">)</span></span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token punctuation"><span data-slate-string="true">;</span></span></span></span></div><div class="" data-slate-node="element"><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-string="true"> props.put</span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token punctuation"><span data-slate-string="true">(</span></span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token string"><span data-slate-string="true">"mail.smtp.host"</span></span></span><span data-slate-leaf="true"><span data-slate-string="true">, SMTP_HOST</span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token punctuation"><span data-slate-string="true">)</span></span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token punctuation"><span data-slate-string="true">;</span></span></span></span></div><div class="" data-slate-node="element"><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-string="true"> // If SSL is used, remove the configuration of using port </span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token number"><span data-slate-string="true">25</span></span></span><span data-slate-leaf="true"><span data-slate-string="true"> and perform the following configuration:</span></span></span></div><div class="" data-slate-node="element"><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-string="true"> props.put</span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token punctuation"><span data-slate-string="true">(</span></span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token string"><span data-slate-string="true">"mail.smtp.socketFactory.class"</span></span></span><span data-slate-leaf="true"><span data-slate-string="true">, </span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token string"><span data-slate-string="true">"javax.net.ssl.SSLSocketFactory"</span></span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token punctuation"><span data-slate-string="true">)</span></span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token punctuation"><span data-slate-string="true">;</span></span></span></span></div><div class="" data-slate-node="element"><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-string="true"> props.put</span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token punctuation"><span data-slate-string="true">(</span></span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token string"><span data-slate-string="true">"mail.smtp.socketFactory.port"</span></span></span><span data-slate-leaf="true"><span data-slate-string="true">, SMTP_PORT</span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token punctuation"><span data-slate-string="true">)</span></span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token punctuation"><span data-slate-string="true">;</span></span></span></span></div><div class="" data-slate-node="element"><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-string="true"> props.put</span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token punctuation"><span data-slate-string="true">(</span></span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token string"><span data-slate-string="true">"mail.smtp.port"</span></span></span><span data-slate-leaf="true"><span data-slate-string="true">, SMTP_PORT</span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token punctuation"><span data-slate-string="true">)</span></span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token punctuation"><span data-slate-string="true">;</span></span></span></span></div><div class="" data-slate-node="element"><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-string="true"> // Sender account. Enter the sender address configured </span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token keyword"><span data-slate-string="true">in</span></span></span><span data-slate-leaf="true"><span data-slate-string="true"> the console, such as xxx@xxx.com</span></span></span></div><div class="" data-slate-node="element"><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-string="true"> props.put</span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token punctuation"><span data-slate-string="true">(</span></span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token string"><span data-slate-string="true">"mail.user"</span></span></span><span data-slate-leaf="true"><span data-slate-string="true">, </span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token string"><span data-slate-string="true">"xxx@xxx.com"</span></span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token punctuation"><span data-slate-string="true">)</span></span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token punctuation"><span data-slate-string="true">;</span></span></span></span></div><div class="" data-slate-node="element"><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-string="true"> // The password that needs to be provided when the SMTP </span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token function"><span data-slate-string="true">service</span></span></span><span data-slate-leaf="true"><span data-slate-string="true"> is accessed </span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token punctuation"><span data-slate-string="true">(</span></span></span><span data-slate-leaf="true"><span data-slate-string="true">select the sender address </span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token keyword"><span data-slate-string="true">in</span></span></span><span data-slate-leaf="true"><span data-slate-string="true"> the console to configure</span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token punctuation"><span data-slate-string="true">)</span></span></span></span></div><div class="" data-slate-node="element"><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-string="true"> props.put</span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token punctuation"><span data-slate-string="true">(</span></span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token string"><span data-slate-string="true">"mail.password"</span></span></span><span data-slate-leaf="true"><span data-slate-string="true">, </span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token string"><span data-slate-string="true">"XXXX"</span></span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token punctuation"><span data-slate-string="true">)</span></span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token punctuation"><span data-slate-string="true">;</span></span></span></span></div><div class="" data-slate-node="element"><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-string="true"> props.setProperty</span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token punctuation"><span data-slate-string="true">(</span></span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token string"><span data-slate-string="true">"mail.smtp.socketFactory.fallback"</span></span></span><span data-slate-leaf="true"><span data-slate-string="true">, </span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token string"><span data-slate-string="true">"false"</span></span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token punctuation"><span data-slate-string="true">)</span></span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token punctuation"><span data-slate-string="true">;</span></span></span></span></div><div class="" data-slate-node="element"><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-string="true"> props.put</span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token punctuation"><span data-slate-string="true">(</span></span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token string"><span data-slate-string="true">"mail.smtp.ssl.enable"</span></span></span><span data-slate-leaf="true"><span data-slate-string="true">, </span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token string"><span data-slate-string="true">"true"</span></span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token punctuation"><span data-slate-string="true">)</span></span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token punctuation"><span data-slate-string="true">;</span></span></span></span></div><div class="" data-slate-node="element"><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-string="true"> //props.put</span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token punctuation"><span data-slate-string="true">(</span></span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token string"><span data-slate-string="true">"mail.smtp.starttls.enable"</span></span></span><span data-slate-leaf="true"><span data-slate-string="true">,</span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token string"><span data-slate-string="true">"true"</span></span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token punctuation"><span data-slate-string="true">)</span></span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token punctuation"><span data-slate-string="true">;</span></span></span></span></div><div class="" data-slate-node="element"><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-string="true"> // Build the authorization information </span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token keyword"><span data-slate-string="true">for</span></span></span><span data-slate-leaf="true"><span data-slate-string="true"> SMTP authentication</span></span></span></div><div class="" data-slate-node="element"><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-string="true"> Authenticator authenticator </span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token operator"><span data-slate-string="true">=</span></span></span><span data-slate-leaf="true"><span data-slate-string="true"> new </span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token function-name"><span data-slate-string="true">Authenticator</span></span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token punctuation"><span data-slate-string="true">(</span></span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token punctuation"><span data-slate-string="true">)</span></span></span><span data-slate-leaf="true"><span data-slate-string="true"> </span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token punctuation"><span data-slate-string="true">{</span></span></span></span></div><div class="" data-slate-node="element"><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-string="true"> @Override</span></span></span></div><div class="" data-slate-node="element"><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-string="true"> protected PasswordAuthentication </span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token function-name"><span data-slate-string="true">getPasswordAuthentication</span></span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token punctuation"><span data-slate-string="true">(</span></span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token punctuation"><span data-slate-string="true">)</span></span></span><span data-slate-leaf="true"><span data-slate-string="true"> </span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token punctuation"><span data-slate-string="true">{</span></span></span></span></div><div class="" data-slate-node="element"><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-string="true"> // Username and password</span></span></span></div><div class="" data-slate-node="element"><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-string="true"> String userName </span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token operator"><span data-slate-string="true">=</span></span></span><span data-slate-leaf="true"><span data-slate-string="true"> props.getProperty</span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token punctuation"><span data-slate-string="true">(</span></span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token string"><span data-slate-string="true">"mail.user"</span></span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token punctuation"><span data-slate-string="true">)</span></span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token punctuation"><span data-slate-string="true">;</span></span></span></span></div><div class="" data-slate-node="element"><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-string="true"> String password </span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token operator"><span data-slate-string="true">=</span></span></span><span data-slate-leaf="true"><span data-slate-string="true"> props.getProperty</span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token punctuation"><span data-slate-string="true">(</span></span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token string"><span data-slate-string="true">"mail.password"</span></span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token punctuation"><span data-slate-string="true">)</span></span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token punctuation"><span data-slate-string="true">;</span></span></span></span></div><div class="" data-slate-node="element"><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-string="true"> </span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token builtin"><span data-slate-string="true">return</span></span></span><span data-slate-leaf="true"><span data-slate-string="true"> new PasswordAuthentication</span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token punctuation"><span data-slate-string="true">(</span></span></span><span data-slate-leaf="true"><span data-slate-string="true">userName, password</span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token punctuation"><span data-slate-string="true">)</span></span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token punctuation"><span data-slate-string="true">;</span></span></span></span></div><div class="" data-slate-node="element"><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-string="true"> </span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token punctuation"><span data-slate-string="true">}</span></span></span></span></div><div class="" data-slate-node="element"><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-string="true"> </span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token punctuation"><span data-slate-string="true">}</span></span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token punctuation"><span data-slate-string="true">;</span></span></span></span></div><div class="" data-slate-node="element"><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-string="true"> // Create the email session with the environment attributes and authorization information</span></span></span></div><div class="" data-slate-node="element"><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-string="true"> Session mailSession </span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token operator"><span data-slate-string="true">=</span></span></span><span data-slate-leaf="true"><span data-slate-string="true"> Session.getInstance</span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token punctuation"><span data-slate-string="true">(</span></span></span><span data-slate-leaf="true"><span data-slate-string="true">props, authenticator</span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token punctuation"><span data-slate-string="true">)</span></span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token punctuation"><span data-slate-string="true">;</span></span></span></span></div><div class="" data-slate-node="element"><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-string="true">// mailSession.setDebug</span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token punctuation"><span data-slate-string="true">(</span></span></span><span data-slate-leaf="true"><span data-slate-string="true">true</span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token punctuation"><span data-slate-string="true">)</span></span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token punctuation"><span data-slate-string="true">;</span></span></span></span></div><div class="" data-slate-node="ele
+
+[… truncated 126169 chars …]

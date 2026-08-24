@@ -1,0 +1,3337 @@
+SendEmail
+https://intl.cloud.tencent.com/document/api/1084/39408
+
+<!DOCTYPE html>SendEmail
+tencent cloud
+
+Promotions
+
+Products
+
+Solutions
+
+Pricing
+
+Partner Network
+
+Marketplace
+
+Explore
+
+PrevNext
+
+APIs
+
+Cloud Virtual Machine
+History
+
+Introduction
+
+API Category
+
+Making API Requests
+
+Region APIs
+
+Instance APIs
+
+Cloud Hosting Cluster APIs
+
+Placement Group APIs
+
+Image APIs
+
+Instance Launch Template APIs
+
+Placement Group APIs
+
+Key APIs
+
+Security Group APIs 
+
+Network APIs
+
+Data Types
+
+Error Codes
+
+Tencent Cloud Lighthouse
+History
+
+Introduction
+
+API Category
+
+Making API Requests
+
+Image APIs
+
+Firewall APIs
+
+Snapshot APIs
+
+Key APIs
+
+Instance APIs
+
+CCN APIs
+
+Cloud Disk APIs
+
+Other APIs
+
+Scene APIs
+
+Package APIs
+
+Quota APIs
+
+Region APIs
+
+Data Types
+
+Error Codes
+
+Auto Scaling
+History
+
+Introduction
+
+API Category
+
+Making API Requests
+
+Scaling Group APIs
+
+Scaling Group Instances APIs
+
+Launch Configuration APIs
+
+Scheduled Action APIs
+
+Alarm Trigger Policy APIs
+
+Notification APIs
+
+Lifecycle Hook APIs
+
+Instance Refresh APIs
+
+Other APIs
+
+Data Types
+
+Error Codes
+
+Batch Compute
+History
+
+Introduction
+
+API Category
+
+Making API Requests
+
+Compute Environment APIs
+
+Job APIs
+
+Configuration Viewing-related APIs
+
+Task Template-related APIs
+
+Data Types
+
+Error Codes
+
+Tencent Cloud Automation Tools
+History
+
+Introduction
+
+API Category
+
+Making API Requests
+
+Remote Command APIs
+
+Scheduled Execution APIs
+
+Managed Instance APIs
+
+Scenario APIs
+
+Statistics APIs
+
+Data Types
+
+Error Codes
+
+Edge Computing Machine
+History
+
+API Category
+
+Making API Requests
+
+Region APIs
+
+Module APIs
+
+Instance APIs
+
+Image APIs
+
+VPC APIs
+
+Subnet APIs
+
+Route Table APIs
+
+CLB APIs
+
+ENI APIs
+
+EIP APIs
+
+HAVIP APIs
+
+Other API
+
+Key APIs
+
+Security Group APIs
+
+Data Types
+
+Error Codes
+
+Tencent Kubernetes Engine
+History
+
+Introduction
+
+API Category
+
+Making API Requests
+
+Elastic Cluster APIs
+
+Resource Reserved Coupon APIs
+
+Cluster APIs
+
+Third-party Node APIs
+
+Relevant APIs for Addon
+
+Node Pool APIs
+
+Network APIs
+
+Node APIs
+
+Node Pool APIs
+
+TKE Edge Cluster APIs
+
+Cloud Native Monitoring APIs
+
+Scaling group APIs
+
+Super Node APIs
+
+Other APIs
+
+Data Types
+
+Error Codes
+
+TKE API 2022-05-01
+
+Tencent Container Registry
+History
+
+Introduction
+
+API Category
+
+Making API Requests
+
+Instance Management APIs
+
+Namespace APIs
+
+Access Control APIs
+
+Instance Synchronization APIs
+
+Tag Retention APIs
+
+Trigger APIs
+
+Helm Chart APIs
+
+Image Repository APIs
+
+Custom Account APIs
+
+Data Types
+
+Error Codes
+
+Tencent Cloud Elastic Microservice
+History
+
+Introduction
+
+API Category
+
+Making API Requests
+
+Environment APIs
+
+ModifyIngress
+
+Resource APIs
+
+Application APIs
+
+Service APIs
+
+Application Deployment APIs
+
+Access Policy APIs
+
+Configuration file APIs
+
+Log collecting APIs
+
+Scaling Rule APIs
+
+Application Version APIs
+
+Other APIs
+
+Workload APIs
+
+Data Types
+
+Error Codes
+
+Serverless Cloud Function
+History
+
+Introduction
+
+API Category
+
+Making API Requests
+
+Other APIs
+
+Namespace APIs
+
+Layer Management APIs
+
+Async Event Management APIs
+
+Trigger APIs
+
+Function APIs
+
+Function and Layer Status Description
+
+Data Types
+
+Error Codes
+
+Event Bridge
+History
+
+Introduction
+
+API Category
+
+Making API Requests
+
+Delivery Target APIs
+
+Event Bus APIs
+
+Event Rule APIs
+
+Event Connector APIs
+
+Data Transformer APIs
+
+Event Storage APIs
+
+Data Types
+
+Error Codes
+
+Cloud Object Storage
+Introduction
+
+Common Request Headers
+
+Common Response Headers
+
+Error Codes
+
+Request Signature
+
+Action List
+
+Service APIs
+
+Bucket APIs
+
+Object APIs
+
+Batch Operation APIs
+
+Data Processing APIs
+
+Job and Workflow
+
+Content Moderation APIs
+
+Cloud Antivirus API
+
+Cloud File Storage
+History
+
+Introduction
+
+API Category
+
+Snapshot APIs
+
+File system APIs
+
+Lifecycle APIs
+
+Other APIs
+
+Data Flow APIs
+
+Making API Requests
+
+Permission Group APIs
+
+Service APIs
+
+Scaling APIs
+
+Data Migration APIs
+
+Data Types
+
+Error Codes
+
+Cloud Block Storage
+History
+
+Introduction
+
+API Category
+
+Making API Requests
+
+Cloud Disk APIs
+
+Snapshot APIs
+
+Data Types
+
+Error Codes
+
+Cloud HDFS
+History
+
+Introduction
+
+API Category
+
+Making API Requests
+
+Other APIs
+
+Permission group APIs
+
+Permission rule APIs
+
+Mount point APIs
+
+Lifecycle rule APIs
+
+File system APIs
+
+Restoration task APIs
+
+Data Types
+
+Error Codes
+
+Cloud Log Service
+History
+
+Introduction
+
+API Category
+
+Making API Requests
+
+Topic Management APIs
+
+Log Set Management APIs
+
+Index APIs
+
+Topic Partition (Abandoned) APIs
+
+Machine Group APIs
+
+Log Collection Configuration APIs
+
+Log APIs
+
+Metric Collection Configuration APIs
+
+Metric APIs
+
+Service APIs
+
+Alarm Policy APIs
+
+Data Processing APIs
+
+Console Customization APIs
+
+Kafka Consumption APIs
+
+CKafka Task APIs
+
+Kafka Data Subscription APIs
+
+COS Task APIs
+
+Dashboard APIs
+
+SCF Delivery Task APIs
+
+Scheduled SQL Analysis APIs
+
+COS Data Import Task APIs
+
+RemoteWrite APIs
+
+Cloud Product Integration APIs
+
+Unified Consumption APIs
+
+AI APIs
+
+DLC Task APIs
+
+es Data Import Task APIs
+
+Splunk Delivery APIs
+
+Network Application APIs
+
+OpenClaw APIs
+
+Query View APIs
+
+Data Types
+
+Error Codes
+
+TDSQL-C for MySQL
+History
+
+Introduction
+
+API Category
+
+Making API Requests
+
+Instance APIs
+
+Multi-Availability Zone APIs
+
+Other APIs
+
+Account APIs
+
+Audit APIs
+
+Database Proxy APIs
+
+Backup and Recovery APIs
+
+Parameter Management APIs
+
+Billing APIs
+
+serverless APIs
+
+ResourcePackage APIs
+
+Read-Only Analysis Engine APIs
+
+Cluster Analysis APIs
+
+AI Optimizer APIs
+
+Performance Analysis APIs
+
+Data Types
+
+Error Codes
+
+TencentDB for MySQL
+History
+
+Introduction
+
+API Category
+
+Making API Requests
+
+Instance APIs
+
+Data Import APIs
+
+Database Proxy APIs
+
+Database Audit APIs
+
+Security APIs
+
+Task APIs
+
+Data Security Encryption APIs
+
+Account APIs
+
+Backup APIs
+
+Rollback APIs
+
+Parameter APIs
+
+Database APIs
+
+Log-related API
+
+Monitoring APIs
+
+Data Types
+
+Error Codes
+
+TencentDB for MariaDB
+History
+
+Introduction
+
+API Category
+
+Making API Requests
+
+Security Group APIs
+
+Other APIs
+
+Account APIs
+
+Parameter Management APIs
+
+Monitoring Management APIs
+
+Instance Management APIs
+
+Backup and Restoration APIs
+
+Data Types
+
+Error Codes
+
+TencentDB for PostgreSQL
+History
+
+Introduction
+
+API Category
+
+Making API Requests
+
+Instance APIs
+
+Read-Only Instance APIs
+
+Backup and Recovery APIs
+
+Parameter Management APIs
+
+Security Group APIs
+
+Performance Optimization APIs
+
+Account APIs
+
+Database APIs
+
+Specification APIs
+
+Task APIs
+
+Other APIs
+
+Database Audit APIs
+
+Network APIs
+
+Data Types
+
+Error Codes
+
+TencentDB for SQL Server
+History
+
+Introduction
+
+API Category
+
+Making API Requests
+
+Sales and fee related APIs
+
+Instance Management related APIs
+
+Operation and maintenance management related APIs
+
+Network management related APIs
+
+Account management related APIs
+
+Database management related APIs
+
+Security group management related APIs
+
+Data security encryption related APIs
+
+Parameter configuration related APIs
+
+Extended Event related APIs
+
+Log management related APIs
+
+Read only instance management related APIs
+
+Publish and subscribe related APIs
+
+Backup related APIs
+
+Rollback related APIs
+
+Data migration (cold standby migration) related APIs
+
+Data migration (DTS old version) related APIs
+
+SQL Server Integration Services (SSIS) related APIs
+
+Data Types
+
+Error Codes
+
+TDSQL for MySQL
+History
+
+Introduction
+
+API Category
+
+Security Group APIs
+
+Other APIs
+
+Making API Requests
+
+TDSQL APIs
+
+Data Types
+
+Error Codes
+
+Tencent Cloud Distributed Cache (Redis OSS-Compatible)
+History
+
+Introduction
+
+API Category
+
+Making API Requests
+
+Instance APIs
+
+Parameter Management APIs
+
+Other APIs
+
+Backup and Restoration APIs
+
+Region APIs
+
+Monitoring Management APIs
+
+Log APIs
+
+Data Types
+
+Error Codes
+
+TencentDB for MongoDB
+History
+
+Introduction
+
+API Category
+
+Making API Requests
+
+Instance APIs
+
+Backup APIs
+
+Database Audit APIs
+
+Account APIs
+
+Other APIs
+
+Task APIs
+
+Introduction
+
+Data Types
+
+Error Codes
+
+TencentDB for TcaplusDB
+History
+
+Introduction
+
+API Category
+
+Making API Requests
+
+Table Group APIs
+
+Other APIs
+
+Table APIs
+
+Cluster APIs
+
+Data Types
+
+Error Codes
+
+Data Transfer Service
+History
+
+Introduction
+
+API Category
+
+Making API Requests
+
+(NewDTS) Data Migration APIs
+
+Data Sync APIs
+
+(NewDTS) Data Subscription APIs
+
+Data Types
+
+Error Codes
+
+DTS API 2018-03-30
+
+TencentDB for DBbrain
+History
+
+Introduction
+
+Introduction
+
+API Category
+
+Making API Requests
+
+Session Killing APIs
+
+Exception Detection APIs
+
+Other APIs
+
+Redis related APIs
+
+Health Report Email Sending APIs
+
+Space Analysis APIs
+
+Security Audit APIs
+
+Slow Log Analysis APIs
+
+Database Audit APIs
+
+Data Types
+
+Error Codes
+
+DBbrain APIs 2019-10-16
+
+Virtual Private Cloud
+History
+
+Introduction
+
+API Category
+
+Making API Requests
+
+VPC APIs
+
+Route Table APIs
+
+Elastic Public IP APIs
+
+Elastic IPv6 APIs
+
+Highly Available Virtual IP APIs
+
+ENI APIs
+
+Bandwidth Package APIs
+
+NAT Gateway APIs
+
+Direct Connect Gateway APIs
+
+Cloud Connect Network APIs
+
+Network ACL APIs
+
+Network Parameter Template APIs
+
+Network Detection-Related APIs
+
+Flow Log APIs
+
+Gateway Traffic Monitor APIs
+
+Private Link APIs
+
+Traffic Mirroring APIs
+
+Other APIs
+
+Subnet APIs
+
+VPN Gateway APIs
+
+Security Group APIs
+
+Snapshot Policy APIs
+
+Error Codes
+
+Data Types
+
+Cloud Load Balancer
+History
+
+History
+
+Introduction
+
+Introduction
+
+API Category
+
+API Category
+
+Making API Requests
+
+Instance APIs
+
+Instance APIs
+
+Listener APIs
+
+Backend Service APIs
+
+Backend Service APIs
+
+Target Group APIs
+
+Redirection APIs
+
+Other APIs
+
+Other APIs
+
+Classic CLB APIs
+
+Classic CLB APIs
+
+Load Balancing APIs
+
+Load Balancing APIs
+
+Making API Requests
+
+Data Types
+
+Data Types
+
+Error Codes
+
+Error Codes
+
+CLB API 2017
+
+Direct Connect
+History
+
+Introduction
+
+API Category
+
+Making API Requests
+
+Direct Connect APIs
+
+Data Types
+
+Error Codes
+
+Content Delivery Network
+History
+
+Introduction
+
+API Category
+
+Content Management APIs
+
+Real-time Log APIs
+
+Domain Name Management APIs
+
+Service Query APIs
+
+Data Query APIs
+
+Abandoned APIs
+
+Making API Requests
+
+Log Query APIs
+
+Configuration Management APIs
+
+Other APIs
+
+Data Types
+
+Error Codes
+
+Global Application Acceleration Platform
+History
+
+Introduction
+
+API Category
+
+Rule APIs
+
+Connection Group APIs
+
+Making API Requests
+
+Origin Server APIs
+
+Listener APIs
+
+Connection APIs
+
+Certificate APIs
+
+Other APIs
+
+Data Types
+
+Error Codes
+
+Tencent Cloud Firewall
+History
+
+Introduction
+
+API Category
+
+Making API Requests
+
+Intrusion Defense APIs
+
+Other APIs
+
+Access Control APIs
+
+AI Security APIs
+
+Log APIs
+
+Enterprise Security Group APIs
+
+Firewall Status APIs
+
+Data Types
+
+Error Codes
+
+Tencent Cloud EdgeOne
+History
+
+Introduction
+
+API Category
+
+Making API Requests
+
+Site APIs
+
+Accelerated Domain Name Management APIs
+
+Site Acceleration Configuration APIs
+
+Edge Function APIs
+
+Alias Domain APIs
+
+Security Configuration APIs
+
+Layer 4 Application Proxy APIs
+
+Content Management APIs
+
+Data Analysis APIs
+
+Log Service APIs
+
+Billing APIs
+
+Certificate APIs
+
+Origin Protection APIs
+
+Load Balancing APIs
+
+Diagnostic Tool APIs
+
+Custom Response Page APIs
+
+Version Management APIs
+
+API Security APIs
+
+DNS Record APIs
+
+Content Identifier APIs
+
+Legacy APIs
+
+Ownership APIs
+
+Image and Video Processing APIs
+
+Multi-Channel Security Gateway APIs
+
+Edge Reasoning APIs
+
+KV Storage APIs
+
+Data Types
+
+Error Codes
+
+Cloud Workload Protection Platform
+History
+
+Introduction
+
+API Category
+
+Asset Management APIs
+
+Virus Scanning APIs
+
+Abnormal Log-in APIs
+
+Password Cracking APIs
+
+Malicious Request APIs
+
+High-Risk Command APIs
+
+Local Privilege Escalation APIs
+
+Intrusion Detection - Reverse Shell APIs
+
+Vulnerability Management APIs
+
+New Baseline Management APIs
+
+Baseline Management APIs
+
+Advanced Defense APIs
+
+Security Operation APIs
+
+Other APIs
+
+Overview Statistics APIs
+
+Settings Center APIs
+
+Client Settings APIs
+
+Making API Requests
+
+Intrusion Detection APIs
+
+Data Types
+
+Error Codes
+
+Key Management Service
+History
+
+Introduction
+
+API Category
+
+Key APIs
+
+Making API Requests
+
+Asymmetric Key APIs
+
+Data Types
+
+Error Codes
+
+Secrets Manager
+History
+
+Introduction
+
+API Category
+
+Making API Requests
+
+Data Security APIs
+
+Other APIs
+
+Data Types
+
+Error Codes
+
+Captcha
+History
+
+Introduction
+
+API Category
+
+Making API Requests
+
+Server APIs
+
+Error Codes
+
+Customer Identity and Access Management
+History
+
+Introduction
+
+API Category
+
+Making API Requests
+
+User Management APIs
+
+Data Sync APIs
+
+Audit Management APIs
+
+Data Types
+
+Error Codes
+
+Security Token Service
+History
+
+Introduction
+
+API Category
+
+Making API Requests
+
+STS APIs
+
+Data Types
+
+Error Codes
+
+SSL Certificates
+History
+
+Introduction
+
+API Category
+
+Making API Requests
+
+Other APIs
+
+Certificate APIs
+
+CSR APIs
+
+Data Types
+
+Error Codes
+
+Private DNS
+History
+
+Introduction
+
+API Category
+
+Making API Requests
+
+Private DNS APIs
+
+Data Types
+
+Error Codes
+
+DNSPod
+History
+
+Introduction
+
+API Category
+
+Making API Requests
+
+Line APIs
+
+Package and Value-Added Service APIs
+
+Batch Operation APIs
+
+Group APIs
+
+Record APIs
+
+DNS Query Volume APIs
+
+Alias APIs
+
+Domain APIs
+
+Data Types
+
+Error Codes
+
+Elastic MapReduce
+History
+
+Introduction
+
+API Category
+
+Making API Requests
+
+Cluster Resource Management APIs
+
+Cluster Services APIs
+
+User Management APIs
+
+Information Query APIs
+
+Scaling APIs
+
+Configuration APIs
+
+Other APIs
+
+Cluster Lifecycle APIs
+
+Serverless HBase APIs
+
+YARN Resource Scheduling APIs
+
+Data Types
+
+Error Codes
+
+Elasticsearch Service
+History
+
+Introduction
+
+API Category
+
+Making API Requests
+
+Instance APIs
+
+Snapshot APIs
+
+Data Types
+
+Error Codes
+
+Elasticsearch Service API 2025-01-01
+
+Data Lake Compute
+History
+
+Introduction
+
+API Category
+
+Making API Requests
+
+Data Table APIs
+
+Task APIs
+
+Metadata APIs
+
+Service Configuration APIs
+
+Permission Management APIs
+
+Data Source Connection APIs
+
+Data Optimization APIs
+
+Database APIs
+
+Data Engine APIs
+
+Resource Group for the Standard Engine APIs
+
+Data Types
+
+Error Codes
+
+Face Recognition
+History
+
+Introduction
+
+API Category
+
+Making API Requests
+
+Face Comparison APIs
+
+Face Detection and Analysis APIs
+
+Facial Feature Localization APIs
+
+Group Management APIs
+
+Face Search APIs
+
+Face Verification APIs
+
+Image-based Liveness Detection (High Precision) APIs
+
+Data Types
+
+Error Codes
+
+eKYC
+History
+
+Introduction
+
+API Category
+
+Making API Requests
+
+Selfie Verification (Pure API) APIs
+
+Face Identity Verification PaaS APIs
+
+Selfie Verification (Mobile HTML5) APIs
+
+Selfie Verification (App SDK) APIs
+
+Identity Verification (App SDK) APIs
+
+AI Face Shield (Pure API) APIs
+
+Real-name Information Verification APIs
+
+Other APIs
+
+Data Types
+
+Error Codes
+
+Text To Speech
+History
+
+Introduction
+
+API Category
+
+Making API Requests
+
+General Text-to-Speech APIs
+
+Data Types
+
+Error Codes
+
+Tencent Machine Translation
+History
+
+Introduction
+
+API Category
+
+Making API Requests
+
+API
+
+Data Types
+
+Error Codes
+
+Optical Character Recognition
+History
+
+Introduction
+
+API Category
+
+Making API Requests
+
+Document Intelligent APIs
+
+Card and Document OCR APIs
+
+Vehicle Scene OCR APIs
+
+General Text OCR APIs
+
+Data Types
+
+Error Codes
+
+IoT Hub
+History
+
+Introduction
+
+API Category
+
+Making API Requests
+
+Device Shadow APIs
+
+Device APIs
+
+CA Certificate APIs
+
+Product APIs
+
+Data Types
+
+Error Codes
+
+TDMQ for CKafka
+History
+
+Introduction
+
+API Category
+
+Making API Requests
+
+Other APIs
+
+ACL APIs
+
+Topic APIs
+
+Instance APIs
+
+Routing APIs
+
+DataHub APIs
+
+Data Types
+
+Error Codes
+
+Cloud Message Queue
+History
+
+Introduction
+
+API Category
+
+Making API Requests
+
+Topic APIs
+
+Queue APIs
+
+Introduction
+
+Data Types
+
+Error Codes
+
+Chat
+JavaScript
+
+Android
+
+iOS & Mac
+
+Swift
+
+Flutter
+
+Electron
+
+Unity
+
+React Native
+
+C APIs
+
+C++
+
+Short Message Service
+History
+
+Introduction
+
+API Category
+
+Making API Requests
+
+SMS Delivery APIs
+
+SMS Mobile Number APIs
+
+SMS Conversion Rate APIs
+
+Status Pull APIs
+
+SMS Statistics APIs
+
+SMS Signature APIs
+
+SMS Template APIs
+
+SMS Callback APIs
+
+Data Types
+
+Error Codes
+
+Tencent Push Notification Service
+Overview
+
+API Overview
+
+Call Method
+
+Push APIs
+
+Tag APIs
+
+Account APIs
+
+Statistics APIs
+
+User Attribute APIs
+
+Server-Side Error Codes
+
+Server SDKs
+
+API (Java)
+
+Simple Email Service
+History
+
+Introduction
+
+API Category
+
+Making API Requests
+
+Domain Verification APIs
+
+Mail APIs
+
+Template APIs
+
+Statistics APIs
+
+Sender Address APIs
+
+Blocklist APIs
+
+Sending Status Query APIs
+
+Batch Task APIs
+
+Custom Blocklist APIs
+
+Data Types
+
+Error Codes
+
+Tencent Real-Time Communication
+History
+
+Introduction
+
+API Category
+
+Room Management APIs
+
+Retweet APIs
+
+On-cloud recording APIs
+
+Data Monitoring APIs
+
+Page Recording APIs
+
+Push Online Media Stream APIs
+
+AI Service APIs
+
+Legacy APIs
+
+Cloud Slicing APIs
+
+Cloud Moderation APIs
+
+Companion Transcription APIs
+
+Making API Requests
+
+Call Quality Monitoring APIs
+
+Usage Statistics APIs
+
+Data Types
+
+Appendix
+
+Error Codes
+
+StreamLive
+History
+
+Introduction
+
+API Category
+
+Making API Requests
+
+Input Management APIs
+
+Input Security Group Management APIs
+
+Channel Management APIs
+
+Plan APIs
+
+Watermark Management APIs
+
+Statistics APIs
+
+Data Types
+
+Error Codes
+
+StreamPackage
+History
+
+Introduction
+
+API Category
+
+Making API Requests
+
+Channel Management APIs
+
+Advertising Insertion Configuration Management APIs
+
+Channel linear assembly management APIs
+
+VOD remux task APIs
+
+Usage Query APIs
+
+HarvestJob Management APIs
+
+Data Types
+
+Error Codes
+
+StreamLink
+History
+
+Introduction
+
+API Category
+
+Making API Requests
+
+Flow APIs
+
+Data Types
+
+Error Codes
+
+Cloud Streaming Services
+History
+
+Introduction
+
+API Category
+
+Making API Requests
+
+Live Pad APIs
+
+Live Stream Mix APIs
+
+Time Shifting APIs
+
+Monitoring Data Query APIs
+
+Billing Statistical Query APIs
+
+Live Stream Management APIs
+
+Delayed Playback Management APIs
+
+Live Transcoding APIs
+
+Domain Name Management APIs
+
+Watermark Management APIs
+
+Certificate Management APIs
+
+Stream Pulling APIs
+
+Recording Management APIs
+
+Live Callback APIs
+
+Screencapturing and Porn Detection APIs
+
+Authentication Management APIs
+
+Data Types
+
+Error Codes
+
+Video on Demand
+History
+
+Introduction
+
+API Category
+
+AI Generation APIs
+
+Media Processing APIs
+
+Parameter Template APIs
+
+Task Management APIs
+
+Media Upload APIs
+
+Media Management APIs
+
+Event Notification APIs
+
+Media Categorization APIs
+
+Domain Name Management APIs
+
+Distribution APIs
+
+AI-based Sample Management APIs
+
+Region Management APIs
+
+Data Statistics APIs
+
+Carousel-Related APIs
+
+Just In Time Transcode APIs
+
+Real-time Log APIs
+
+Other APIs
+
+Deprecated APIs
+
+Making API Requests
+
+AI-based image processing APIs
+
+Task Flow APIs
+
+Data Types
+
+Error Codes
+
+Video on Demand API 2024-07-18
+
+Media Processing Service
+History
+
+Introduction
+
+API Category
+
+Making API Requests
+
+Processing Task Initiation APIs
+
+Task management APIs
+
+Parse Event Notification APIs
+
+Transcoding and Enhancement Template APIs
+
+Watermark Template APIs
+
+Screenshot Template APIs
+
+Media AI Template APIs
+
+Media AI—Hotword Lexicon APIs
+
+Media AI—Sample Management APIs
+
+Media Quality Inspection Template APIs
+
+Live Streaming Recording Template APIs
+
+Orchestration Management APIs
+
+Data Statistics APIs
+
+StreamLink—Security Group Management APIs
+
+AI Generation APIs
+
+Image Processing Template APIs
+
+Media AI – Episode Management APIs
+
+Media AI – Dubbing APIs
+
+AIGC scenario application APIs
+
+Other APIs
+
+Data Types
+
+Error Codes
+
+Cloud Application Rendering
+History
+
+Introduction
+
+API Category
+
+Making API Requests
+
+User APIs
+
+Application Management APIs
+
+Project Management APIs
+
+Concurrency Management APIs
+
+Stream Push Service APIs
+
+Data Types
+
+Error Codes
+
+Game Multimedia Engine
+History
+
+Introduction
+
+API Category
+
+Usage APIs
+
+Recording APIs
+
+Making API Requests
+
+Voice Chat APIs
+
+Application APIs
+
+Data Types
+
+Error Codes
+
+Tag
+History
+
+Introduction
+
+API Category
+
+Making API Requests
+
+Write APIs
+
+Read APIs
+
+Project APIs
+
+Data Types
+
+返回结果
+
+Cloud Access Management
+History
+
+Introduction
+
+API Category
+
+Making API Requests
+
+User APIs
+
+Policy APIs
+
+Role APIs
+
+Identity Provider APIs
+
+Data Types
+
+Error Codes
+
+CloudAudit
+History
+
+Introduction
+
+API Category
+
+Calling Method
+
+CloudAudit APIs
+
+Data Types
+
+Error Codes
+
+Tencent Cloud Organization
+History
+
+Introduction
+
+API Category
+
+Making API Requests
+
+Organization Settings APIs
+
+Department and Member Management APIs
+
+Unified Member Login APIs
+
+Member Access Management APIs
+
+Organization Service Management APIs
+
+Organization Management Policy APIs
+
+Resource Sharing APIs
+
+Identity Center Management APIs
+
+Identity Center User Management APIs
+
+Identity Center User Group Management APIs
+
+Identity Center Management SCIM Synchronization APIs
+
+Identity Center Single Sign-On Management APIs
+
+Identity Center Permission Configuration Management APIs
+
+Identity Center Multi-Account Authorization Management APIs
+
+Identity Center Sub-User Synchronization Management APIs
+
+Data Types
+
+Error Codes
+
+TCO API 2018-12-25
+
+Tencent Cloud Observability Platform
+History
+
+History
+
+Introduction
+
+API Category
+
+API Category
+
+Making API Requests
+
+Making API Requests
+
+Monitoring Data Query APIs
+
+Alarm APIs
+
+Alarm APIs
+
+Legacy Alert APIs
+
+Notification Template APIs
+
+TMP APIs
+
+Grafana Service APIs
+
+Event Center APIs
+
+TencentCloud Managed Service for Prometheus APIs
+
+Monitoring APIs
+
+Data Types
+
+Error Codes
+
+Data Types
+
+Error Codes
+
+Real User Monitoring
+History
+
+Introduction
+
+API Category
+
+Making API Requests
+
+Console APIs
+
+Business System and Project Information APIs
+
+Page Performance APIs
+
+Custom Speed Test APIs
+
+Custom Event APIs
+
+Monitoring APIs
+
+Exception Analysis APIs
+
+Page Visit APIs
+
+Static Resource Monitoring APIs
+
+Log APIs 
+
+Page Performance APIs 
+
+Data Types
+
+Error Codes
+
+International Partners
+History
+
+Introduction
+
+API Category
+
+Making API Requests
+
+Customer Management APIs
+
+Credit Management APIs
+
+Agent APIs
+
+Bill Management APIs
+
+Voucher Management APIs
+
+Commission Management APIs
+
+Cost Management APIs
+
+Data Types
+
+Error Codes
+
+Billing Center
+History
+
+Introduction
+
+API Category
+
+Making API Requests
+
+Funds Management APIs
+
+Group Account APIs
+
+Order Management APIs
+
+Resource Management APIs
+
+Budget Management APIs
+
+Bill Management APIs
+
+Cost Allocation Management APIs
+
+Cost Management APIs
+
+Data Types
+
+Error Codes
+
+Multiple Network Acceleration
+History
+
+Introduction
+
+API Category
+
+Making API Requests
+
+Multi-Network Aggregation Acceleration (Tencent Cloud Jutong) APIs
+
+Data Types
+
+Error Codes
+
+Service Registry and Governance
+History
+
+Introduction
+
+API Category
+
+Making API Requests
+
+Cloud-Native Gateway APIs
+
+Microservice Engine APIs
+
+Data Types
+
+Error Codes
+
+LLM Service TokenHub
+History
+
+Introduction
+
+API Category
+
+Making API Requests
+
+API Key Management APIs
+
+Terminology Library Management APIs
+
+Data Types
+
+Error Codes
+
+TDSQL Boundless
+History
+
+Introduction
+
+API Category
+
+Making API Requests
+
+Instance APIs
+
+Security Group APIs
+
+Task APIs
+
+Data Security Encryption APIs
+
+Account APIs
+
+Backup APIs
+
+Restore APIs
+
+Parameter APIs
+
+Database APIs
+
+Log APIs
+
+Other APIs
+
+Data Types
+
+Error Codes
+
+TDMQ for MQTT
+History
+
+Introduction
+
+API Category
+
+Making API Requests
+
+Cluster APIs
+
+Topic APIs
+
+Authorization Policy APIs
+
+Certificate APIs
+
+User APIs
+
+Client APIs
+
+Message APIs
+
+Shared Subscription APIs
+
+Device Identifier APIs
+
+Message Enhancement Rule APIs
+
+Data Types
+
+Error Codes
+
+Tencent HY 
+History
+
+Introduction
+
+API Category
+
+Making API Requests
+
+Hunyuan Translation APIs
+
+Hunyuan 3D APIs
+
+Data Types
+
+Error Codes
+
+Smart Media Hosting
+History
+
+Introduction
+
+API Category
+
+Making API Requests
+
+PaaS Service APIs
+
+Official Cloud Disk APIs
+
+Data Types
+
+Error Codes
+
+Quota Center
+History
+
+Introduction
+
+API Category
+
+Making API Requests
+
+Alarm APIs
+
+Quota APIs
+
+Data Types
+
+Error Codes
+
+Message Center
+History
+
+Introduction
+
+API Category
+
+Making API Requests
+
+Message Subscription APIs
+
+Data Types
+
+Error Codes
+
+Business Intelligence
+History
+
+Introduction
+
+API Category
+
+Making API Requests
+
+Project Management APIs
+
+Role APIs
+
+Database Table APIs
+
+Report Embedding APIs
+
+Page Management APIs
+
+Tag APIs
+
+Data Types
+
+Error Codes
+
+Region Management System
+History
+
+Introduction
+
+API Category
+
+Making API Requests
+
+Region APIs
+
+Data Types
+
+Error Codes
+
+Elastic IP
+API Overview
+
+Guide for Switching EIP API 2.0 to API 3.0
+
+LLM Knowledge Engine Basic API
+History
+
+Introduction
+
+API Category
+
+Making API Requests
+
+Atomic Capability APIs
+
+Data Types
+
+Error Codes
+
+Tencent Cloud Agent Development Platform
+
+Tencent Cloud Agent Development Platform API 2023-11-30 (Deprecated)
+
+Tencent Cloud Blockchain as a Service
+History
+
+Introduction
+
+API Category
+
+Making API Requests
+
+Hyperledger Fabric 2.3 APIs
+
+Data Types
+
+Error Codes
+
+Performance Testing Service
+History
+
+Introduction
+
+API Category
+
+Making API Requests
+
+PTS-related APIs
+
+Data Types
+
+Error Codes
+
+Real-time Teleoperation
+History
+
+Introduction
+
+API Category
+
+Making API Requests
+
+Project APIs
+
+Device APIs
+
+Session APIs
+
+Authorization APIs
+
+Other APIs
+
+Data Types
+
+Error Codes
+
+Gateway Load Balancer
+History
+
+Introduction
+
+API Category
+
+Making API Requests
+
+Target Group APIs
+
+GWLB APIs
+
+Other APIs
+
+Data Types
+
+Error Codes
+
+Identity Aware Platform
+History
+
+Introduction
+
+API Category
+
+Making API Requests
+
+IAP APIs
+
+Error Codes
+
+Cloud Dedicated Cluster
+History
+
+Introduction
+
+API Category
+
+Making API Requests
+
+Cloud Dedicated Cluster (CDC) APIs
+
+Data Types
+
+Error Codes
+
+Image Creation Large Model
+History
+
+Introduction
+
+API Category
+
+Image Style Transfer APIs
+
+Change Clothes APIs
+
+Data Types
+
+Error Codes
+
+Face Fusion
+API Category
+
+Making API Requests
+
+Image Face Fusion (Basic) APIs
+
+Data Types
+
+Error Codes
+
+Tencent Smart Advisor-Chaotic Fault Generator
+History
+
+Introduction
+
+API Category
+
+Making API Requests
+
+Task APIs
+
+Template Library APIs
+
+Data Types
+
+Error Codes
+
+Tencent HealthCare Omics Platform
+History
+
+Introduction
+
+API Category
+
+Making API Requests
+
+Environment Management APIs
+
+Tencent Healthcare Omics Platform APIs
+
+Data Types
+
+Error Codes
+
+Tencent Cloud TCHouse-D
+History
+
+Introduction
+
+API Category
+
+Making API Requests
+
+Cluster Operation APIs
+
+Database and Table APIs
+
+Cluster Information Viewing APIs
+
+Hot-Cold Data Layering APIs
+
+Database and Operation Audit APIs
+
+User and Permission APIs
+
+Resource Group Management APIs
+
+Data Types
+
+Error Codes
+
+Tencent Cloud WeData
+History
+
+Introduction
+
+API Category
+
+Making API Requests
+
+Smart Ops Related Interfaces
+
+Data Development APIs
+
+Data Development APIs
+
+Ops Center APIs
+
+Data Operations Related Interfaces
+
+Data Exploration APIs
+
+Metadata Related Interfaces
+
+Task Operations APIs
+
+Instance Operation and Maintenance Related Interfaces
+
+Data Map and Data Dictionary APIs
+
+Data Quality Related Interfaces
+
+Data Source Management APIs
+
+DataInLong APIs
+
+Platform Management APIs
+
+Asset Data APIs
+
+Data Types
+
+Error Codes
+
+WeData API 2025-08-06
+
+Anti-DDoS
+History
+
+History
+
+Introduction
+
+Introduction
+
+API Category
+
+API Category
+
+Making API Requests
+
+Making API Requests
+
+Anti-DDoS Advanced Instance APIs
+
+Resource List APIs
+
+Protection Configuration APIs
+
+Other APIs
+
+Alarm Notification APIs
+
+Connection Configuration APIs
+
+Intelligent Scheduling APIs
+
+Blackhole Unblocking APIs
+
+Black hole unblocking APIs
+
+Statistical Report APIs
+
+Data Types
+
+Data Types
+
+Error Codes
+
+Error Codes
+
+Edge Zone
+History
+
+Introduction
+
+API Category
+
+Making API Requests
+
+Physical Server APIs
+
+Network APIs
+
+Data APIs
+
+Data Types
+
+Error Codes
+
+Cloud Contact Center
+History
+
+Introduction
+
+API Category
+
+Making API Requests
+
+Agent APIs
+
+Skill Group APIs
+
+Number APIs
+
+Dual Call APIs
+
+Predictive Outbound Call APIs
+
+SIP Phone APIs
+
+Call Service Record APIs
+
+Billing APIs
+
+Other APIs
+
+Outbound Call APIs
+
+Speech Intelligent Agent APIs
+
+Data Types
+
+Error Codes
+
+Tencent Cloud Super App as a Service
+History
+
+Introduction
+
+API Category
+
+Making API Requests
+
+Superapp APIs
+
+Mini program APIs
+
+Mini game APIs
+
+Sensitive APIs
+
+Management-Sensitive APIs
+
+Platform Management APIs
+
+Other Console APIs
+
+Team Management APIs
+
+Global Domain Management APIs
+
+User Management APIs
+
+Role Management APIs
+
+Operation Management APIs
+
+Data Types
+
+Tencent Cloud Smart Advisor
+History
+
+Introduction
+
+API Category
+
+Making API Requests
+
+Other APIs
+
+Task APIs
+
+Cloud Architecture Console APIs
+
+Data Types
+
+Error Codes
+
+TDMQ for RabbitMQ
+History
+
+Introduction
+
+API Category
+
+Making API Requests
+
+Relevant APIs for RabbitMQ Serverless PAAS Capacity
+
+RabbitMQ Serverless Instance Management APIs
+
+Data Types
+
+Error Codes
+
+Control Center
+History
+
+Introduction
+
+API Category
+
+Making API Requests
+
+Account Factory APIs
+
+Data Types
+
+Error Codes
+
+TDMQ for CMQ
+API Documentation
+
+API 2.0 to 3.0 Switch Guide
+
+Tencent Cloud TCHouse-P
+History
+
+Introduction
+
+API Category
+
+Making API Requests
+
+Information Query APIs
+
+Instance APIs
+
+Query APIs
+
+Cluster Management APIs
+
+Cluster Operation APIs
+
+Data Types
+
+Error Codes
+
+TDMQ for RocketMQ
+History
+
+Introduction
+
+API Category
+
+Making API Requests
+
+Topic APIs
+
+Consumer Group APIs
+
+Message APIs
+
+Role Authentication APIs
+
+Hitless Migration APIs
+
+Cloud Migration APIs
+
+Cluster APIs
+
+Data Types
+
+Error Codes
+
+Cloud Dedicated Zone
+History
+
+Introduction
+
+API Category
+
+Making API Requests
+
+Availability Zone APIs
+
+Data Types
+
+Error Codes
+
+Tencent Cloud Health Dashboard
+History
+
+Introduction
+
+API Category
+
+Making API Requests
+
+Event APIs
+
+Data Types
+
+Error Codes
+
+Application Performance Management
+History
+
+Introduction
+
+API Category
+
+Making API Requests
+
+Application APIs
+
+Business System APIs
+
+Topology APIs
+
+General Query APIs
+
+Performance Analysis APIs
+
+Data Types
+
+Error Codes
+
+Config
+History
+
+Introduction
+
+API Category
+
+Making API Requests
+
+Rule APIs
+
+Resource APIs
+
+Data Types
+
+Error Codes
+
+Automatic Speech Recognition
+History
+
+Introduction
+
+API Category
+
+Making API Requests
+
+Recording Recognition APIs
+
+Real-Time Speech Recognition APIs
+
+Data Types
+
+Error Codes
+
+Tencent Cloud TI-ONE Platform
+History
+
+Introduction
+
+API Category
+
+Making API Requests
+
+Online Service APIs
+
+Data Types
+
+Error Codes
+
+Web Application Firewall
+History
+
+Introduction
+
+API Category
+
+Making API Requests
+
+Asset Management APIs
+
+Billing APIs
+
+Protection Settings APIs
+
+Other APIs
+
+IP Management APIs
+
+Integration APIs
+
+Log Service APIs
+
+Security Overview APIs
+
+Rule Engine APIs
+
+Data Types
+
+Error Codes
+
+Cloud Security Center
+History
+
+Introduction
+
+API Category
+
+Making API Requests
+
+Multi-account Management APIs
+
+Scan Task APIs
+
+Alarm Center APIs
+
+Risk Center APIs
+
+Asset Center APIs
+
+User Behavior Analysis APIs
+
+Cloud Boundary Analysis APIs
+
+Cloud API Anomaly Detection APIs
+
+Cloud Resource Configuration Check APIs
+
+AI-SPM APIs
+
+Key Sandbox APIs
+
+Host Vulnerability APIs
+
+Vulnerability Repair APIs
+
+Skill Security Detection APIs
+
+IaC Detection APIs
+
+Report Download APIs
+
+Solid Protection APIs
+
+Cloud Security Center Overview APIs
+
+Data Types
+
+Error Codes
+
+Risk Control Engine
+History
+
+Introduction
+
+API Category
+
+Making API Requests
+
+TencentCloud APIs
+
+Data Types
+
+Error Codes
+
+rce API 2020-11-03
+
+TencentDB for CTSDB
+History
+
+Introduction
+
+API Category
+
+Making API Requests
+
+Instance APIs
+
+Database APIs
+
+Data Types
+
+Error Codes
+
+Tencent Interactive Whiteboard
+History
+
+Introduction
+
+API Category
+
+Making API Requests
+
+Whiteboard Push APIs
+
+Other APIs
+
+Document Transcoding APIs
+
+Real-Time Recording APIs
+
+Statistics Query APIs
+
+Whiteboard Snapshot APIs
+
+Recording Video Generation APIs
+
+Data Types
+
+Error Codes
+
+Tencent Container Security Service
+History
+
+Introduction
+
+API Category
+
+Making API Requests
+
+Network Security APIs
+
+Cluster Security APIs
+
+Security Compliance APIs
+
+Runtime security - High-risk syscalls
+
+Runtime Security - Reverse Shell APIs
+
+Runtime Security APIs
+
+Image Security APIs
+
+Alert Settings APIs
+
+Advanced prevention - K8s API abnormal requests
+
+Asset Management APIs
+
+Security Operations - Log Analysis APIs
+
+Runtime Security - Trojan Call APIs
+
+Vulnerability Management APIs
+
+Runtime Security - Container Escape APIs
+
+Billing APIs
+
+Data Types
+
+Error Codes
+
+Domains 
+History
+
+Introduction
+
+API Category
+
+Making API Requests
+
+Domain Management APIs
+
+Domain Query APIs
+
+Bulk Operation APIs
+
+Registrant Profile APIs
+
+Other APIs
+
+Data Types
+
+Error Codes
+
+Low-code Interactive Classroom
+History
+
+Introduction
+
+API Category
+
+Making API Requests
+
+User Login APIs
+
+Room Management APIs
+
+Group Management APIs
+
+Application Configuration APIs
+
+Recording Management APIs
+
+Courseware Management APIs
+
+User Management APIs
+
+Developer APIs
+
+Data Types
+
+Error Codes
+
+DocumentationAPIsSimple Email ServiceMail APIsSendEmail
+
+SendEmail
+
+Download
+
+Focus Mode
+
+Font Size
+
+Last updated: 2
+
+[… truncated 12813 chars …]

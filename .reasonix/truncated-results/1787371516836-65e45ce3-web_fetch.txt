@@ -1,0 +1,354 @@
+Sending Email with Attachment
+https://intl.cloud.tencent.com/document/product/1084/44454
+
+<!DOCTYPE html>Sending Email with Attachment
+tencent cloud
+
+Promotions
+
+Products
+
+Solutions
+
+Pricing
+
+Partner Network
+
+Marketplace
+
+Explore
+
+PrevNext
+
+Simple Email Service
+
+News and Announcements
+Release Notes
+
+Announcement on a Newly Added Independent IP Value-Added Service
+
+Product Introduction
+Overview
+
+Features
+
+Strengths
+
+Use Cases
+
+Specifications
+
+Purchase Guide
+Pricing
+
+Getting Started
+Email Configuration
+
+Email Sending
+
+Reputation Level
+
+Console Guide
+
+Configuration
+
+Email Sending
+
+Statistics
+
+Delivery Response
+
+API Documentation
+History
+
+Introduction
+
+API Category
+
+Making API Requests
+
+Domain Verification APIs
+
+Mail APIs
+
+Template APIs
+
+Statistics APIs
+
+Sender Address APIs
+
+Blocklist APIs
+
+Sending Status Query APIs
+
+Batch Task APIs
+
+Custom Blocklist APIs
+
+Data Types
+
+Error Codes
+
+SMTP Documentation
+SMTP Email Sending Guide
+
+SMTP Service Address
+
+Sample Call for Java
+
+Sample Call for Go
+
+Sample Call for PHP
+
+Sample Call for Python
+
+Sample Call for C#
+
+Sending Email with Attachment
+
+Error Code
+
+Webhook Documentation
+Email Event Notification
+
+Email Sending Restrictions
+Attachment Types
+
+FAQs
+Getting Started
+
+Billing
+
+Sending Limits
+
+Sending Feature
+
+Domain
+
+Template
+
+Identity Verification and Configuration
+
+Independent IP Related Questions
+
+Delivery
+
+API Use
+
+Callback
+
+Spam Folder
+
+Delivery Status FAQ
+
+Security
+
+Domain Acceleration Configuration
+
+Important Notes
+
+Others
+
+Contact Us
+
+DocumentationSimple Email ServiceSMTP DocumentationSending Email with Attachment
+
+Sending Email with Attachment
+
+Download
+
+Focus Mode
+
+Font Size
+
+Last updated: 2026-01-16 10:44:02
+AI-Translated
+
+The method of sending an email with an attachment through SMTP is to construct the content of a MIME-formatted email.
+
+Email MIME Format
+
+For more information, see MIME Protocol.
+
+Note: 
+
+A MIME message consists of two parts: email header and email body.
+
+Email Header
+
+The email header contains important information such as sender, recipient, subject, time, MIME version, and body type.
+
+Note: 
+
+Each piece of information is called a field, which consists of a domain followed by ":" and the information content and can be in one or multiple lines.
+
+The first line of a field must be written "to the left", i.e., without whitespace characters (spaces and tabs) on the left.
+
+The next lines must start with whitespace characters, one of which must not be inherent in the message itself (that is, it needs to be filtered out during decoding).
+
+Blank lines are not allowed in the email header. If the first line is blank, some emails cannot be recognized by certain email client software, and the original code is displayed.
+
+For example:
+
+Content 
+
+Example 
+
+Date
+
+Mon, 29 Jun 2009 18:39:03 +0800
+
+From
+
+abc@123.com
+
+To
+
+abc1@123.com
+
+BCC
+
+abc3@123.com
+
+Subject
+
+test
+
+Message-ID
+
+123@123.com
+
+Mime-Version
+
+1.0
+
+Field 
+
+Description 
+
+Bcc
+
+Blind carbon copy address
+
+Cc
+
+Copy address
+
+Content-Transfer-Encoding
+
+Content transfer encoding method
+
+Content-Type
+
+Content type
+
+Date
+
+Date and time
+
+Delivered-To
+
+Recipient address
+
+From
+
+Sender address
+
+Message-ID
+
+Message ID
+
+MIME-Version
+
+MIME version
+
+Received
+
+Transfer path
+
+Reply-To
+
+Reply-to address
+
+Return-Path
+
+Reply-to address
+
+Subject
+
+Subject
+
+To
+
+Recipient address
+
+Email Body
+
+Field 
+
+Description 
+
+Content-ID
+
+Content ID
+
+Content-Transfer-Encoding
+
+Content transfer encoding method
+
+Content-Location
+
+Content location (path)
+
+Content-Base
+
+Content base location
+
+Content-Disposition
+
+Content disposition method
+
+Content-Type
+
+Content type
+
+Some fields have parameters in addition to values. Value and parameter as well as parameter and parameter are separated with ";". Parameter name and parameter value are separated with "=".
+
+The email body contains the content of the email, whose type is indicated by the Content-Type field in the email header.
+
+Note: 
+
+Common simple types include:
+
+text/plain (plain text) 
+
+text/html (hypertext)
+
+The multipart type is the essence of MIME emails. The email body is divided into multiple parts, each of which consists of part header and part body separated by a blank line.
+
+There are three common multipart types:
+
+multipart/mixed
+
+multipart/related
+
+multipart/alternative
+
+The meaning and use of each of these types can be seen from their names. The hierarchical relationship between them can be summarized as shown below:
+
+﻿
+
+﻿
+﻿
+
+If you want to add attachments to an email, you must define the multipart/mixed part. If there are embedded resources, you must define at least the multipart/related part; if plain text and hypertext coexist, you must define at least the multipart/alternative part.
+
+Note: 
+
+The number of attachments should not exceed 10, the size of a single attachment should not exceed 4 MB, and the total size of all attachments should not exceed 8 MB. For more information, see Data Structure.
+
+Sample Go Code
+
+<div class="" data-slate-node="element"><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token keyword"><span data-slate-string="true">package</span></span></span><span data-slate-leaf="true"><span data-slate-string="true"> main</span></span></span></div><div class="" data-slate-node="element"><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token keyword"><span data-slate-string="true">import</span></span></span><span data-slate-leaf="true"><span data-slate-string="true"> </span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token punctuation"><span data-slate-string="true">(</span></span></span></span></div><div class="" data-slate-node="element"><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-string="true"> </span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token string"><span data-slate-string="true">"bytes"</span></span></span></span></div><div class="" data-slate-node="element"><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-string="true"> </span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token string"><span data-slate-string="true">"crypto/tls"</span></span></span></span></div><div class="" data-slate-node="element"><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-string="true"> </span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token string"><span data-slate-string="true">"encoding/base64"</span></span></span></span></div><div class="" data-slate-node="element"><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-string="true"> </span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token string"><span data-slate-string="true">"fmt"</span></span></span></span></div><div class="" data-slate-node="element"><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-string="true"> </span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token string"><span data-slate-string="true">"io/ioutil"</span></span></span></span></div><div class="" data-slate-node="element"><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-string="true"> </span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token string"><span data-slate-string="true">"log"</span></span></span></span></div><div class="" data-slate-node="element"><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-string="true"> </span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token string"><span data-slate-string="true">"mime"</span></span></span></span></div><div class="" data-slate-node="element"><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-string="true"> </span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token string"><span data-slate-string="true">"net"</span></span></span></span></div><div class="" data-slate-node="element"><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-string="true"> </span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token string"><span data-slate-string="true">"net/smtp"</span></span></span></span></div><div class="" data-slate-node="element"><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-string="true"> </span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token string"><span data-slate-string="true">"time"</span></span></span></span></div><div class="" data-slate-node="element"><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token punctuation"><span data-slate-string="true">)</span></span></span></span></div><div class="" data-slate-node="element"><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-zero-width="n" data-slate-length="0">﻿<br/></span></span></span></div><div class="" data-slate-node="element"><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token comment"><span data-slate-string="true">// Test465Attachment for port 465</span></span></span></span></div><div class="" data-slate-node="element"><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token keyword"><span data-slate-string="true">func</span></span></span><span data-slate-leaf="true"><span data-slate-string="true"> </span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token function"><span data-slate-string="true">Test465Attachment</span></span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token punctuation"><span data-slate-string="true">(</span></span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token punctuation"><span data-slate-string="true">)</span></span></span><span data-slate-leaf="true"><span data-slate-string="true"> </span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token builtin"><span data-slate-string="true">error</span></span></span><span data-slate-leaf="true"><span data-slate-string="true"> </span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token punctuation"><span data-slate-string="true">{</span></span></span></span></div><div class="" data-slate-node="element"><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-string="true"> boundary </span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token operator"><span data-slate-string="true">:=</span></span></span><span data-slate-leaf="true"><span data-slate-string="true"> </span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token string"><span data-slate-string="true">"GoBoundary"</span></span></span></span></div><div class="" data-slate-node="element"><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-string="true"> host </span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token operator"><span data-slate-string="true">:=</span></span></span><span data-slate-leaf="true"><span data-slate-string="true"> </span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token string"><span data-slate-string="true">"sg-smtp.qcloudmail.com"</span></span></span></span></div><div class="" data-slate-node="element"><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-string="true"> port </span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token operator"><span data-slate-string="true">:=</span></span></span><span data-slate-leaf="true"><span data-slate-string="true"> </span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token number"><span data-slate-string="true">465</span></span></span></span></div><div class="" data-slate-node="element"><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-string="true"> email </span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token operator"><span data-slate-string="true">:=</span></span></span><span data-slate-leaf="true"><span data-slate-string="true"> </span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token string"><span data-slate-string="true">"abc@cd.com"</span></span></span></span></div><div class="" data-slate-node="element"><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-string="true"> password </span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token operator"><span data-slate-string="true">:=</span></span></span><span data-slate-leaf="true"><span data-slate-string="true"> </span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token string"><span data-slate-string="true">"***"</span></span></span></span></div><div class="" data-slate-node="element"><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-string="true"> toEmail </span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token operator"><span data-slate-string="true">:=</span></span></span><span data-slate-leaf="true"><span data-slate-string="true"> </span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token string"><span data-slate-string="true">"test@test123.com"</span></span></span></span></div><div class="" data-slate-node="element"><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-string="true"> header </span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token operator"><span data-slate-string="true">:=</span></span></span><span data-slate-leaf="true"><span data-slate-string="true"> </span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token function"><span data-slate-string="true">make</span></span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token punctuation"><span data-slate-string="true">(</span></span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token keyword"><span data-slate-string="true">map</span></span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token punctuation"><span data-slate-string="true">[</span></span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token builtin"><span data-slate-string="true">string</span></span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token punctuation"><span data-slate-string="true">]</span></span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token builtin"><span data-slate-string="true">string</span></span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token punctuation"><span data-slate-string="true">)</span></span></span></span></div><div class="" data-slate-node="element"><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-string="true"> header</span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token punctuation"><span data-slate-string="true">[</span></span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token string"><span data-slate-string="true">"From"</span></span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token punctuation"><span data-slate-string="true">]</span></span></span><span data-slate-leaf="true"><span data-slate-string="true"> </span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token operator"><span data-slate-string="true">=</span></span></span><span data-slate-leaf="true"><span data-slate-string="true"> </span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token string"><span data-slate-string="true">"test "</span></span></span><span data-slate-leaf="true"><span data-slate-string="true"> </span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token operator"><span data-slate-string="true">+</span></span></span><span data-slate-leaf="true"><span data-slate-string="true"> </span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token string"><span data-slate-string="true">"<"</span></span></span><span data-slate-leaf="true"><span data-slate-string="true"> </span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token operator"><span data-slate-string="true">+</span></span></span><span data-slate-leaf="true"><span data-slate-string="true"> email </span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token operator"><span data-slate-string="true">+</span></span></span><span data-slate-leaf="true"><span data-slate-string="true"> </span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token string"><span data-slate-string="true">">"</span></span></span></span></div><div class="" data-slate-node="element"><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-string="true"> header</span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token punctuation"><span data-slate-string="true">[</span></span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token string"><span data-slate-string="true">"To"</span></span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token punctuation"><span data-slate-string="true">]</span></span></span><span data-slate-leaf="true"><span data-slate-string="true"> </span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token operator"><span data-slate-string="true">=</span></span></span><span data-slate-leaf="true"><span data-slate-string="true"> toEmail</span></span></span></div><div class="" data-slate-node="element"><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-string="true"> header</span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token punctuation"><span data-slate-string="true">[</span></span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token string"><span data-slate-string="true">"Subject"</span></span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token punctuation"><span data-slate-string="true">]</span></span></span><span data-slate-leaf="true"><span data-slate-string="true"> </span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token operator"><span data-slate-string="true">=</span></span></span><span data-slate-leaf="true"><span data-slate-string="true"> </span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token string"><span data-slate-string="true">"Test465Attachment"</span></span></span></span></div><div class="" data-slate-node="element"><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-string="true"> header</span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token punctuation"><span data-slate-string="true">[</span></span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token string"><span data-slate-string="true">"Content-Type"</span></span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token punctuation"><span data-slate-string="true">]</span></span></span><span data-slate-leaf="true"><span data-slate-string="true"> </span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token operator"><span data-slate-string="true">=</span></span></span><span data-slate-leaf="true"><span data-slate-string="true"> </span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token string"><span data-slate-string="true">"multipart/mixed;boundary="</span></span></span><span data-slate-leaf="true"><span data-slate-string="true"> </span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token operator"><span data-slate-string="true">+</span></span></span><span data-slate-leaf="true"><span data-slate-string="true"> boundary</span></span></span></div><div class="" data-slate-node="element"><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-string="true"> </span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token comment"><span data-slate-string="true">// This field is not used for the time being. Pass in `1.0` by default</span></span></span></span></div><div class="" data-slate-node="element"><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-string="true"> header</span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token punctuation"><span data-slate-string="true">[</span></span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token string"><span data-slate-string="true">"Mime-Version"</span></span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token punctuation"><span data-slate-string="true">]</span></span></span><span data-slate-leaf="true"><span data-slate-string="true"> </span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token operator"><span data-slate-string="true">=</span></span></span><span data-slate-leaf="true"><span data-slate-string="true"> </span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token string"><span data-slate-string="true">"1.0"</span></span></span></span></div><div class="" data-slate-node="element"><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-string="true"> </span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token comment"><span data-slate-string="true">// This field is not used for the time being</span></span></span></span></div><div class="" data-slate-node="element"><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-string="true"> header</span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token punctuation"><span data-slate-string="true">[</span></span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token string"><span data-slate-string="true">"Date"</span></span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token punctuation"><span data-slate-string="true">]</span></span></span><span data-slate-leaf="true"><span data-slate-string="true"> </span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token operator"><span data-slate-string="true">=</span></span></span><span data-slate-leaf="true"><span data-slate-string="true"> time</span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token punctuation"><span data-slate-string="true">.</span></span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token function"><span data-slate-string="true">Now</span></span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token punctuation"><span data-slate-string="true">(</span></span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token punctuation"><span data-slate-string="true">)</span></span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token punctuation"><span data-slate-string="true">.</span></span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token function"><span data-slate-string="true">String</span></span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token punctuation"><span data-slate-string="true">(</span></span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token punctuation"><span data-slate-string="true">)</span></span></span></span></div><div class="" data-slate-node="element"><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-string="true"> bodyHtml </span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token operator"><span data-slate-string="true">:=</span></span></span><span data-slate-leaf="true"><span data-slate-string="true"> </span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token string"><span data-slate-string="true">"<!DOCTYPE html>\\n<html>\\n<head>\\n<meta charset=\\"utf-8\\">\\n<title>hello world</title>\\n</head>\\n<body>\\n "</span></span></span><span data-slate-leaf="true"><span data-slate-string="true"> </span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token operator"><span data-slate-string="true">+</span></span></span></span></div><div class="" data-slate-node="element"><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-string="true"> </span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token string"><span data-slate-string="true">"<h1>My first heading</h1>\\n <p>My first paragraph.</p>\\n</body>\\n</html>"</span></span></span></span></div><div class="" data-slate-node="element"><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-string="true"> message </span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token operator"><span data-slate-string="true">:=</span></span></span><span data-slate-leaf="true"><span data-slate-string="true"> </span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token string"><span data-slate-string="true">""</span></span></span></span></div><div class="" data-slate-node="element"><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-string="true"> </span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token keyword"><span data-slate-string="true">for</span></span></span><span data-slate-leaf="true"><span data-slate-string="true"> k</span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token punctuation"><span data-slate-string="true">,</span></span></span><span data-slate-leaf="true"><span data-slate-string="true"> v </span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token operator"><span data-slate-string="true">:=</span></span></span><span data-slate-leaf="true"><span data-slate-string="true"> </span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token keyword"><span data-slate-string="true">range</span></span></span><span data-slate-leaf="true"><span data-slate-string="true"> header </span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token punctuation"><span data-slate-string="true">{</span></span></span></span></div><div class="" data-slate-node="element"><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-string="true"> message </span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token operator"><span data-slate-string="true">+=</span></span></span><span data-slate-leaf="true"><span data-slate-string="true"> fmt</span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token punctuation"><span data-slate-string="true">.</span></span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token function"><span data-slate-string="true">Sprintf</span></span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token punctuation"><span data-slate-string="true">(</span></span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token string"><span data-slate-string="true">"%s: %s\\r\\n"</span></span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token punctuation"><span data-slate-string="true">,</span></span></span><span data-slate-leaf="true"><span data-slate-string="true"> k</span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token punctuation"><span data-slate-string="true">,</span></span></span><span data-slate-leaf="true"><span data-slate-string="true"> v</span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token punctuation"><span data-slate-string="true">)</span></span></span></span></div><div class="" data-slate-node="element"><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-string="true"> </span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token punctuation"><span data-slate-string="true">}</span></span></span></span></div><div class="" data-slate-node="element"><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-string="true"> buffer </span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token operator"><span data-slate-string="true">:=</span></span></span><span data-slate-leaf="true"><span data-slate-string="true"> bytes</span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token punctuation"><span data-slate-string="true">.</span></span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token function"><span data-slate-string="true">NewBuffer</span></span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token punctuation"><span data-slate-string="true">(</span></span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token boolean"><span data-slate-string="true">nil</span></span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token punctuation"><span data-slate-string="true">)</span></span></span></span></div><div class="" data-slate-node="element"><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-string="true"> buffer</span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token punctuation"><span data-slate-string="true">.</span></span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token function"><span data-slate-string="true">WriteString</span></span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token punctuation"><span data-slate-string="true">(</span></span></span><span data-slate-leaf="true"><span data-slate-string="true">message</span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token punctuation"><span data-slate-string="true">)</span></span></span></span></div><div class="" data-slate-node="element"><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-string="true"> </span></span></span></div><div class="" data-slate-node="element"><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-string="true"> contentType
+
+[… truncated 165362 chars …]

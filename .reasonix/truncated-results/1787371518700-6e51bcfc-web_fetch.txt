@@ -1,0 +1,171 @@
+Sample Call for Go
+https://intl.cloud.tencent.com/document/product/1084/44455
+
+<!DOCTYPE html>Sample Call for Go
+tencent cloud
+
+Promotions
+
+Products
+
+Solutions
+
+Pricing
+
+Partner Network
+
+Marketplace
+
+Explore
+
+PrevNext
+
+Simple Email Service
+
+News and Announcements
+Release Notes
+
+Announcement on a Newly Added Independent IP Value-Added Service
+
+Product Introduction
+Overview
+
+Features
+
+Strengths
+
+Use Cases
+
+Specifications
+
+Purchase Guide
+Pricing
+
+Getting Started
+Email Configuration
+
+Email Sending
+
+Reputation Level
+
+Console Guide
+
+Configuration
+
+Email Sending
+
+Statistics
+
+Delivery Response
+
+API Documentation
+History
+
+Introduction
+
+API Category
+
+Making API Requests
+
+Domain Verification APIs
+
+Mail APIs
+
+Template APIs
+
+Statistics APIs
+
+Sender Address APIs
+
+Blocklist APIs
+
+Sending Status Query APIs
+
+Batch Task APIs
+
+Custom Blocklist APIs
+
+Data Types
+
+Error Codes
+
+SMTP Documentation
+SMTP Email Sending Guide
+
+SMTP Service Address
+
+Sample Call for Java
+
+Sample Call for Go
+
+Sample Call for PHP
+
+Sample Call for Python
+
+Sample Call for C#
+
+Sending Email with Attachment
+
+Error Code
+
+Webhook Documentation
+Email Event Notification
+
+Email Sending Restrictions
+Attachment Types
+
+FAQs
+Getting Started
+
+Billing
+
+Sending Limits
+
+Sending Feature
+
+Domain
+
+Template
+
+Identity Verification and Configuration
+
+Independent IP Related Questions
+
+Delivery
+
+API Use
+
+Callback
+
+Spam Folder
+
+Delivery Status FAQ
+
+Security
+
+Domain Acceleration Configuration
+
+Important Notes
+
+Others
+
+Contact Us
+
+DocumentationSimple Email ServiceSMTP DocumentationSample Call for Go
+
+Sample Call for Go
+
+Download
+
+Focus Mode
+
+Font Size
+
+Last updated: 2026-05-12 16:00:22
+AI-Translated
+
+The following sample code uses SMTP to send an email in Go language (v1.16):
+
+<div class="" data-slate-node="element"><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token comment"><span data-slate-string="true">// Email Push Service (SES) using the SMTP protocol.</span></span></span></span></div><div class="" data-slate-node="element"><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token comment"><span data-slate-string="true">//</span></span></span></span></div><div class="" data-slate-node="element"><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token comment"><span data-slate-string="true">// This code demonstrates how to send an email request to Tencent Cloud SES</span></span></span></span></div><div class="" data-slate-node="element"><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token comment"><span data-slate-string="true">// via the SMTP protocol (port 465 with SSL/TLS encryption). The overall flow</span></span></span></span></div><div class="" data-slate-node="element"><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token comment"><span data-slate-string="true">// consists of the following steps:</span></span></span></span></div><div class="" data-slate-node="element"><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token comment"><span data-slate-string="true">// 1. Prepare sending parameters (sender, recipients, Cc, Bcc, subject, body, etc.);</span></span></span></span></div><div class="" data-slate-node="element"><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token comment"><span data-slate-string="true">// 2. Assemble the email Header and Body in RFC 822 format (the Body is Base64-encoded);</span></span></span></span></div><div class="" data-slate-node="element"><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token comment"><span data-slate-string="true">// 3. Establish an encrypted connection to the SMTP server using tls.Dial;</span></span></span></span></div><div class="" data-slate-node="element"><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token comment"><span data-slate-string="true">// 4. Complete authentication via PlainAuth;</span></span></span></span></div><div class="" data-slate-node="element"><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token comment"><span data-slate-string="true">// 5. Execute SMTP commands such as MAIL FROM, RCPT TO and DATA in order to deliver the message.</span></span></span></span></div><div class="" data-slate-node="element"><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token comment"><span data-slate-string="true">//</span></span></span></span></div><div class="" data-slate-node="element"><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token comment"><span data-slate-string="true">// Before using this code, please complete the following preparations in the</span></span></span></span></div><div class="" data-slate-node="element"><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token comment"><span data-slate-string="true">// Tencent Cloud Email Push console:</span></span></span></span></div><div class="" data-slate-node="element"><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token comment"><span data-slate-string="true">// - Create and verify a Sender Domain;</span></span></span></span></div><div class="" data-slate-node="element"><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token comment"><span data-slate-string="true">// - Create a Sender Address and enable SMTP sending;</span></span></span></span></div><div class="" data-slate-node="element"><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token comment"><span data-slate-string="true">// - Generate a dedicated SMTP password under "SMTP Password" in the console</span></span></span></span></div><div class="" data-slate-node="element"><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token comment"><span data-slate-string="true">// (note: this is NOT your Tencent Cloud account password);</span></span></span></span></div><div class="" data-slate-node="element"><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token comment"><span data-slate-string="true">// - Make sure the sender address has available sending quota.</span></span></span></span></div><div class="" data-slate-node="element"><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token comment"><span data-slate-string="true">//</span></span></span></span></div><div class="" data-slate-node="element"><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token comment"><span data-slate-string="true">// Dependencies: only the standard library net/smtp and crypto/tls; no third-party packages required.</span></span></span></span></div><div class="" data-slate-node="element"><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token keyword"><span data-slate-string="true">package</span></span></span><span data-slate-leaf="true"><span data-slate-string="true"> main</span></span></span></div><div class="" data-slate-node="element"><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-zero-width="n" data-slate-length="0">﻿<br/></span></span></span></div><div class="" data-slate-node="element"><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token keyword"><span data-slate-string="true">import</span></span></span><span data-slate-leaf="true"><span data-slate-string="true"> </span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token punctuation"><span data-slate-string="true">(</span></span></span></span></div><div class="" data-slate-node="element"><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-string="true"> </span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token string"><span data-slate-string="true">"crypto/tls"</span></span></span></span></div><div class="" data-slate-node="element"><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-string="true"> </span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token string"><span data-slate-string="true">"encoding/base64"</span></span></span></span></div><div class="" data-slate-node="element"><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-string="true"> </span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token string"><span data-slate-string="true">"fmt"</span></span></span></span></div><div class="" data-slate-node="element"><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-string="true"> </span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token string"><span data-slate-string="true">"log"</span></span></span></span></div><div class="" data-slate-node="element"><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-string="true"> </span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token string"><span data-slate-string="true">"net"</span></span></span></span></div><div class="" data-slate-node="element"><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-string="true"> </span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token string"><span data-slate-string="true">"net/smtp"</span></span></span></span></div><div class="" data-slate-node="element"><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token punctuation"><span data-slate-string="true">)</span></span></span></span></div><div class="" data-slate-node="element"><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-zero-width="n" data-slate-length="0">﻿<br/></span></span></span></div><div class="" data-slate-node="element"><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token comment"><span data-slate-string="true">// Test465 demonstrates sending an HTML-formatted email via port 465 (SSL/TLS).</span></span></span></span></div><div class="" data-slate-node="element"><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token comment"><span data-slate-string="true">//</span></span></span></span></div><div class="" data-slate-node="element"><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token comment"><span data-slate-string="true">// Workflow:</span></span></span></span></div><div class="" data-slate-node="element"><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token comment"><span data-slate-string="true">// 1. Configure the SMTP server address, port, sender account and SMTP password;</span></span></span></span></div><div class="" data-slate-node="element"><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token comment"><span data-slate-string="true">// 2. Build the email headers (From / To / Cc / Bcc / Subject / Content-Type, etc.);</span></span></span></span></div><div class="" data-slate-node="element"><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token comment"><span data-slate-string="true">// 3. Base64-encode the body and append it after the headers (a blank line is required between header and body);</span></span></span></span></div><div class="" data-slate-node="element"><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token comment"><span data-slate-string="true">// 4. Use smtp.PlainAuth to create a PLAIN authentication object;</span></span></span></span></div><div class="" data-slate-node="element"><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token comment"><span data-slate-string="true">// 5. Call SendMailWithTLS to deliver the message via a TLS connection.</span></span></span></span></div><div class="" data-slate-node="element"><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token comment"><span data-slate-string="true">//</span></span></span></span></div><div class="" data-slate-node="element"><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token comment"><span data-slate-string="true">// Return value: returns nil on success, or the specific error on failure.</span></span></span></span></div><div class="" data-slate-node="element"><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token keyword"><span data-slate-string="true">func</span></span></span><span data-slate-leaf="true"><span data-slate-string="true"> </span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token function"><span data-slate-string="true">Test465</span></span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token punctuation"><span data-slate-string="true">(</span></span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token punctuation"><span data-slate-string="true">)</span></span></span><span data-slate-leaf="true"><span data-slate-string="true"> </span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token builtin"><span data-slate-string="true">error</span></span></span><span data-slate-leaf="true"><span data-slate-string="true"> </span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token punctuation"><span data-slate-string="true">{</span></span></span></span></div><div class="" data-slate-node="element"><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-string="true"> </span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token comment"><span data-slate-string="true">// SMTP server address. For Tencent Cloud Email Push it is fixed to smtp.qcloudmail.com.</span></span></span></span></div><div class="" data-slate-node="element"><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-string="true"> host </span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token operator"><span data-slate-string="true">:=</span></span></span><span data-slate-leaf="true"><span data-slate-string="true"> </span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token string"><span data-slate-string="true">"smtp.qcloudmail.com"</span></span></span></span></div><div class="" data-slate-node="element"><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-string="true"> </span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token comment"><span data-slate-string="true">// SMTP port: 465 means an SSL/TLS encrypted connection;</span></span></span></span></div><div class="" data-slate-node="element"><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-string="true"> </span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token comment"><span data-slate-string="true">// If you want to use STARTTLS, switch to port 25, and the tls.Dial in the code</span></span></span></span></div><div class="" data-slate-node="element"><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-string="true"> </span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token comment"><span data-slate-string="true">// must be changed to net.Dial + StartTLS accordingly.</span></span></span></span></div><div class="" data-slate-node="element"><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-string="true"> port </span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token operator"><span data-slate-string="true">:=</span></span></span><span data-slate-leaf="true"><span data-slate-string="true"> </span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token number"><span data-slate-string="true">465</span></span></span></span></div><div class="" data-slate-node="element"><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-zero-width="n" data-slate-length="0">﻿<br/></span></span></span></div><div class="" data-slate-node="element"><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-string="true"> </span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token comment"><span data-slate-string="true">// email: the Sender Address that has been created and verified in the console;</span></span></span></span></div><div class="" data-slate-node="element"><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-string="true"> </span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token comment"><span data-slate-string="true">// it must match the account that owns the SMTP password.</span></span></span></span></div><div class="" data-slate-node="element"><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-string="true"> email </span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token operator"><span data-slate-string="true">:=</span></span></span><span data-slate-leaf="true"><span data-slate-string="true"> </span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token string"><span data-slate-string="true">"abc@cd.com"</span></span></span></span></div><div class="" data-slate-node="element"><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-string="true"> </span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token comment"><span data-slate-string="true">// password: the dedicated SMTP password generated for this sender address</span></span></span></span></div><div class="" data-slate-node="element"><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-string="true"> </span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token comment"><span data-slate-string="true">// in the "SMTP Settings" page of the console.</span></span></span></span></div><div class="" data-slate-node="element"><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-string="true"> </span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token comment"><span data-slate-string="true">// It is NOT your Tencent Cloud login password and NOT the API key.</span></span></span></span></div><div class="" data-slate-node="element"><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-string="true"> password </span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token operator"><span data-slate-string="true">:=</span></span></span><span data-slate-leaf="true"><span data-slate-string="true"> </span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token string"><span data-slate-string="true">"****"</span></span></span></span></div><div class="" data-slate-node="element"><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-zero-width="n" data-slate-length="0">﻿<br/></span></span></span></div><div class="" data-slate-node="element"><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-string="true"> </span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token comment"><span data-slate-string="true">// Recipient address (required, at least one)</span></span></span></span></div><div class="" data-slate-node="element"><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-string="true"> toEmail </span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token operator"><span data-slate-string="true">:=</span></span></span><span data-slate-leaf="true"><span data-slate-string="true"> </span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token string"><span data-slate-string="true">"test@test123.com"</span></span></span></span></div><div class="" data-slate-node="element"><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-string="true"> </span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token comment"><span data-slate-string="true">// Cc address (optional)</span></span></span></span></div><div class="" data-slate-node="element"><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-string="true"> ccEmail </span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token operator"><span data-slate-string="true">:=</span></span></span><span data-slate-leaf="true"><span data-slate-string="true"> </span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token string"><span data-slate-string="true">"cc@test123.com"</span></span></span></span></div><div class="" data-slate-node="element"><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-string="true"> </span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token comment"><span data-slate-string="true">// Bcc address (optional)</span></span></span></span></div><div class="" data-slate-node="element"><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-string="true"> bccEmail </span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token operator"><span data-slate-string="true">:=</span></span></span><span data-slate-leaf="true"><span data-slate-string="true"> </span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token string"><span data-slate-string="true">"bcc@test123.com"</span></span></span></span></div><div class="" data-slate-node="element"><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-zero-width="n" data-slate-length="0">﻿<br/></span></span></span></div><div class="" data-slate-node="element"><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-string="true"> </span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token comment"><span data-slate-string="true">// Build the email header. The SMTP protocol requires header fields to be</span></span></span></span></div><div class="" data-slate-node="element"><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-string="true"> </span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token comment"><span data-slate-string="true">// written as "Key: Value\\r\\n", and a blank line ("\\r\\n") is required after</span></span></span></span></div><div class="" data-slate-node="element"><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-string="true"> </span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token comment"><span data-slate-string="true">// all headers, followed by the body.</span></span></span></span></div><div class="" data-slate-node="element"><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-string="true"> header </span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token operator"><span data-slate-string="true">:=</span></span></span><span data-slate-leaf="true"><span data-slate-string="true"> </span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token function"><span data-slate-string="true">make</span></span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token punctuation"><span data-slate-string="true">(</span></span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token keyword"><span data-slate-string="true">map</span></span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token punctuation"><span data-slate-string="true">[</span></span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token builtin"><span data-slate-string="true">string</span></span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token punctuation"><span data-slate-string="true">]</span></span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token builtin"><span data-slate-string="true">string</span></span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token punctuation"><span data-slate-string="true">)</span></span></span></span></div><div class="" data-slate-node="element"><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-string="true"> </span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token comment"><span data-slate-string="true">// "From" is recommended to be in the form "Display Name <sender address>";</span></span></span></span></div><div class="" data-slate-node="element"><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-string="true"> </span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token comment"><span data-slate-string="true">// the display name will be shown as the sender's nickname in the inbox.</span></span></span></span></div><div class="" data-slate-node="element"><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-string="true"> header</span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token punctuation"><span data-slate-string="true">[</span></span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token string"><span data-slate-string="true">"From"</span></span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token punctuation"><span data-slate-string="true">]</span></span></span><span data-slate-leaf="true"><span data-slate-string="true"> </span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token operator"><span data-slate-string="true">=</span></span></span><span data-slate-leaf="true"><span data-slate-string="true"> </span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token string"><span data-slate-string="true">"test "</span></span></span><span data-slate-leaf="true"><span data-slate-string="true"> </span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token operator"><span data-slate-string="true">+</span></span></span><span data-slate-leaf="true"><span data-slate-string="true"> </span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token string"><span data-slate-string="true">"<"</span></span></span><span data-slate-leaf="true"><span data-slate-string="true"> </span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token operator"><span data-slate-string="true">+</span></span></span><span data-slate-leaf="true"><span data-slate-string="true"> email </span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token operator"><span data-slate-string="true">+</span></span></span><span data-slate-leaf="true"><span data-slate-string="true"> </span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token string"><span data-slate-string="true">">"</span></span></span></span></div><div class="" data-slate-node="element"><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-string="true"> header</span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token punctuation"><span data-slate-string="true">[</span></span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token string"><span data-slate-string="true">"To"</span></span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token punctuation"><span data-slate-string="true">]</span></span></span><span data-slate-leaf="true"><span data-slate-string="true"> </span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token operator"><span data-slate-string="true">=</span></span></span><span data-slate-leaf="true"><span data-slate-string="true"> toEmail</span></span></span></div><div class="" data-slate-node="element"><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-string="true"> header</span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token punctuation"><span data-slate-string="true">[</span></span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token string"><span data-slate-string="true">"Cc"</span></span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token punctuation"><span data-slate-string="true">]</span></span></span><span data-slate-leaf="true"><span data-slate-string="true"> </span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token operator"><span data-slate-string="true">=</span></span></span><span data-slate-leaf="true"><span data-slate-string="true"> ccEmail</span></span></span></div><div class="" data-slate-node="element"><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-string="true"> header</span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token punctuation"><span data-slate-string="true">[</span></span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token string"><span data-slate-string="true">"Bcc"</span></span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token punctuation"><span data-slate-string="true">]</span></span></span><span data-slate-leaf="true"><span data-slate-string="true"> </span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token operator"><span data-slate-string="true">=</span></span></span><span data-slate-leaf="true"><span data-slate-string="true"> bccEmail</span></span></span></div><div class="" data-slate-node="element"><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-string="true"> </span></span><span data-slate-leaf="true"><span data-slate-leaf="true" class="prism-token token comment"><span data-slate-string="true">// Email subject. If it contains non-ASCII characters, RFC 2047 encoding</span></span></span></span></div><div class="" data-slate-node="element"><span data-slate-node="text"><span d
+
+[… truncated 95023 chars …]
