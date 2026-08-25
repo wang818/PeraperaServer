@@ -82,7 +82,7 @@ async def send_captcha_email(to_email: str, captcha: str, lang: str = "en") -> b
     <html>
         <body>
             <h2>{get_translation("email_captcha_title", lang)}</h2>
-            <p>{get_translation("email_captcha_body", lang, captcha=captcha)}</p>
+            <p>{get_translation("email_captcha_body", lang, captcha=captcha, app_name=settings.APP_NAME or settings.SMTP_FROM_NAME)}</p>
             <p>{get_translation("email_captcha_validity", lang)}</p>
             <br>
             <p>{get_translation("email_captcha_ignore", lang)}</p>

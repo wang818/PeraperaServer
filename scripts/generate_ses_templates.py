@@ -3,8 +3,8 @@
 
 背景：个人实名认证的 SES 账号无法走 SMTP 发信，必须走 SendEmail API，
 而 API 只接受「控制台模板 + TemplateData」，且 TemplateData 值不能含 HTML。
-因此方案是：每种语言一个控制台模板，模板内只有 {{captcha}} 一个变量，
-其余文案（标题/正文/有效期/忽略提示）全部烘焙进模板，TemplateData = {"captcha": "123456"}。
+因此方案是：每种语言一个控制台模板，模板内只有 {{app_name}}、{{captcha}} 两个变量，
+其余文案（标题/有效期/忽略提示）全部烘焙进模板，TemplateData = {"app_name": "PeraperaServer", "captcha": "123456"}。
 
 用法：
     python3 scripts/generate_ses_templates.py
@@ -37,9 +37,14 @@ CAPTCHA_SPAN = '<span style="font-size:24px;font-weight:700;color:#0a6cff;">{{ca
 def render_console_template(lang: str) -> str:
     """渲染单个语言的 SES 控制台模板 HTML"""
     structure = Template(STRUCTURE_FILE.read_text(encoding="utf-8"))
-    body_sentence = get_translation("email_captcha_body", lang).replace("{captcha}", CAPTCHA_SPAN)
+    app_name = settings.APP_NAME or settings.SMTP_FROM_NAME
+    body_sentence = (
+        get_translation("email_captcha_body", lang)
+        .replace("{captcha}", CAPTCHA_SPAN)
+        .replace("{app_name}", "{{app_name}}")
+    )
     return structure.substitute(
-        app_name=settings.APP_NAME or settings.SMTP_FROM_NAME,
+        app_name=app_name,
         title=get_translation("email_captcha_title", lang),
         body=body_sentence,
         validity=get_translation("email_captcha_validity", lang),
