@@ -1,0 +1,1128 @@
+https://raw.githubusercontent.com/TencentCloud/tencentcloud-sdk-python/master/tencentcloud/ses/v20201002/models.py
+
+# -*- coding: utf8 -*-
+# Copyright (c) 2017-2025 Tencent. All Rights Reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+import warnings
+
+from tencentcloud.common.abstract_model import AbstractModel
+
+
+class AbuseReport(AbstractModel):
+    r"""垃圾投诉数据
+
+    """
+
+    def __init__(self):
+        r"""
+        :param _DeliverTime: <p>发送时间</p>
+        :type DeliverTime: str
+        :param _OriginalMailFrom: <p>发信地址</p>
+        :type OriginalMailFrom: str
+        :param _OriginalRcptTo: <p>收信地址</p>
+        :type OriginalRcptTo: str
+        :param _FromDomain: <p>发信域名</p>
+        :type FromDomain: str
+        :param _ComplainTime: <p>投诉时间</p>
+        :type ComplainTime: str
+        :param _Mta: <p>收信域名</p>
+        :type Mta: str
+        :param _SourceIp: <p>来源ip</p>
+        :type SourceIp: str
+        :param _InsertTime: <p>数据时间</p>
+        :type InsertTime: str
+        :param _TemplateId: <p>模板ID</p>
+        :type TemplateId: str
+        :param _BulkId: <p>bulkId</p>
+        :type BulkId: str
+        :param _MessageId: <p>邮件Message-Id</p>
+        :type MessageId: str
+        :param _AbuseTime: <p>投诉时间</p>
+        :type AbuseTime: str
+        :param _Subject: <p>邮件主题</p>
+        :type Subject: str
+        """
+        self._DeliverTime = None
+        self._OriginalMailFrom = None
+        self._OriginalRcptTo = None
+        self._FromDomain = None
+        self._ComplainTime = None
+        self._Mta = None
+        self._SourceIp = None
+        self._InsertTime = None
+        self._TemplateId = None
+        self._BulkId = None
+        self._MessageId = None
+        self._AbuseTime = None
+        self._Subject = None
+
+    @property
+    def DeliverTime(self):
+        r"""<p>发送时间</p>
+        :rtype: str
+        """
+        return self._DeliverTime
+
+    @DeliverTime.setter
+    def DeliverTime(self, DeliverTime):
+        self._DeliverTime = DeliverTime
+
+    @property
+    def OriginalMailFrom(self):
+        r"""<p>发信地址</p>
+        :rtype: str
+        """
+        return self._OriginalMailFrom
+
+    @OriginalMailFrom.setter
+    def OriginalMailFrom(self, OriginalMailFrom):
+        self._OriginalMailFrom = OriginalMailFrom
+
+    @property
+    def OriginalRcptTo(self):
+        r"""<p>收信地址</p>
+        :rtype: str
+        """
+        return self._OriginalRcptTo
+
+    @OriginalRcptTo.setter
+    def OriginalRcptTo(self, OriginalRcptTo):
+        self._OriginalRcptTo = OriginalRcptTo
+
+    @property
+    def FromDomain(self):
+        r"""<p>发信域名</p>
+        :rtype: str
+        """
+        return self._FromDomain
+
+    @FromDomain.setter
+    def FromDomain(self, FromDomain):
+        self._FromDomain = FromDomain
+
+    @property
+    def ComplainTime(self):
+        r"""<p>投诉时间</p>
+        :rtype: str
+        """
+        return self._ComplainTime
+
+    @ComplainTime.setter
+    def ComplainTime(self, ComplainTime):
+        self._ComplainTime = ComplainTime
+
+    @property
+    def Mta(self):
+        r"""<p>收信域名</p>
+        :rtype: str
+        """
+        return self._Mta
+
+    @Mta.setter
+    def Mta(self, Mta):
+        self._Mta = Mta
+
+    @property
+    def SourceIp(self):
+        r"""<p>来源ip</p>
+        :rtype: str
+        """
+        return self._SourceIp
+
+    @SourceIp.setter
+    def SourceIp(self, SourceIp):
+        self._SourceIp = SourceIp
+
+    @property
+    def InsertTime(self):
+        r"""<p>数据时间</p>
+        :rtype: str
+        """
+        return self._InsertTime
+
+    @InsertTime.setter
+    def InsertTime(self, InsertTime):
+        self._InsertTime = InsertTime
+
+    @property
+    def TemplateId(self):
+        r"""<p>模板ID</p>
+        :rtype: str
+        """
+        return self._TemplateId
+
+    @TemplateId.setter
+    def TemplateId(self, TemplateId):
+        self._TemplateId = TemplateId
+
+    @property
+    def BulkId(self):
+        r"""<p>bulkId</p>
+        :rtype: str
+        """
+        return self._BulkId
+
+    @BulkId.setter
+    def BulkId(self, BulkId):
+        self._BulkId = BulkId
+
+    @property
+    def MessageId(self):
+        r"""<p>邮件Message-Id</p>
+        :rtype: str
+        """
+        return self._MessageId
+
+    @MessageId.setter
+    def MessageId(self, MessageId):
+        self._MessageId = MessageId
+
+    @property
+    def AbuseTime(self):
+        r"""<p>投诉时间</p>
+        :rtype: str
+        """
+        return self._AbuseTime
+
+    @AbuseTime.setter
+    def AbuseTime(self, AbuseTime):
+        self._AbuseTime = AbuseTime
+
+    @property
+    def Subject(self):
+        r"""<p>邮件主题</p>
+        :rtype: str
+        """
+        return self._Subject
+
+    @Subject.setter
+    def Subject(self, Subject):
+        self._Subject = Subject
+
+
+    def _deserialize(self, params):
+        self._DeliverTime = params.get("DeliverTime")
+        self._OriginalMailFrom = params.get("OriginalMailFrom")
+        self._OriginalRcptTo = params.get("OriginalRcptTo")
+        self._FromDomain = params.get("FromDomain")
+        self._ComplainTime = params.get("ComplainTime")
+        self._Mta = params.get("Mta")
+        self._SourceIp = params.get("SourceIp")
+        self._InsertTime = params.get("InsertTime")
+        self._TemplateId = params.get("TemplateId")
+        self._BulkId = params.get("BulkId")
+        self._MessageId = params.get("MessageId")
+        self._AbuseTime = params.get("AbuseTime")
+        self._Subject = params.get("Subject")
+        memeber_set = set(params.keys())
+        for name, value in vars(self).items():
+            property_name = name[1:]
+            if property_name in memeber_set:
+                memeber_set.remove(property_name)
+        if len(memeber_set) > 0:
+            warnings.warn("%s fileds are useless." % ",".join(memeber_set))
+        
+
+
+class AddressUnsubscribeConfigData(AbstractModel):
+    r"""地址级退订配置
+
+    """
+
+    def __init__(self):
+        r"""
+        :param _Address: 发信地址
+        :type Address: str
+        :param _UnsubscribeConfig: 退订链接选项 0: 不加入退订链接 1: 简体中文 2: 英文 3: 繁体中文 4: 西班牙语 5: 法语 6: 德语 7: 日语 8: 韩语 9: 阿拉伯语 10: 泰语
+        :type UnsubscribeConfig: str
+        :param _Status: 0:关闭，1:开启
+        :type Status: int
+        """
+        self._Address = None
+        self._UnsubscribeConfig = None
+        self._Status = None
+
+    @property
+    def Address(self):
+        r"""发信地址
+        :rtype: str
+        """
+        return self._Address
+
+    @Address.setter
+    def Address(self, Address):
+        self._Address = Address
+
+    @property
+    def UnsubscribeConfig(self):
+        r"""退订链接选项 0: 不加入退订链接 1: 简体中文 2: 英文 3: 繁体中文 4: 西班牙语 5: 法语 6: 德语 7: 日语 8: 韩语 9: 阿拉伯语 10: 泰语
+        :rtype: str
+        """
+        return self._UnsubscribeConfig
+
+    @UnsubscribeConfig.setter
+    def UnsubscribeConfig(self, UnsubscribeConfig):
+        self._UnsubscribeConfig = UnsubscribeConfig
+
+    @property
+    def Status(self):
+        r"""0:关闭，1:开启
+        :rtype: int
+        """
+        return self._Status
+
+    @Status.setter
+    def Status(self, Status):
+        self._Status = Status
+
+
+    def _deserialize(self, params):
+        self._Address = params.get("Address")
+        self._UnsubscribeConfig = params.get("UnsubscribeConfig")
+        self._Status = params.get("Status")
+        memeber_set = set(params.keys())
+        for name, value in vars(self).items():
+            property_name = name[1:]
+            if property_name in memeber_set:
+                memeber_set.remove(property_name)
+        if len(memeber_set) > 0:
+            warnings.warn("%s fileds are useless." % ",".join(memeber_set))
+        
+
+
+class Attachment(AbstractModel):
+    r"""附件结构，包含附件名和base64之后的附件内容。
+
+    """
+
+    def __init__(self):
+        r"""
+        :param _FileName: 附件名称，最大支持255个字符长度，不支持部分附件类型，详情请参考[附件类型](https://cloud.tencent.com/document/product/1288/51951)。
+        :type FileName: str
+        :param _Content: Base64之后的附件内容，您可以发送的附件大小上限为4M。注意：腾讯云接口请求最大支持 8M 的请求包，附件内容经过 Base64 预期扩大1.5倍。应该控制所有附件的总大小最大在 4M 以内，整体请求超出 8M 接口会返回错误。
+        :type Content: str
+        :param _FileURL: 附件URL。未开放功能，请勿使用。
+        :type FileURL: str
+        """
+        self._FileName = None
+        self._Content = None
+        self._FileURL = None
+
+    @property
+    def FileName(self):
+        r"""附件名称，最大支持255个字符长度，不支持部分附件类型，详情请参考[附件类型](https://cloud.tencent.com/document/product/1288/51951)。
+        :rtype: str
+        """
+        return self._FileName
+
+    @FileName.setter
+    def FileName(self, FileName):
+        self._FileName = FileName
+
+    @property
+    def Content(self):
+        r"""Base64之后的附件内容，您可以发送的附件大小上限为4M。注意：腾讯云接口请求最大支持 8M 的请求包，附件内容经过 Base64 预期扩大1.5倍。应该控制所有附件的总大小最大在 4M 以内，整体请求超出 8M 接口会返回错误。
+        :rtype: str
+        """
+        return self._Content
+
+    @Content.setter
+    def Content(self, Content):
+        self._Content = Content
+
+    @property
+    def FileURL(self):
+        r"""附件URL。未开放功能，请勿使用。
+        :rtype: str
+        """
+        return self._FileURL
+
+    @FileURL.setter
+    def FileURL(self, FileURL):
+        self._FileURL = FileURL
+
+
+    def _deserialize(self, params):
+        self._FileName = params.get("FileName")
+        self._Content = params.get("Content")
+        self._FileURL = params.get("FileURL")
+        memeber_set = set(params.keys())
+        for name, value in vars(self).items():
+            property_name = name[1:]
+            if property_name in memeber_set:
+                memeber_set.remove(property_name)
+        if len(memeber_set) > 0:
+            warnings.warn("%s fileds are useless." % ",".join(memeber_set))
+        
+
+
+class BatchSendEmailRequest(AbstractModel):
+    r"""BatchSendEmail请求参数结构体
+
+    """
+
+    def __init__(self):
+        r"""
+        :param _FromEmailAddress: <p>发信邮件地址。请填写发件人邮箱地址，例如：noreply@mail.qcloud.com。如需填写发件人说明，请按照<br>发信人 &lt;邮件地址&gt; 的方式填写，例如：<br>腾讯云团队 &lt;noreply@mail.qcloud.com&gt;</p>
+        :type FromEmailAddress: str
+        :param _ReceiverId: <p>收件人列表ID</p>
+        :type ReceiverId: int
+        :param _Subject: <p>邮件主题</p><p>当使用模版发送时，支持使用模版变量参数填充</p>
+        :type Subject: str
+        :param _TaskType: <p>任务类型 1: 立即发送 2: 定时发送 3: 周期（频率）发送</p>
+        :type TaskType: int
+        :param _ReplyToAddresses: <p>邮件的“回复”电子邮件地址。可以填写您能收到邮件的邮箱地址，可以是个人邮箱。如果不填，收件人的回复邮件将会发送失败。</p>
+        :type ReplyToAddresses: str
+        :param _Template: <p>使用模板发送时，填写的模板相关参数</p><blockquote class="rno-document-tips rno-document-tips-notice">    <div class="rno-document-tips-body">        <i class="rno-document-tip-icon"></i>        <div class="rno-document-tip-title">注意</div>        <div class="rno-document-tip-desc"><p>如您未申请过特殊配置，则该字段为必填</p></div>    </div></blockquote>
+        :type Template: :class:`tencentcloud.ses.v20201002.models.Template`
+        :param _Simple: <p>已废弃<blockquote class="rno-document-tips rno-document-tips-notice">    <div class="rno-document-tips-body">        <i class="rno-document-tip-icon"></i>        <div class="rno-document-tip-title">说明</div>        <div class="rno-document-tip-desc"><p>仅部分历史上申请了特殊配置的客户需要使用。如您未申请过特殊配置，则不存在该字段。</p></div>    </div></blockquote></p>
+        :type Simple: :class:`tencentcloud.ses.v20201002.models.Simple`
+        :param _Attachments: <p>需要发送附件时，填写附件相关参数（暂未支持）</p>
+        :type Attachments: list of Attachment
+        :param _CycleParam: <p>周期发送任务的必要参数</p>
+        :type CycleParam: :class:`tencentcloud.ses.v20201002.models.CycleEmailParam`
+        :param _TimedParam: <p>定时发送任务的必要参数</p>
+        :type TimedParam: :class:`tencentcloud.ses.v20201002.models.TimedEmailParam`
+        :param _Unsubscribe: <p>退订链接选项</p><p>枚举值：</p><ul><li>0： 不加入退订链接</li><li>1： 简体中文</li><li>2： 英文</li><li>3： 繁体中文</li><li>4： 西班牙语</li><li>5： 法语</li><li>6： 德语</li><li>7： 日语</li><li>8： 韩语</li><li>9： 阿拉伯语</li><li>10： 泰语</li><li>11： 印尼语</li><li>12： 越南语</li></ul>
+        :type Unsubscribe: str
+        :param _ADLocation: <p>是否添加广告标识 0:不添加 1:添加到subject前面，2:添加到subject后面</p>
+        :type ADLocation: int
+        """
+        self._FromEmailAddress = None
+        self._ReceiverId = None
+        self._Subject = None
+        self._TaskType = None
+        self._ReplyToAddresses = None
+        self._Template = None
+        self._Simple = None
+        self._Attachments = None
+        self._CycleParam = None
+        self._TimedParam = None
+        self._Unsubscribe = None
+        self._ADLocation = None
+
+    @property
+    def FromEmailAddress(self):
+        r"""<p>发信邮件地址。请填写发件人邮箱地址，例如：noreply@mail.qcloud.com。如需填写发件人说明，请按照<br>发信人 &lt;邮件地址&gt; 的方式填写，例如：<br>腾讯云团队 &lt;noreply@mail.qcloud.com&gt;</p>
+        :rtype: str
+        """
+        return self._FromEmailAddress
+
+    @FromEmailAddress.setter
+    def FromEmailAddress(self, FromEmailAddress):
+        self._FromEmailAddress = FromEmailAddress
+
+    @property
+    def ReceiverId(self):
+        r"""<p>收件人列表ID</p>
+        :rtype: int
+        """
+        return self._ReceiverId
+
+    @ReceiverId.setter
+    def ReceiverId(self, ReceiverId):
+        self._ReceiverId = ReceiverId
+
+    @property
+    def Subject(self):
+        r"""<p>邮件主题</p><p>当使用模版发送时，支持使用模版变量参数填充</p>
+        :rtype: str
+        """
+        return self._Subject
+
+    @Subject.setter
+    def Subject(self, Subject):
+        self._Subject = Subject
+
+    @property
+    def TaskType(self):
+        r"""<p>任务类型 1: 立即发送 2: 定时发送 3: 周期（频率）发送</p>
+        :rtype: int
+        """
+        return self._TaskType
+
+    @TaskType.setter
+    def TaskType(self, TaskType):
+        self._TaskType = TaskType
+
+    @property
+    def ReplyToAddresses(self):
+        r"""<p>邮件的“回复”电子邮件地址。可以填写您能收到邮件的邮箱地址，可以是个人邮箱。如果不填，收件人的回复邮件将会发送失败。</p>
+        :rtype: str
+        """
+        return self._ReplyToAddresses
+
+    @ReplyToAddresses.setter
+    def ReplyToAddresses(self, ReplyToAddresses):
+        self._ReplyToAddresses = ReplyToAddresses
+
+    @property
+    def Template(self):
+        r"""<p>使用模板发送时，填写的模板相关参数</p><blockquote class="rno-document-tips rno-document-tips-notice">    <div class="rno-document-tips-body">        <i class="rno-document-tip-icon"></i>        <div class="rno-document-tip-title">注意</div>        <div class="rno-document-tip-desc"><p>如您未申请过特殊配置，则该字段为必填</p></div>    </div></blockquote>
+        :rtype: :class:`tencentcloud.ses.v20201002.models.Template`
+        """
+        return self._Template
+
+    @Template.setter
+    def Template(self, Template):
+        self._Template = Template
+
+    @property
+    def Simple(self):
+        r"""<p>已废弃<blockquote class="rno-document-tips rno-document-tips-notice">    <div class="rno-document-tips-body">        <i class="rno-document-tip-icon"></i>        <div class="rno-document-tip-title">说明</div>        <div class="rno-document-tip-desc"><p>仅部分历史上申请了特殊配置的客户需要使用。如您未申请过特殊配置，则不存在该字段。</p></div>    </div></blockquote></p>
+        :rtype: :class:`tencentcloud.ses.v20201002.models.Simple`
+        """
+        return self._Simple
+
+    @Simple.setter
+    def Simple(self, Simple):
+        self._Simple = Simple
+
+    @property
+    def Attachments(self):
+        r"""<p>需要发送附件时，填写附件相关参数（暂未支持）</p>
+        :rtype: list of Attachment
+        """
+        return self._Attachments
+
+    @Attachments.setter
+    def Attachments(self, Attachments):
+        self._Attachments = Attachments
+
+    @property
+    def CycleParam(self):
+        r"""<p>周期发送任务的必要参数</p>
+        :rtype: :class:`tencentcloud.ses.v20201002.models.CycleEmailParam`
+        """
+        return self._CycleParam
+
+    @CycleParam.setter
+    def CycleParam(self, CycleParam):
+        self._CycleParam = CycleParam
+
+    @property
+    def TimedParam(self):
+        r"""<p>定时发送任务的必要参数</p>
+        :rtype: :class:`tencentcloud.ses.v20201002.models.TimedEmailParam`
+        """
+        return self._TimedParam
+
+    @TimedParam.setter
+    def TimedParam(self, TimedParam):
+        self._TimedParam = TimedParam
+
+    @property
+    def Unsubscribe(self):
+        r"""<p>退订链接选项</p><p>枚举值：</p><ul><li>0： 不加入退订链接</li><li>1： 简体中文</li><li>2： 英文</li><li>3： 繁体中文</li><li>4： 西班牙语</li><li>5： 法语</li><li>6： 德语</li><li>7： 日语</li><li>8： 韩语</li><li>9： 阿拉伯语</li><li>10： 泰语</li><li>11： 印尼语</li><li>12： 越南语</li></ul>
+        :rtype: str
+        """
+        return self._Unsubscribe
+
+    @Unsubscribe.setter
+    def Unsubscribe(self, Unsubscribe):
+        self._Unsubscribe = Unsubscribe
+
+    @property
+    def ADLocation(self):
+        r"""<p>是否添加广告标识 0:不添加 1:添加到subject前面，2:添加到subject后面</p>
+        :rtype: int
+        """
+        return self._ADLocation
+
+    @ADLocation.setter
+    def ADLocation(self, ADLocation):
+        self._ADLocation = ADLocation
+
+
+    def _deserialize(self, params):
+        self._FromEmailAddress = params.get("FromEmailAddress")
+        self._ReceiverId = params.get("ReceiverId")
+        self._Subject = params.get("Subject")
+        self._TaskType = params.get("TaskType")
+        self._ReplyToAddresses = params.get("ReplyToAddresses")
+        if params.get("Template") is not None:
+            self._Template = Template()
+            self._Template._deserialize(params.get("Template"))
+        if params.get("Simple") is not None:
+            self._Simple = Simple()
+            self._Simple._deserialize(params.get("Simple"))
+        if params.get("Attachments") is not None:
+            self._Attachments = []
+            for item in params.get("Attachments"):
+                obj = Attachment()
+                obj._deserialize(item)
+                self._Attachments.append(obj)
+        if params.get("CycleParam") is not None:
+            self._CycleParam = CycleEmailParam()
+            self._CycleParam._deserialize(params.get("CycleParam"))
+        if params.get("TimedParam") is not None:
+            self._TimedParam = TimedEmailParam()
+            self._TimedParam._deserialize(params.get("TimedParam"))
+        self._Unsubscribe = params.get("Unsubscribe")
+        self._ADLocation = params.get("ADLocation")
+        memeber_set = set(params.keys())
+        for name, value in vars(self).items():
+            property_name = name[1:]
+            if property_name in memeber_set:
+                memeber_set.remove(property_name)
+        if len(memeber_set) > 0:
+            warnings.warn("%s fileds are useless." % ",".join(memeber_set))
+        
+
+
+class BatchSendEmailResponse(AbstractModel):
+    r"""BatchSendEmail返回参数结构体
+
+    """
+
+    def __init__(self):
+        r"""
+        :param _TaskId: <p>发送任务ID</p>
+        :type TaskId: int
+        :param _RequestId: 唯一请求 ID，由服务端生成，每次请求都会返回（若请求因其他原因未能抵达服务端，则该次请求不会获得 RequestId）。定位问题时需要提供该次请求的 RequestId。
+        :type RequestId: str
+        """
+        self._TaskId = None
+        self._RequestId = None
+
+    @property
+    def TaskId(self):
+        r"""<p>发送任务ID</p>
+        :rtype: int
+        """
+        return self._TaskId
+
+    @TaskId.setter
+    def TaskId(self, TaskId):
+        self._TaskId = TaskId
+
+    @property
+    def RequestId(self):
+        r"""唯一请求 ID，由服务端生成，每次请求都会返回（若请求因其他原因未能抵达服务端，则该次请求不会获得 RequestId）。定位问题时需要提供该次请求的 RequestId。
+        :rtype: str
+        """
+        return self._RequestId
+
+    @RequestId.setter
+    def RequestId(self, RequestId):
+        self._RequestId = RequestId
+
+
+    def _deserialize(self, params):
+        self._TaskId = params.get("TaskId")
+        self._RequestId = params.get("RequestId")
+
+
+class BlackAddressDetail(AbstractModel):
+    r"""黑名单详情
+
+    """
+
+    def __init__(self):
+        r"""
+        :param _Id: 黑名单地址id
+        :type Id: int
+        :param _Email: 邮箱地址
+        :type Email: str
+        :param _CreateTime: 创建时间
+        :type CreateTime: str
+        :param _ExpireDate: 过期时间
+        :type ExpireDate: str
+        :param _Status: 黑名单状态，0:已过期，1:生效中
+        :type Status: int
+        """
+        self._Id = None
+        self._Email = None
+        self._CreateTime = None
+        self._ExpireDate = None
+        self._Status = None
+
+    @property
+    def Id(self):
+        r"""黑名单地址id
+        :rtype: int
+        """
+        return self._Id
+
+    @Id.setter
+    def Id(self, Id):
+        self._Id = Id
+
+    @property
+    def Email(self):
+        r"""邮箱地址
+        :rtype: str
+        """
+        return self._Email
+
+    @Email.setter
+    def Email(self, Email):
+        self._Email = Email
+
+    @property
+    def CreateTime(self):
+        r"""创建时间
+        :rtype: str
+        """
+        return self._CreateTime
+
+    @CreateTime.setter
+    def CreateTime(self, CreateTime):
+        self._CreateTime = CreateTime
+
+    @property
+    def ExpireDate(self):
+        r"""过期时间
+        :rtype: str
+        """
+        return self._ExpireDate
+
+    @ExpireDate.setter
+    def ExpireDate(self, ExpireDate):
+        self._ExpireDate = ExpireDate
+
+    @property
+    def Status(self):
+        r"""黑名单状态，0:已过期，1:生效中
+        :rtype: int
+        """
+        return self._Status
+
+    @Status.setter
+    def Status(self, Status):
+        self._Status = Status
+
+
+    def _deserialize(self, params):
+        self._Id = params.get("Id")
+        self._Email = params.get("Email")
+        self._CreateTime = params.get("CreateTime")
+        self._ExpireDate = params.get("ExpireDate")
+        self._Status = params.get("Status")
+        memeber_set = set(params.keys())
+        for name, value in vars(self).items():
+            property_name = name[1:]
+            if property_name in memeber_set:
+                memeber_set.remove(property_name)
+        if len(memeber_set) > 0:
+            warnings.warn("%s fileds are useless." % ",".join(memeber_set))
+        
+
+
+class BlackEmailAddress(AbstractModel):
+    r"""邮箱黑名单结构，包含被拉黑的邮箱地址和被拉黑时间，以及被拉黑的理由
+
+    """
+
+    def __init__(self):
+        r"""
+        :param _BounceTime: 邮箱被拉黑时间
+        :type BounceTime: str
+        :param _EmailAddress: 被拉黑的邮箱地址
+        :type EmailAddress: str
+        :param _IspDesc: 被拉黑的理由
+        :type IspDesc: str
+        """
+        self._BounceTime = None
+        self._EmailAddress = None
+        self._IspDesc = None
+
+    @property
+    def BounceTime(self):
+        r"""邮箱被拉黑时间
+        :rtype: str
+        """
+        return self._BounceTime
+
+    @BounceTime.setter
+    def BounceTime(self, BounceTime):
+        self._BounceTime = BounceTime
+
+    @property
+    def EmailAddress(self):
+        r"""被拉黑的邮箱地址
+        :rtype: str
+        """
+        return self._EmailAddress
+
+    @EmailAddress.setter
+    def EmailAddress(self, EmailAddress):
+        self._EmailAddress = EmailAddress
+
+    @property
+    def IspDesc(self):
+        r"""被拉黑的理由
+        :rtype: str
+        """
+        return self._IspDesc
+
+    @IspDesc.setter
+    def IspDesc(self, IspDesc):
+        self._IspDesc = IspDesc
+
+
+    def _deserialize(self, params):
+        self._BounceTime = params.get("BounceTime")
+        self._EmailAddress = params.get("EmailAddress")
+        self._IspDesc = params.get("IspDesc")
+        memeber_set = set(params.keys())
+        for name, value in vars(self).items():
+            property_name = name[1:]
+            if property_name in memeber_set:
+                memeber_set.remove(property_name)
+        if len(memeber_set) > 0:
+            warnings.warn("%s fileds are useless." % ",".join(memeber_set))
+        
+
+
+class CreateAddressUnsubscribeConfigRequest(AbstractModel):
+    r"""CreateAddressUnsubscribeConfig请求参数结构体
+
+    """
+
+    def __init__(self):
+        r"""
+        :param _Address: 发信地址
+        :type Address: str
+        :param _UnsubscribeConfig: 退订链接选项 0: 不加入退订链接 1: 简体中文 2: 英文 3: 繁体中文 4: 西班牙语 5: 法语 6: 德语 7: 日语 8: 韩语 9: 阿拉伯语 10: 泰语
+        :type UnsubscribeConfig: str
+        :param _Status: 0:关闭，1:打开
+        :type Status: int
+        """
+        self._Address = None
+        self._UnsubscribeConfig = None
+        self._Status = None
+
+    @property
+    def Address(self):
+        r"""发信地址
+        :rtype: str
+        """
+        return self._Address
+
+    @Address.setter
+    def Address(self, Address):
+        self._Address = Address
+
+    @property
+    def UnsubscribeConfig(self):
+        r"""退订链接选项 0: 不加入退订链接 1: 简体中文 2: 英文 3: 繁体中文 4: 西班牙语 5: 法语 6: 德语 7: 日语 8: 韩语 9: 阿拉伯语 10: 泰语
+        :rtype: str
+        """
+        return self._UnsubscribeConfig
+
+    @UnsubscribeConfig.setter
+    def UnsubscribeConfig(self, UnsubscribeConfig):
+        self._UnsubscribeConfig = UnsubscribeConfig
+
+    @property
+    def Status(self):
+        r"""0:关闭，1:打开
+        :rtype: int
+        """
+        return self._Status
+
+    @Status.setter
+    def Status(self, Status):
+        self._Status = Status
+
+
+    def _deserialize(self, params):
+        self._Address = params.get("Address")
+        self._UnsubscribeConfig = params.get("UnsubscribeConfig")
+        self._Status = params.get("Status")
+        memeber_set = set(params.keys())
+        for name, value in vars(self).items():
+            property_name = name[1:]
+            if property_name in memeber_set:
+                memeber_set.remove(property_name)
+        if len(memeber_set) > 0:
+            warnings.warn("%s fileds are useless." % ",".join(memeber_set))
+        
+
+
+class CreateAddressUnsubscribeConfigResponse(AbstractModel):
+    r"""CreateAddressUnsubscribeConfig返回参数结构体
+
+    """
+
+    def __init__(self):
+        r"""
+        :param _RequestId: 唯一请求 ID，由服务端生成，每次请求都会返回（若请求因其他原因未能抵达服务端，则该次请求不会获得 RequestId）。定位问题时需要提供该次请求的 RequestId。
+        :type RequestId: str
+        """
+        self._RequestId = None
+
+    @property
+    def RequestId(self):
+        r"""唯一请求 ID，由服务端生成，每次请求都会返回（若请求因其他原因未能抵达服务端，则该次请求不会获得 RequestId）。定位问题时需要提供该次请求的 RequestId。
+        :rtype: str
+        """
+        return self._RequestId
+
+    @RequestId.setter
+    def RequestId(self, RequestId):
+        self._RequestId = RequestId
+
+
+    def _deserialize(self, params):
+        self._RequestId = params.get("RequestId")
+
+
+class CreateCustomBlacklistRequest(AbstractModel):
+    r"""CreateCustomBlacklist请求参数结构体
+
+    """
+
+    def __init__(self):
+        r"""
+        :param _Emails: 添加到黑名单的邮件地址
+        :type Emails: list of str
+        :param _ExpireDate: 过期日期
+        :type ExpireDate: str
+        """
+        self._Emails = None
+        self._ExpireDate = None
+
+    @property
+    def Emails(self):
+        r"""添加到黑名单的邮件地址
+        :rtype: list of str
+        """
+        return self._Emails
+
+    @Emails.setter
+    def Emails(self, Emails):
+        self._Emails = Emails
+
+    @property
+    def ExpireDate(self):
+        r"""过期日期
+        :rtype: str
+        """
+        return self._ExpireDate
+
+    @ExpireDate.setter
+    def ExpireDate(self, ExpireDate):
+        self._ExpireDate = ExpireDate
+
+
+    def _deserialize(self, params):
+        self._Emails = params.get("Emails")
+        self._ExpireDate = params.get("ExpireDate")
+        memeber_set = set(params.keys())
+        for name, value in vars(self).items():
+            property_name = name[1:]
+            if property_name in memeber_set:
+                memeber_set.remove(property_name)
+        if len(memeber_set) > 0:
+            warnings.warn("%s fileds are useless." % ",".join(memeber_set))
+        
+
+
+class CreateCustomBlacklistResponse(AbstractModel):
+    r"""CreateCustomBlacklist返回参数结构体
+
+    """
+
+    def __init__(self):
+        r"""
+        :param _TotalCount: 收件人总数
+        :type TotalCount: int
+        :param _ValidCount: 实际上传数量
+        :type ValidCount: int
+        :param _TooLongCount: 数据过长数量
+        :type TooLongCount: int
+        :param _RepeatCount: 重复数量
+        :type RepeatCount: int
+        :param _InvalidCount: 格式不正确数量
+        :type InvalidCount: int
+        :param _RequestId: 唯一请求 ID，由服务端生成，每次请求都会返回（若请求因其他原因未能抵达服务端，则该次请求不会获得 RequestId）。定位问题时需要提供该次请求的 RequestId。
+        :type RequestId: str
+        """
+        self._TotalCount = None
+        self._ValidCount = None
+        self._TooLongCount = None
+        self._RepeatCount = None
+        self._InvalidCount = None
+        self._RequestId = None
+
+    @property
+    def TotalCount(self):
+        r"""收件人总数
+        :rtype: int
+        """
+        return self._TotalCount
+
+    @TotalCount.setter
+    def TotalCount(self, TotalCount):
+        self._TotalCount = TotalCount
+
+    @property
+    def ValidCount(self):
+        r"""实际上传数量
+        :rtype: int
+        """
+        return self._ValidCount
+
+    @ValidCount.setter
+    def ValidCount(self, ValidCount):
+        self._ValidCount = ValidCount
+
+    @property
+    def TooLongCount(self):
+        r"""数据过长数量
+        :rtype: int
+        """
+        return self._TooLongCount
+
+    @TooLongCount.setter
+    def TooLongCount(self, TooLongCount):
+        self._TooLongCount = TooLongCount
+
+    @property
+    def RepeatCount(self):
+        r"""重复数量
+        :rtype: int
+        """
+        return self._RepeatCount
+
+    @RepeatCount.setter
+    def RepeatCount(self, RepeatCount):
+        self._RepeatCount = RepeatCount
+
+    @property
+    def InvalidCount(self):
+        r"""格式不正确数量
+        :rtype: int
+        """
+        return self._InvalidCount
+
+    @InvalidCount.setter
+    def InvalidCount(self, InvalidCount):
+        self._InvalidCount = InvalidCount
+
+    @property
+    def RequestId(self):
+        r"""唯一请求 ID，由服务端生成，每次请求都会返回（若请求因其他原因未能抵达服务端，则该次请求不会获得 RequestId）。定位问题时需要提供该次请求的 RequestId。
+        :rtype: str
+        """
+        return self._RequestId
+
+    @RequestId.setter
+    def RequestId(self, RequestId):
+        self._RequestId = RequestId
+
+
+    def _deserialize(self, params):
+        self._TotalCount = params.get("TotalCount")
+        self._ValidCount = params.get("ValidCount")
+        self._TooLongCount = params.get("TooLongCount")
+        self._RepeatCount = params.get("RepeatCount")
+        self._InvalidCount = params.get("InvalidCount")
+        self._RequestId = params.get("RequestId")
+
+
+class CreateEmailAddressRequest(AbstractModel):
+    r"""CreateEmailAddress请求参数结构体
+
+    """
+
+    def __init__(self):
+        r"""
+        :param _EmailAddress: 您的发信地址（发信地址总数上限为10个）
+        :type EmailAddress: str
+        :param _EmailSenderName: 发件人别名
+        :type EmailSenderName: str
+        """
+        self._EmailAddress = None
+        self._EmailSenderName = None
+
+    @property
+    def EmailAddress(self):
+        r"""您的发信地址（发信地址总数上限为10个）
+        :rtype: str
+        """
+        return self._EmailAddress
+
+    @EmailAddress.setter
+    def EmailAddress(self, EmailAddress):
+        self._EmailAddress = EmailAddress
+
+    @property
+    def EmailSenderName(self):
+        r"""发件人别名
+        :rtype: str
+        """
+        return self._EmailSenderName
+
+    @EmailSenderName.setter
+    def EmailSenderName(self, EmailSenderName):
+        self._EmailSenderName = EmailSenderName
+
+
+    def _deserialize(self, params):
+        self._EmailAddress = params.get("EmailAddress")
+        self._EmailSenderName = params.get("EmailSenderName")
+        memeber_set = set(params.keys())
+        for name, value in vars(self).items():
+            property_name = name[1:]
+            if property_name in memeber_set:
+                memeber_set.remove(property_name)
+        if len(memeber_set) > 0:
+            warnings.warn("%s fileds are useless." % ",".join(memeber_set))
+        
+
+
+class CreateEmailAddressResponse(AbstractModel):
+    r"""CreateEmailAddress返回参数结构体
+
+    """
+
+    def __init__(self):
+        r"""
+        :param _RequestId: 唯一请求 ID，由服务端生成，每次请求都会返回（若请求因其他原因未能抵达服务端，则该次请求不会获得 RequestId）。定位问题时需要提供该次请求的 RequestId。
+        :type RequestId: str
+        """
+        self._RequestId = None
+
+    @property
+    def RequestId(self):
+        r"""唯一请求 ID，由服务端生成，每次请求都会返回（若请求因其他原因未能抵达服务端，则该次请求不会获得 RequestId）。定位问题时需要提供该次请求的 RequestId。
+        :rtype: str
+        """
+        return self._RequestId
+
+    @RequestId.setter
+    def RequestId(self, RequestId):
+        self._RequestId = RequestId
+
+
+    def _deserialize(self, params):
+        self._RequestId = params.get("RequestId")
+
+
+class CreateEmailIdentityRequest(AbstractModel):
+    r"""CreateEmailIdentity请求参数结构体
+
+    """
+
+    def __init__(self):
+        r"""
+        :param _EmailIdentity: <p>您的发信域名，建议使用三级以上域名。例如：mail.qcloud.com。</p>
+        :type EmailIdentity: str
+        :param _DKIMOption: <p>生
+
+[… truncated 151091 chars …]

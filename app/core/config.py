@@ -38,6 +38,14 @@ class Settings(BaseSettings):
     SMTP_PASSWORD: str = ""
     SMTP_FROM_EMAIL: str = ""
     SMTP_FROM_NAME: str = "PeraperaServer"
+
+    # Tencent Cloud SES (Simple Email Service) — 优先于 SMTP 发送
+    # 个人实名账号无法走 SMTP 发信，需用 SendEmail API + 控制台审核通过的模板
+    SES_SECRET_ID: str = ""          # 腾讯云 SecretId（可复用 COS 的）
+    SES_SECRET_KEY: str = ""         # 腾讯云 SecretKey
+    SES_REGION: str = "ap-guangzhou" # SES 可用区
+    SES_FROM_EMAIL: str = ""         # SES 控制台已验证的发信地址（如 noreply@mail.qcloud.com）
+    SES_TEMPLATE_IDS: str = ""       # JSON: 语言代码 -> 模板ID，如 {"zh-CN": 213037}
     
     # RapidAPI
     RAPIDAPI_KEY: str = ""
