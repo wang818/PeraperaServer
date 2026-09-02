@@ -246,9 +246,18 @@ commit_and_push() {
     msg="fix: $(printf '%s' "$title" | tr '\n' ' ') (#${num})"
     git commit -m "$msg"
 
-    # 先 rebase 拉取远端，避免 push 被拒
-    if ! git pull --rebase origin "$branch"; then
-        log_error "[#${num}] git pull --rebase 失败"
+    # 先 fetch 再 rebase 到 origin/<branch>，避免 push 被拒
+    # （不用 git pull --rebase：仓库配了 pull.rebase=true 时会对多个分支报错）
+    if ! git fetch origin "$branch"; then
+        log_error "[#${num}] git fetch 失败"
+        return 1
+    fi
+    if ! git rebase "origin/$branch"; then
+        if git ls-files -u | grep -q .; then
+            log_error "[#${num}] git rebase 冲突, 请手动解决后重跑"
+            return 1
+        fi
+        log_error "[#${num}] git rebase 失败"
         return 1
     fi
 
@@ -304,8 +313,22 @@ deploy_release() {
 
     # 4. 更新代码
     if [ -d "$PROJECT_DIR/.git" ]; then
-        log_info "更新代码 (git pull origin ${branch}) ..."
-        git pull origin "$branch"
+        log_info "更新代码 (fetch + rebase origin/${branch}) ..."
+        # 用 fetch + rebase 代替 git pull --rebase：
+        # 仓库配置了 pull.rebase=true 时 git pull origin <branch> 会报
+        # "Cannot rebase onto multiple branches"。分开执行不受影响。
+        if ! git fetch origin "$branch"; then
+            log_error "git fetch 失败"
+            return 1
+        fi
+        if ! git rebase "origin/$branch"; then
+            if git ls-files -u | grep -q .; then
+                log_error "git rebase 冲突, 请手动解决后重跑"
+                return 1
+            fi
+            log_error "git rebase 失败"
+            return 1
+        fi
     else
         log_error "$PROJECT_DIR 不是 git 仓库, 无法部署"
         return 1

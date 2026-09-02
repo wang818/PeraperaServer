@@ -55,7 +55,11 @@ cd $DEPLOY_PATH
 # 4. 克隆或更新代码
 if [ -d "$DEPLOY_PATH/.git" ]; then
     echo_info "更新代码..."
-    git pull origin main
+    # 用 fetch + rebase 代替 git pull --rebase：
+    # 仓库配置了 pull.rebase=true 时 git pull origin main 会报
+    # "Cannot rebase onto multiple branches"。分开执行不受影响。
+    git fetch origin main
+    git rebase origin/main
 else
     echo_info "克隆代码..."
     # git clone $REPO_URL $DEPLOY_PATH
