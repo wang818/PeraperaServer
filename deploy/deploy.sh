@@ -92,14 +92,24 @@ cp $DEPLOY_PATH/deploy/perapera.service /etc/systemd/system/
 systemctl daemon-reload
 systemctl enable perapera.service
 
-# 10. 部署 SSL 证书
+# 10. 部署 SSL 证书（使用 acme.sh 签发的证书）
 echo_info "部署 SSL 证书..."
+ACME_HOME="${ACME_HOME:-/root/.acme.sh}"
+ACME_CERT_DIR="$ACME_HOME/perapera.cc_ecc"
 SSL_DIR="/etc/nginx/ssl/perapera.cc"
+
+if [ ! -f "$ACME_CERT_DIR/fullchain.cer" ]; then
+    echo_error "未找到 acme.sh 证书: $ACME_CERT_DIR/fullchain.cer"
+    echo_error "也可通过环境变量 ACME_CERT_DIR 指定证书目录"
+    exit 1
+fi
+
 mkdir -p $SSL_DIR
-cp $DEPLOY_PATH/deploy/ssl/perapera.cc_bundle.pem $SSL_DIR/
-cp $DEPLOY_PATH/deploy/ssl/perapera.cc.key $SSL_DIR/
-chmod 644 $SSL_DIR/perapera.cc_bundle.pem
-chmod 600 $SSL_DIR/perapera.cc.key
+# 复制 fullchain（证书链）与私钥。nginx 建议私钥 600、证书 644
+install -m 644 "$ACME_CERT_DIR/fullchain.cer" "$SSL_DIR/fullchain.cer"
+install -m 644 "$ACME_CERT_DIR/ca.cer" "$SSL_DIR/ca.cer"
+install -m 600 "$ACME_CERT_DIR/perapera.cc.key" "$SSL_DIR/perapera.cc.key"
+chown -R root:root "$SSL_DIR"
 
 # 11. 配置 Nginx
 echo_info "配置 Nginx..."

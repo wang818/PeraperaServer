@@ -24,6 +24,9 @@
 #   REASONIX_CMD         reasonix 路径 (可选; 默认自动探测 reasonix 命令、
 #                        npm 全局安装、~/.local/bin 等常见位置)
 #   DEPLOY_NOTIFY_EMAIL  部署完成通知收件人   (默认 wangjianvip83@gmail.com)
+#   ACME_HOME            acme.sh 安装目录     (默认 /root/.acme.sh)
+#   ACME_CERT_DIR        acme.sh 证书目录     (默认 $ACME_HOME/perapera.cc_ecc；
+#                        证书按 fullchain.cer + perapera.cc.key 读取)
 # ---------------------------------------------------------------------------
 
 set -euo pipefail
@@ -338,14 +341,26 @@ deploy_release() {
     systemctl daemon-reload
     systemctl enable perapera.service
 
-    # 10. 部署 SSL 证书
+    # 10. 部署 SSL 证书（使用 acme.sh 签发的证书）
     log_info "部署 SSL 证书..."
+    local ACL="${ACME_HOME:-/root/.acme.sh}/perapera.cc_ecc"
+    if [ -n "${ACME_CERT_DIR:-}" ]; then
+        ACL="$ACME_CERT_DIR"
+    fi
     local SSL_DIR="/etc/nginx/ssl/perapera.cc"
+
+    if [ ! -f "$ACL/fullchain.cer" ]; then
+        log_error "未找到 acme.sh 证书: $ACL/fullchain.cer"
+        log_error "也可通过环境变量 ACME_CERT_DIR 指定证书目录"
+        return 1
+    fi
+
     mkdir -p "$SSL_DIR"
-    cp "$PROJECT_DIR/deploy/ssl/perapera.cc_bundle.pem" "$SSL_DIR/"
-    cp "$PROJECT_DIR/deploy/ssl/perapera.cc.key" "$SSL_DIR/"
-    chmod 644 "$SSL_DIR/perapera.cc_bundle.pem"
-    chmod 600 "$SSL_DIR/perapera.cc.key"
+    # 复制 fullchain（证书链）与私钥。nginx 建议私钥 600、证书 644
+    install -m 644 "$ACL/fullchain.cer" "$SSL_DIR/fullchain.cer"
+    install -m 644 "$ACL/ca.cer" "$SSL_DIR/ca.cer"
+    install -m 600 "$ACL/perapera.cc.key" "$SSL_DIR/perapera.cc.key"
+    chown -R root:root "$SSL_DIR"
 
     # 11. 配置 Nginx
     log_info "配置 Nginx..."
