@@ -4,7 +4,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 from typing import Optional, Union
 
-from app.core.support_lang import get_support_lang
+from app.core.support_lang import get_support_lang, get_support_second_lang
 from app.services.cos_service import cos_service, hash_filename
 from app.core.database import get_db
 from app.api.v1.endpoints.auth import get_current_user
@@ -28,6 +28,12 @@ router = APIRouter()
 async def get_supported_languages():
     """Get list of supported languages."""
     return get_support_lang()
+
+
+@router.get("/support_second_lang")
+async def get_supported_second_languages():
+    """Get list of supported second languages."""
+    return get_support_second_lang()
 
 
 @router.get("/yt_audio")

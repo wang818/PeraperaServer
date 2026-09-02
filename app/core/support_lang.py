@@ -22,3 +22,11 @@ def get_support_lang():
         {"name": "简体中文", "lang": "zh-CN"},
         {"name": "繁體中文", "lang": "zh-Hant"},
     ]
+
+
+def get_support_second_lang():
+    """Get list of supported second languages with their codes."""
+    return [
+        {"name": "日本語", "lang": "ja"},
+        {"name": "粤语", "lang": "yue"},
+    ]
