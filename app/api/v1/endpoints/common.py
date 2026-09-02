@@ -4,7 +4,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 from typing import Optional, Union
 
-from app.core.support_lang import get_support_lang, get_support_second_lang
+from app.core.support_lang import get_support_lang, get_support_second_lang, get_target_lang
 from app.services.cos_service import cos_service, hash_filename
 from app.core.database import get_db
 from app.api.v1.endpoints.auth import get_current_user
@@ -34,6 +34,12 @@ async def get_supported_languages():
 async def get_supported_second_languages():
     """Get list of supported second languages."""
     return get_support_second_lang()
+
+
+@router.get("/target_lang")
+async def get_target_languages():
+    """Get list of target languages (Japanese and Cantonese)."""
+    return get_target_lang()
 
 
 @router.get("/yt_audio")
