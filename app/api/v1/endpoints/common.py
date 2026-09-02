@@ -38,7 +38,7 @@ async def get_supported_second_languages():
 
 @router.get("/target_lang")
 async def get_target_languages():
-    """Get list of target languages (Japanese and Cantonese)."""
+    """Get list of target languages (Japanese, Korean and Cantonese)."""
     return get_target_lang()
 
 

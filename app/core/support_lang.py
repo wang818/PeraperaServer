@@ -33,8 +33,9 @@ def get_support_second_lang():
 
 
 def get_target_lang():
-    """Get list of target languages (currently Japanese and Cantonese)."""
+    """Get list of target languages (currently Japanese, Korean and Cantonese)."""
     return [
         {"name": "日本語", "lang": "ja"},
+        {"name": "한국어", "lang": "ko"},
         {"name": "粤语", "lang": "yue"},
     ]
