@@ -9,6 +9,7 @@ def get_support_lang():
         # {"name": "Français", "lang": "fr"},
         # {"name": "Indonesia", "lang": "id"},
         {"name": "日本語", "lang": "ja"},
+        {"name": "粤语", "lang": "yue"},
         # {"name": "한국어", "lang": "ko"},
         # {"name": "Malaysia", "lang": "ms"},
         # {"name": "မြန်မာ", "lang": "my"},
