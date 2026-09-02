@@ -39,6 +39,35 @@ MAX_FIX_ATTEMPTS="${MAX_FIX_ATTEMPTS:-3}"
 VERIFY_TIMEOUT="${VERIFY_TIMEOUT:-45}"
 VERIFY_PORT="${VERIFY_PORT:-18099}"
 
+# cron 环境的 PATH 很窄，先补齐常用目录，避免找不到 gh/git/timeout
+export PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:$PATH"
+# nvm 的 node 工具（reasonix）在交互 shell 才进 PATH，这里补上
+if [ -z "${NVM_DIR:-}" ] && [ -d "$HOME/.nvm" ]; then
+    export NVM_DIR="$HOME/.nvm"
+fi
+if [ -n "${NVM_DIR:-}" ]; then
+    for _nvm_bin in "$NVM_DIR"/versions/node/*/bin; do
+        [ -d "$_nvm_bin" ] && PATH="$_nvm_bin:$PATH"
+    done
+fi
+
+# 单实例锁：crontab 每分钟跑一次，reasonix+验收+部署耗时数分钟，
+# 必须防止多个实例同时改代码/提交/部署。用 flock 锁住自身脚本文件描述符。
+# 若拿不到锁说明上一轮还在跑，本次直接退出（不报错、不重复处理）。
+# flock 来自 util-linux，需在锁之前确认存在。
+if ! command -v flock >/dev/null 2>&1; then
+    echo "[ERROR] 缺少命令: flock (请安装 util-linux)"
+    exit 1
+fi
+LOCK_FILE="${LOCK_FILE:-/tmp/fix_da_ye_issues.lock}"
+exec 9>"$LOCK_FILE"
+if ! flock -n 9; then
+    echo "[SKIP] 另一实例正在运行, 本次跳过 (lock: $LOCK_FILE)"
+    exit 0
+fi
+# 锁成功后设置 EXIT trap（详见 main 里的合并 trap；这里建立默认清理）
+trap 'rm -f "$LOCK_FILE"' EXIT
+
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 RED='\033[0;31m'
@@ -457,7 +486,8 @@ main() {
 
     local verify_log
     verify_log="$(mktemp /tmp/perapera-verify.XXXXXX.log)"
-    trap 'rm -f "$verify_log"' EXIT
+    # 合并之前的锁清理 trap，同时清理验收日志（锁文件在 exit 时也一并删）
+    trap 'rm -f "$LOCK_FILE" "$verify_log"' EXIT
 
     local num title body
     while IFS= read -r num; do
