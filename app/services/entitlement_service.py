@@ -21,6 +21,7 @@ from app.models.iap import Product, TransactionRecord, UserEntitlement
 from app.models.user import User
 from app.services.apple_api_client import apple_api_client
 from app.services.apple_jws_verifier import apple_jws_verifier
+from app.services import business_service
 
 logger = logging.getLogger(__name__)
 
@@ -310,17 +311,35 @@ class EntitlementService:
         if product_id == settings.PRODUCT_PRO_MONTHLY:
             user.monthly_expire_at = now + timedelta(days=settings.MONTHLY_DURATION_DAYS)
             user.monthly_card_minutes = settings.MONTHLY_CARD_MINUTES
+            # 记流水：充值会员，月卡时长
+            await business_service.record_recharge_member(
+                self.db, user_id, settings.MONTHLY_CARD_MINUTES,
+                user.monthly_card_minutes, source=product_id,
+                description=f"月卡充值 {settings.MONTHLY_CARD_MINUTES} 分钟",
+            )
             logger.info(
                 f"已应用月卡权益 user={user_id}，"
                 f"月卡过期={user.monthly_expire_at}，月卡时长={user.monthly_card_minutes} 分钟"
             )
         elif product_id == settings.PRODUCT_PRO_YEARLY:
             user.annual_expire_at = now + timedelta(days=settings.YEARLY_DURATION_DAYS)
+            # 年卡本身不直接给时长，但属于「充值会员」类型，记 0 分钟流水用于对账
+            await business_service.record_recharge_member(
+                self.db, user_id, 0, user.monthly_card_minutes or 0,
+                source=product_id,
+                description=f"年卡充值 {settings.YEARLY_DURATION_DAYS} 天（时长由年卡补充机制另行发放）",
+            )
             logger.info(
                 f"已应用年卡权益 user={user_id}，年卡过期={user.annual_expire_at}"
             )
         elif product_id == settings.PRODUCT_BASE_MONTHLY:
             user.point_card_minutes = (user.point_card_minutes or 0) + settings.POINT_CARD_MINUTES
+            # 记流水：充值点数，点数时长
+            await business_service.record_recharge_points(
+                self.db, user_id, settings.POINT_CARD_MINUTES,
+                user.point_card_minutes, source=product_id,
+                description=f"点卡充值 {settings.POINT_CARD_MINUTES} 分钟",
+            )
             logger.info(
                 f"已应用点卡权益 user={user_id}，"
                 f"点卡时长 +{settings.POINT_CARD_MINUTES} 分钟，当前={user.point_card_minutes} 分钟"

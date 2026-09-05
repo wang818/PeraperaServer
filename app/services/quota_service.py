@@ -25,6 +25,8 @@ import yt_dlp
 from app.core.config import settings
 from app.core.i18n import get_translation
 from app.models.user import User
+from app.models.business import DURATION_MONTHLY, DURATION_POINT
+from app.services import business_service
 
 logger = logging.getLogger(__name__)
 
@@ -86,6 +88,12 @@ async def ensure_monthly_refill(db: AsyncSession, user: User) -> None:
     if _is_active(user.annual_expire_at):
         user.monthly_card_minutes = (user.monthly_card_minutes or 0) + settings.MONTHLY_REFILL_MINUTES
         user.monthly_expire_at = _now() + timedelta(days=settings.MONTHLY_DURATION_DAYS)
+        # 记流水：免费赠送，月卡时长（年卡有效自动补充）
+        await business_service.record_free_gift(
+            db, user.id, DURATION_MONTHLY, settings.MONTHLY_REFILL_MINUTES,
+            user.monthly_card_minutes, source="annual_refill",
+            description=f"年卡有效，月卡过期自动补充 {settings.MONTHLY_REFILL_MINUTES} 分钟",
+        )
         logger.info(
             f"年卡有效，已为 user={user.id} 补充月卡时长 "
             f"{settings.MONTHLY_REFILL_MINUTES} 分钟，月卡有效期重置为 {user.monthly_expire_at}"
@@ -104,7 +112,8 @@ async def check_quota_available(
 
     await ensure_monthly_refill(db, user)
 
-    monthly_minutes = user.monthly_card_minutes or 0 if _is_active(user.monthly_expire_at) else 0
+    # 月卡时长只要有值即可用（不再要求月卡未过期）
+    monthly_minutes = user.monthly_card_minutes or 0
     point_minutes = user.point_card_minutes or 0
     total = monthly_minutes + point_minutes
 
@@ -119,7 +128,7 @@ async def check_quota_available(
     return needed
 
 
-async def consume_quota(db: AsyncSession, user: User, duration_seconds: int) -> None:
+async def consume_quota(db: AsyncSession, user: User, duration_seconds: int, video_url: Optional[str] = None) -> None:
     """下载成功后扣除用户时长。
 
     优先扣除月卡时长，不足部分再扣点卡时长。
@@ -130,15 +139,25 @@ async def consume_quota(db: AsyncSession, user: User, duration_seconds: int) -> 
 
     await ensure_monthly_refill(db, user)
 
-    # 优先扣月卡
-    if _is_active(user.monthly_expire_at) and user.monthly_card_minutes:
+    # 优先扣月卡（只要有值即可扣）
+    if user.monthly_card_minutes:
         take = min(needed, user.monthly_card_minutes)
         user.monthly_card_minutes -= take
         needed -= take
+        # 记流水：视频消费，月卡时长扣减
+        await business_service.record_video_consumption(
+            db, user.id, DURATION_MONTHLY, -take, user.monthly_card_minutes,
+            source=video_url, description=f"视频消费扣减 {take} 分钟",
+        )
 
     # 剩余扣点卡
     if needed > 0:
         user.point_card_minutes = (user.point_card_minutes or 0) - needed
+        # 记流水：视频消费，点数时长扣减
+        await business_service.record_video_consumption(
+            db, user.id, DURATION_POINT, -needed, user.point_card_minutes,
+            source=video_url, description=f"视频消费扣减 {needed} 分钟",
+        )
 
     logger.info(
         f"扣除字幕识别时长完成 user={user.id}，"

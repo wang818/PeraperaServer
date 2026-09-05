@@ -83,6 +83,13 @@ class Settings(BaseSettings):
     MONTHLY_CARD_MINUTES: int = 1800    # 月卡时长：30 小时 = 1800 分钟
     POINT_CARD_MINUTES: int = 180       # 点卡单次充值：3 小时 = 180 分钟
     MONTHLY_REFILL_MINUTES: int = 1800  # 年卡有效且月卡过期时补充的月卡时长：30 小时 = 1800 分钟
+
+    # ── 免费用户月度时长 ──
+    FREE_MONTHLY_MINUTES: int = 30          # 免费用户每月赠送的月卡时长（分钟）
+    MONTHLY_FREE_RESET_DAY: int = 1         # 每月几号重置（1 = 每月1号）
+    MONTHLY_FREE_RESET_HOUR: int = 0        # 重置时刻（时）
+    MONTHLY_FREE_RESET_MINUTE: int = 30     # 重置时刻（分）
+    SCHEDULER_TIMEZONE: str = "Asia/Hong_Kong"  # 定时任务时区
     
     def get_allowed_origins(self) -> list[str]:
         """Get CORS origins as a list."""

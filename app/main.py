@@ -28,8 +28,15 @@ async def lifespan(app: FastAPI):
     logger.info("Starting up...")
     await init_db()
     logger.info("Database initialized")
+
+    # 启动定时任务（每月1号重置免费用户月卡时长）
+    from app.services.scheduler import start_scheduler, stop_scheduler
+    start_scheduler()
+
     yield
+
     # Shutdown
+    stop_scheduler()
     logger.info("Shutting down...")
 
 

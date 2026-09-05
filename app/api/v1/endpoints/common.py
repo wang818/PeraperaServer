@@ -80,7 +80,7 @@ async def download_youtube_audio(
     audio_content, audio_title = await _fetch_audio(url)
 
     # 5. 下载成功后才扣除时长
-    await quota_service.consume_quota(db, current_user, duration_seconds)
+    await quota_service.consume_quota(db, current_user, duration_seconds, video_url=url)
 
     # 6. 上传 COS 并提交事务（优先使用视频元信息标题）
     info_title = (video_info or {}).get("title")

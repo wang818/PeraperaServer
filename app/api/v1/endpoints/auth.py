@@ -121,7 +121,9 @@ async def login_with_captcha(
             username=username,
             hashed_password=get_password_hash(random_password),
             is_active=True,
-            is_superuser=False
+            is_superuser=False,
+            # 新注册用户赠送免费月卡时长
+            monthly_card_minutes=settings.FREE_MONTHLY_MINUTES,
         )
         db.add(user)
         await db.flush()
@@ -131,6 +133,14 @@ async def login_with_captcha(
             user_uuid=user.uuid
         )
         db.add(user_setting)
+
+        # 记流水：新用户注册赠送免费月卡时长
+        from app.services import business_service
+        await business_service.record_free_gift(
+            db, user.id, "monthly", settings.FREE_MONTHLY_MINUTES,
+            settings.FREE_MONTHLY_MINUTES, source="new_user_gift",
+            description=f"新用户注册赠送 {settings.FREE_MONTHLY_MINUTES} 分钟",
+        )
         
         await db.commit()
         await db.refresh(user)
